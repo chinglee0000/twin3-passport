@@ -1,0 +1,2092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twin3 Passport - Complete Flow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-bg: #0a0a0a;
+            --card-bg: #1a1a1a;
+            --border-color: #333333;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --text-muted: #666666;
+            --accent-green: #34C759;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--primary-bg);
+            min-height: 100vh;
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+        }
+        
+        .card {
+            background: #FFFFFF0D;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .card:hover {
+            border-color: #555555;
+        }
+        
+        .btn-primary {
+            background: var(--accent-green);
+            color: #000000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+        
+        .btn-primary:hover {
+            background: #00cc6a;
+        }
+        
+        .btn-primary:disabled {
+            background: #333333;
+            color: #666666;
+            cursor: not-allowed;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+        
+        .btn-secondary:hover {
+            border-color: #555555;
+            color: var(--text-primary);
+        }
+        
+        .input-field {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 16px 20px;
+            color: white;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 400;
+            transition: all 0.3s ease;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: var(--accent-green);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 0 3px rgba(52, 199, 89, 0.1);
+        }
+
+        .input-field::placeholder {
+            color: #9C9C9C;
+            font-weight: 400;
+        }
+        
+        .select-field {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 16px 20px;
+            padding-right: 48px;
+            color: white;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239C9C9C' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 16px center;
+            background-repeat: no-repeat;
+            background-size: 16px;
+        }
+
+        .select-field:focus {
+            outline: none;
+            border-color: var(--accent-green);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 0 3px rgba(52, 199, 89, 0.1);
+        }
+
+        .select-field option {
+            background: #1a1a1a;
+            color: white;
+            padding: 12px;
+        }
+        
+        .progress-bar {
+            background: #222222;
+            height: 4px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: var(--accent-green);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+
+
+        .custom-select {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .custom-select-trigger {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 16px 20px;
+            color: white;
+            width: 100%;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+        }
+
+        .custom-select-trigger:hover {
+            border-color: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .custom-select-trigger.active {
+            border-color: var(--accent-green);
+            box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+        }
+
+        .custom-select-options {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #FFFFFF0D;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            margin-top: 4px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+
+        .custom-select-options.show {
+            display: block;
+        }
+
+        .custom-select-option {
+            padding: 12px 16px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: background-color 0.2s ease;
+        }
+
+        .custom-select-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .custom-select-option .material-icons {
+            color: var(--accent-green);
+            font-size: 20px;
+        }
+
+        .custom-select-selected {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .custom-select-selected .material-icons {
+            color: var(--accent-green);
+            font-size: 20px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .input-wrapper .input-field {
+            padding-right: 48px;
+        }
+
+        .input-clear {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #9C9C9C;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 50%;
+            display: none;
+            transition: all 0.2s ease;
+        }
+
+        .input-clear:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .input-wrapper.has-value .input-clear {
+            display: block;
+        }
+        
+        .grid-bg {
+            background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+
+        .particle-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000 url('3d-network-particle-flow-background.jpg') center center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            overflow: hidden;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .particle-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('3d-network-particle-flow-background.jpg') center center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            animation: particle-flow 20s infinite linear;
+            opacity: 0.4;
+        }
+
+        .particle-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('3d-network-particle-flow-background.jpg') center center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            animation: particle-flow-reverse 25s infinite linear;
+            opacity: 0.3;
+        }
+
+        @keyframes particle-flow {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0.7;
+            }
+            50% {
+                transform: translateY(-50px) scale(1.05);
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(-100px) scale(1.1);
+                opacity: 0.7;
+            }
+        }
+
+        @keyframes particle-flow-reverse {
+            0% {
+                transform: translateY(0) scale(1.1) rotate(0deg);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translateY(30px) scale(1) rotate(1deg);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(60px) scale(0.95) rotate(2deg);
+                opacity: 0.5;
+            }
+        }
+
+        .particle-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('3d-network-particle-flow-background.jpg') center center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            animation: particle-drift 30s infinite ease-in-out;
+            opacity: 0.2;
+            mix-blend-mode: screen;
+        }
+
+        /* Dark overlay to improve text readability */
+        .particle-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 2;
+        }
+
+        @keyframes particle-drift {
+            0% {
+                transform: translateX(0) translateY(0) scale(1);
+                opacity: 0.3;
+            }
+            25% {
+                transform: translateX(-20px) translateY(-30px) scale(1.02);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translateX(10px) translateY(-60px) scale(1.05);
+                opacity: 0.4;
+            }
+            75% {
+                transform: translateX(-10px) translateY(-30px) scale(1.02);
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateX(0) translateY(0) scale(1);
+                opacity: 0.3;
+            }
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            pointer-events: none;
+            bottom: -10px;
+            animation: float-particle 12s infinite linear;
+        }
+
+        @keyframes float-particle {
+            0% {
+                transform: translateY(0) translateX(0px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-110vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        .welcome-container {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .welcome-form {
+            background: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .welcome-title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+            text-align: center;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.125rem;
+            color: #9C9C9C;
+            text-align: center;
+            margin-bottom: 3rem;
+            line-height: 1.5;
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-subtitle {
+            color: #a0a0a0;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 0.875rem;
+        }
+        
+        .verification-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .verification-card.completed {
+            border-color: var(--accent-green);
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        .verification-card.pending {
+            border-color: var(--border-color);
+            background: var(--card-bg);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .metric-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .metric-label {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Proof of Humanity Page Styles */
+        .proof-container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .proof-title {
+            font-size: 3rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .proof-subtitle {
+            margin-bottom: 3rem;
+            max-width: 600px;
+        }
+
+        .cta-main {
+            font-size: 24px;
+            color: white;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 1rem;
+        }
+
+        .cta-description {
+            font-size: 16px;
+            color: #9C9C9C;
+            line-height: 1.6;
+        }
+
+        .verification-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 3rem;
+        }
+
+        .verification-step {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .verification-step.completed {
+            border-color: var(--accent-green);
+            background: rgba(52, 199, 89, 0.1);
+        }
+
+        .step-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .step-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .step-number {
+            width: 2rem;
+            height: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.875rem;
+        }
+
+        .verification-step.completed .step-number {
+            background: var(--accent-green);
+        }
+
+        .step-text {
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .step-status {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            background: var(--accent-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .check-icon {
+            width: 1rem;
+            height: 1rem;
+            color: white;
+        }
+
+        .start-btn {
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .start-btn:hover {
+            background: #2BA84A;
+            transform: translateY(-1px);
+        }
+
+        .get-started-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: #9CA3AF;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 1rem 3rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: not-allowed;
+            transition: all 0.3s ease;
+        }
+
+        .get-started-btn:not(:disabled) {
+            background: var(--accent-green);
+            color: white;
+            cursor: pointer;
+            border-color: var(--accent-green);
+        }
+
+        .get-started-btn:not(:disabled):hover {
+            background: #2BA84A;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(52, 199, 89, 0.3);
+        }
+
+        .get-started-btn.completed {
+            background: var(--accent-green);
+            color: white;
+            cursor: pointer;
+            border-color: var(--accent-green);
+        }
+
+        /* Consistent button styles across all pages */
+        .btn-primary, .btn-secondary {
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background: var(--accent-green);
+            color: white;
+            border-color: var(--accent-green);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #2BA84A;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(52, 199, 89, 0.3);
+        }
+
+        .btn-primary:disabled {
+            background: rgba(255, 255, 255, 0.1);
+            color: #9CA3AF;
+            border-color: rgba(255, 255, 255, 0.2);
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-1px);
+        }
+
+        /* Card styles consistency */
+        .card, .welcome-form, .verification-step {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover, .welcome-form:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Material Icons styling */
+        .material-icons {
+            font-family: 'Material Icons';
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+            vertical-align: middle;
+        }
+
+        /* Icon size variants */
+        .material-icons.icon-sm {
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
+        }
+
+        .material-icons.icon-md {
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+        }
+
+        .material-icons.icon-lg {
+            font-size: 24px;
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Default size */
+        .material-icons:not(.icon-sm):not(.icon-md):not(.icon-lg) {
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Platform logos */
+        .platform-logo {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="grid-bg">
+    <!-- Welcome Page -->
+    <div id="welcome-page" class="min-h-screen relative">
+        <!-- Particle Background -->
+        <div class="particle-bg">
+            <!-- Additional animated layers for enhanced particle flow effect -->
+            <div class="particle-layer" style="animation-delay: 0s;"></div>
+            <div class="particle-layer" style="animation-delay: 5s;"></div>
+            <div class="particle-layer" style="animation-delay: 10s;"></div>
+        </div>
+
+        <!-- Welcome Content -->
+        <div class="welcome-container">
+            <!-- Main Title -->
+            <h1 class="welcome-title">Your digital identity, supercharged!</h1>
+            <p class="welcome-subtitle">
+                Connect your profiles, earn rewards, and show the world who you really are.
+            </p>
+
+            <!-- Welcome Form -->
+            <div class="welcome-form">
+                <h2 class="form-title">Welcome to Twin3 Passport!</h2>
+                <p class="form-subtitle">Please enter your profile information to get start.</p>
+
+                <div class="space-y-4">
+                    <div class="input-wrapper" id="username-wrapper">
+                        <input
+                            type="text"
+                            id="username"
+                            class="input-field"
+                            placeholder="User Name"
+                        >
+                        <button type="button" class="input-clear" id="username-clear">
+                            <span class="material-icons icon-sm">close</span>
+                        </button>
+                    </div>
+
+                    <div class="custom-select" id="career-select">
+                        <div class="custom-select-trigger" id="career-trigger">
+                            <span class="custom-select-selected" id="career-selected">
+                                <span>What's your career</span>
+                            </span>
+                            <span class="material-icons">expand_more</span>
+                        </div>
+                        <div class="custom-select-options" id="career-options">
+                            <div class="custom-select-option" data-value="creative">
+                                <span class="material-icons">palette</span>
+                                <span>Creative Content Maker</span>
+                            </div>
+                            <div class="custom-select-option" data-value="developer">
+                                <span class="material-icons">code</span>
+                                <span>Developer</span>
+                            </div>
+                            <div class="custom-select-option" data-value="researcher">
+                                <span class="material-icons">psychology</span>
+                                <span>Research & Innovation Expert</span>
+                            </div>
+                            <div class="custom-select-option" data-value="web3">
+                                <span class="material-icons">language</span>
+                                <span>Web3 Network Pioneer</span>
+                            </div>
+                            <div class="custom-select-option" data-value="influencer">
+                                <span class="material-icons">groups</span>
+                                <span>Social Influencer</span>
+                            </div>
+                            <div class="custom-select-option" data-value="gamer">
+                                <span class="material-icons">sports_esports</span>
+                                <span>Gamer</span>
+                            </div>
+                            <div class="custom-select-option" data-value="artist">
+                                <span class="material-icons">brush</span>
+                                <span>Artist</span>
+                            </div>
+                            <div class="custom-select-option" data-value="entrepreneur">
+                                <span class="material-icons">business_center</span>
+                                <span>Entrepreneur</span>
+                            </div>
+                            <div class="custom-select-option" data-value="educator">
+                                <span class="material-icons">school</span>
+                                <span>Educator</span>
+                            </div>
+                            <div class="custom-select-option" data-value="healthcare">
+                                <span class="material-icons">local_hospital</span>
+                                <span>Healthcare Professional</span>
+                            </div>
+                            <div class="custom-select-option" data-value="athlete">
+                                <span class="material-icons">emoji_events</span>
+                                <span>Athlete</span>
+                            </div>
+                            <div class="custom-select-option" data-value="writer">
+                                <span class="material-icons">edit</span>
+                                <span>Writer</span>
+                            </div>
+                            <div class="custom-select-option" data-value="software-engineer">
+                                <span class="material-icons">computer</span>
+                                <span>Software Engineer</span>
+                            </div>
+                            <div class="custom-select-option" data-value="data-scientist">
+                                <span class="material-icons">analytics</span>
+                                <span>Data Scientist</span>
+                            </div>
+                            <div class="custom-select-option" data-value="product-manager">
+                                <span class="material-icons">track_changes</span>
+                                <span>Product Manager</span>
+                            </div>
+                            <div class="custom-select-option" data-value="designer">
+                                <span class="material-icons">design_services</span>
+                                <span>UX/UI Designer</span>
+                            </div>
+                            <div class="custom-select-option" data-value="marketing">
+                                <span class="material-icons">campaign</span>
+                                <span>Marketing Specialist</span>
+                            </div>
+                        </div>
+                        <input type="hidden" id="career" name="career" value="">
+                    </div>
+
+                    <button id="next-btn" class="btn-primary mt-6" disabled>
+                        Next
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Proof of Humanity Page -->
+    <div id="proof-page" class="min-h-screen relative hidden">
+        <!-- Same Particle Background as Welcome Page -->
+        <div class="particle-bg">
+            <!-- Additional animated layers for enhanced particle flow effect -->
+            <div class="particle-layer" style="animation-delay: 0s;"></div>
+            <div class="particle-layer" style="animation-delay: 5s;"></div>
+            <div class="particle-layer" style="animation-delay: 10s;"></div>
+        </div>
+
+        <!-- Proof of Humanity Content -->
+        <div class="proof-container">
+            <!-- Main Title -->
+            <h1 class="proof-title">Proof of Humanity</h1>
+            <div class="proof-subtitle" id="career-cta">
+                <div class="cta-main">Build the future with AI-powered development skills</div>
+                <div class="cta-description">
+                    Complete our quick 2 step verification to unlock your<br>
+                    supercharged digital identity and join our authentic community.
+                </div>
+            </div>
+
+            <!-- Verification Steps -->
+            <div class="verification-steps">
+                <!-- Step 1: Google reCAPTCHA -->
+                <div class="verification-step" id="step1">
+                    <div class="step-content">
+                        <div class="step-info">
+                            <div class="step-number">1</div>
+                            <span class="step-text">Click Google ReCAPTCHA v2</span>
+                        </div>
+                        <button class="start-btn" id="step1-btn">
+                            Click
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Mobile Authentication -->
+                <div class="verification-step" id="step2">
+                    <div class="step-content">
+                        <div class="step-info">
+                            <div class="step-number">2</div>
+                            <span class="step-text">Mobile Authentication</span>
+                        </div>
+                        <button class="start-btn" id="start-mobile-auth">
+                            Start
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Get Started Button -->
+            <button id="get-started-btn" class="get-started-btn" disabled>
+                Get Started!
+            </button>
+        </div>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div id="dashboard-page" class="min-h-screen px-6 py-8 hidden">
+        <div class="max-w-6xl mx-auto">
+            <!-- Section 1: Profile Header -->
+            <div class="card p-6 mb-6">
+                <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between space-y-4 lg:space-y-0">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 w-full lg:w-auto">
+                        <!-- Profile Photo (Editable) -->
+                        <div class="relative">
+                            <div class="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity">
+                                <span class="text-white text-2xl font-bold">A</span>
+                            </div>
+                            <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-gray-700 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-600 transition-colors">
+                                <span class="material-icons icon-sm text-white">edit</span>
+                            </div>
+                        </div>
+
+                        <!-- User Info -->
+                        <div>
+                            <h1 id="dashboard-title" class="text-2xl font-bold text-white mb-1">Hi, User!</h1>
+                            <div class="flex items-center space-x-3 mb-2">
+                                <!-- Profession -->
+                                <div class="flex items-center space-x-2 px-3 py-1 bg-gray-700 rounded-full">
+                                    <span id="career-type" class="text-white text-sm font-medium">Developer</span>
+                                </div>
+                                <!-- Title -->
+                                <div class="flex items-center space-x-2 px-3 py-1 bg-green-600 rounded-full">
+                                    <span class="material-icons icon-sm text-white">star</span>
+                                    <span class="text-white text-sm font-medium">Code Architect</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- $twin3 Balance & Actions -->
+                    <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-start lg:justify-end">
+                        <!-- $twin3 Balance Display -->
+                        <div class="flex items-center bg-gray-800 rounded-full px-4 py-2 border border-gray-600">
+                            <span class="material-icons icon-sm text-white mr-2">monetization_on</span>
+                            <span class="text-white font-bold text-lg">0.247</span>
+                            <span class="text-gray-400 text-sm ml-1">$twin3</span>
+                        </div>
+
+                        <!-- Language Selector -->
+                        <div class="relative">
+                            <button class="flex items-center space-x-2 px-3 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors">
+                                <span class="material-icons icon-sm text-white">language</span>
+                                <span class="text-white text-sm">EN</span>
+                                <span class="material-icons icon-sm text-white">expand_more</span>
+                            </button>
+                        </div>
+
+                        <!-- Notifications -->
+                        <div class="relative">
+                            <button class="p-2 hover:bg-gray-700 rounded-lg transition-colors">
+                                <span class="material-icons icon-sm text-white">notifications</span>
+                                <div class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Scores & Metrics -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <!-- Twin Matrix Score -->
+                <div class="card p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-lg font-semibold text-white flex items-center space-x-2">
+                            <span class="material-icons icon-md text-white">psychology</span>
+                            <span>Global Identity Score</span>
+                        </h2>
+                        <div class="relative group">
+                            <span class="material-icons icon-sm text-gray-400 cursor-help">help_outline</span>
+                            <div class="absolute right-0 top-6 w-80 p-3 bg-gray-800 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10 text-xs text-gray-300">
+                                <div class="font-semibold mb-2">Calculation Formula:</div>
+                                <div class="mb-2 font-mono text-blue-400">Wi = (0.25Hi + 0.25Bi + 0.30Di + 0.20Si)^1.2</div>
+                                <div>Hi (Humanity Integration): 0-63</div>
+                                <div>Bi (Blockchain Behavior): 0-63</div>
+                                <div>Di (Digital Asset Stickiness): 0-63</div>
+                                <div>Si (Social Contribution): 0-63</div>
+                                <div class="mt-2 font-semibold">Total Score Range: 0-266</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-white mb-2">187<span class="text-2xl text-gray-400"> / 266</span></div>
+                        <div class="progress-bar">
+                            <div class="progress-fill bg-green-500" style="width: 70%"></div>
+                        </div>
+                        <div class="text-xs text-gray-400 mt-2">70% of maximum score</div>
+
+
+                    </div>
+                </div>
+
+
+
+                <!-- Profession Trait Scores -->
+                <div class="card p-6">
+                    <h2 class="text-lg font-semibold text-white mb-4 flex items-center space-x-2">
+                        <span class="material-icons icon-md text-white">bar_chart</span>
+                        <span>Developer Traits</span>
+                    </h2>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-white text-sm">Programming Skills</span>
+                                <span class="text-white text-sm font-bold">240</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill bg-green-500" style="width: 80%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-white text-sm">Cybersecurity Awareness</span>
+                                <span class="text-white text-sm font-bold">185</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill bg-green-500" style="width: 62%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-white text-sm">Technical Innovation</span>
+                                <span class="text-white text-sm font-bold">210</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill bg-green-500" style="width: 70%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-white text-sm">Code Quality</span>
+                                <span class="text-white text-sm font-bold">195</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill bg-green-500" style="width: 65%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Account Approval -->
+            <div class="card p-6 mb-6">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center space-x-3">
+                        <span class="material-icons icon-md text-green-400">link</span>
+                        <div>
+                            <h2 class="text-xl font-bold text-white">Account Approval</h2>
+                            <p class="text-gray-400 text-sm">Connect required accounts for Developer verification</p>
+                        </div>
+                    </div>
+                    <div class="text-green-400 text-sm font-semibold">
+                        1/3 Required Connected
+                    </div>
+                </div>
+
+                <!-- Required Accounts -->
+                <div class="mb-6">
+                    <h3 class="text-white font-semibold mb-4 flex items-center">
+                        <span class="w-2 h-2 bg-red-500 rounded-full mr-2"></span>
+                        Required Accounts
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- GitHub - Connected -->
+                        <div class="card p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 bg-gray-700 rounded flex items-center justify-center">
+                                        <svg class="platform-logo" viewBox="0 0 24 24" fill="white">
+                                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-white text-sm">GitHub</h4>
+                                        <p class="text-xs text-green-400">@alexchen</p>
+                                    </div>
+                                </div>
+                                <div class="text-green-400">
+                                    <span class="material-icons icon-sm">check</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="px-2 py-1 bg-gray-700 text-green-400 rounded-full">Connected</span>
+                            </div>
+                        </div>
+
+                        <!-- Stack Overflow - Not Connected -->
+                        <div class="card p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 bg-gray-700 rounded flex items-center justify-center">
+                                        <span class="material-icons icon-sm">help</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-white text-sm">Stack Overflow</h4>
+                                        <p class="text-xs text-gray-500">Not connected</p>
+                                    </div>
+                                </div>
+                                <div class="text-gray-400">
+                                    <span class="material-icons icon-sm">add</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between text-xs">
+                                <button class="btn-secondary text-xs" style="width: auto; padding: 4px 12px;">
+                                    Connect
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- LinkedIn - Not Connected -->
+                        <div class="card p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 bg-gray-700 rounded flex items-center justify-center">
+                                        <svg class="platform-logo" viewBox="0 0 24 24" fill="white">
+                                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-white text-sm">LinkedIn</h4>
+                                        <p class="text-xs text-gray-500">Not connected</p>
+                                    </div>
+                                </div>
+                                <div class="text-gray-400">
+                                    <span class="material-icons icon-sm">add</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between text-xs">
+                                <button class="btn-secondary text-xs" style="width: auto; padding: 4px 12px;">
+                                    Connect
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recommended Accounts -->
+                <div>
+                    <h3 class="text-white font-semibold mb-4 flex items-center">
+                        <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                        Recommended Accounts
+                    </h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div class="card p-3 text-center hover:border-gray-500 cursor-pointer">
+                            <div class="flex justify-center mb-2">
+                                <svg class="platform-logo" viewBox="0 0 24 24" fill="white">
+                                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                                </svg>
+                            </div>
+                            <div class="text-xs text-white font-medium">X (Twitter)</div>
+                        </div>
+                        <div class="card p-3 text-center hover:border-gray-500 cursor-pointer">
+                            <div class="flex justify-center mb-2">
+                                <svg class="platform-logo" viewBox="0 0 24 24" fill="white">
+                                    <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/>
+                                </svg>
+                            </div>
+                            <div class="text-xs text-white font-medium">Medium</div>
+                        </div>
+                        <div class="card p-3 text-center hover:border-gray-500 cursor-pointer">
+                            <div class="flex justify-center mb-2">
+                                <svg class="platform-logo" viewBox="0 0 24 24" fill="white">
+                                    <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419-.0002 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9554 2.4189-2.1568 2.4189Z"/>
+                                </svg>
+                            </div>
+                            <div class="text-xs text-white font-medium">Discord</div>
+                        </div>
+                        <div class="card p-3 text-center hover:border-gray-500 cursor-pointer">
+                            <div class="flex justify-center mb-2">
+                                <svg class="platform-logo" viewBox="0 0 24 24" fill="white">
+                                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                                </svg>
+                            </div>
+                            <div class="text-xs text-white font-medium">YouTube</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: Task List & Rewards -->
+            <div class="card p-6">
+                <!-- Tab Navigation -->
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex space-x-1 rounded-lg p-1" style="background: #FFFFFF0D;">
+                        <button id="task-tab" class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md transition-colors">
+                            Task List
+                        </button>
+                        <button id="rewards-tab" class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white transition-colors">
+                            Rewards Logs
+                        </button>
+                    </div>
+                    <div class="text-green-400 text-sm font-semibold">
+                        <span id="active-count">5 Active Tasks</span>
+                    </div>
+                </div>
+
+                <!-- Task List Content -->
+                <div id="task-content" class="space-y-4">
+                    <!-- Daily Tasks -->
+                    <div class="mb-6">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-8 h-8 bg-gray-700 rounded-lg flex items-center justify-center">
+                                <span class="material-icons icon-sm text-white">today</span>
+                            </div>
+                            <h3 class="text-lg font-semibold text-white">Daily Tasks</h3>
+                        </div>
+
+                        <div class="space-y-3">
+                            <!-- Task 1 -->
+                            <div class="rounded-lg p-4 border-l-4 border-green-500" style="background: #FFFFFF0D;">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="flex items-center space-x-2">
+                                            <span class="text-white font-bold text-lg">+0.005</span>
+                                            <span class="text-gray-400 font-bold">$twin3</span>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold text-white">Complete Code Review</h4>
+                                            <p class="text-xs text-gray-400">Review 3 pull requests from team members</p>
+                                        </div>
+                                    </div>
+                                    <button class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm rounded-lg transition-colors">
+                                        Start
+                                    </button>
+                                </div>
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-gray-400">Progress: 1/3</span>
+                                    <span class="text-green-400">Profession Trait</span>
+                                </div>
+                            </div>
+
+                            <!-- Task 2 -->
+                            <div class="rounded-lg p-4 border-l-4 border-green-500" style="background: #FFFFFF0D;">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="flex items-center space-x-2">
+                                            <span class="text-white font-bold text-lg">+0.005</span>
+                                            <span class="text-gray-400 font-bold">$twin3</span>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold text-white">Follow Twin3 on X</h4>
+                                            <p class="text-xs text-gray-400">Stay updated with latest news</p>
+                                        </div>
+                                    </div>
+                                    <button class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm rounded-lg transition-colors">
+                                        Complete
+                                    </button>
+                                </div>
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-gray-400">Social Task</span>
+                                    <span class="text-green-400">Available</span>
+                                </div>
+                            </div>
+
+                            <!-- Task 3 -->
+                            <div class="rounded-lg p-4 border-l-4 border-green-500" style="background: #FFFFFF0D;">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="flex items-center space-x-2">
+                                            <span class="text-white font-bold text-lg">+0.005</span>
+                                            <span class="text-gray-400 font-bold">$twin3</span>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold text-white">Join Twin3 Discord</h4>
+                                            <p class="text-xs text-gray-400">Connect with the community</p>
+                                        </div>
+                                    </div>
+                                    <button class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm rounded-lg transition-colors">
+                                        Start
+                                    </button>
+                                </div>
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-gray-400">Community Task</span>
+                                    <span class="text-green-400">Available</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Weekly Tasks -->
+                    <div class="mb-6">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-8 h-8 bg-gray-700 rounded-lg flex items-center justify-center">
+                                <span class="material-icons icon-sm text-white">date_range</span>
+                            </div>
+                            <h3 class="text-lg font-semibold text-white">Weekly Tasks</h3>
+                        </div>
+
+                        <div class="space-y-3">
+                            <!-- Weekly Task 1 -->
+                            <div class="rounded-lg p-4 border-l-4 border-green-500" style="background: #FFFFFF0D;">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="flex items-center space-x-2">
+                                            <span class="text-white font-bold text-lg">+0.01</span>
+                                            <span class="text-gray-400 font-bold">$twin3</span>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold text-white">Solve Algorithm Challenge</h4>
+                                            <p class="text-xs text-gray-400">Complete a medium-level algorithm problem</p>
+                                        </div>
+                                    </div>
+                                    <button class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm rounded-lg transition-colors">
+                                        Start
+                                    </button>
+                                </div>
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-gray-400">Progress: 50%</span>
+                                    <span class="text-green-400">In Progress</span>
+                                </div>
+                            </div>
+
+                            <!-- Weekly Task 2 -->
+                            <div class="rounded-lg p-4 border-l-4 border-green-500" style="background: #FFFFFF0D;">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="flex items-center space-x-2">
+                                            <span class="text-white font-bold text-lg">+0.01</span>
+                                            <span class="text-gray-400 font-bold">$twin3</span>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold text-white">Submit 10 GitHub PRs</h4>
+                                            <p class="text-xs text-gray-400">Contribute to open source projects</p>
+                                        </div>
+                                    </div>
+                                    <button class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm rounded-lg transition-colors">
+                                        Start
+                                    </button>
+                                </div>
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-gray-400">Progress: 0/10</span>
+                                    <span class="text-green-400">Available</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Achievement Tasks -->
+                    <div class="mb-6">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-8 h-8 bg-gray-700 rounded-lg flex items-center justify-center">
+                                <span class="material-icons icon-sm text-white">emoji_events</span>
+                            </div>
+                            <h3 class="text-lg font-semibold text-white">Achievement Tasks</h3>
+                        </div>
+
+                        <div class="space-y-3">
+                            <!-- Achievement Task 1 -->
+                            <div class="rounded-lg p-4 border-l-4 border-green-500" style="background: #FFFFFF0D;">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="flex items-center space-x-2">
+                                            <span class="text-white font-bold text-lg">+0.02</span>
+                                            <span class="text-gray-400 font-bold">$twin3</span>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold text-white">Complete Identity Verification</h4>
+                                            <p class="text-xs text-gray-400">Verify your identity for enhanced security</p>
+                                        </div>
+                                    </div>
+                                    <button class="px-4 py-2 bg-gray-600 text-white text-sm rounded-lg cursor-not-allowed" disabled>
+                                        ✓ Completed
+                                    </button>
+                                </div>
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-gray-400">Humanity Trust +20</span>
+                                    <span class="text-green-400">Completed</span>
+                                </div>
+                            </div>
+
+                            <!-- Achievement Task 2 -->
+                            <div class="rounded-lg p-4 border-l-4 border-green-500" style="background: #FFFFFF0D;">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="flex items-center space-x-2">
+                                            <span class="text-white font-bold text-lg">+0.015</span>
+                                            <span class="text-gray-400 font-bold">$twin3</span>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold text-white">Connect 3 Professional Accounts</h4>
+                                            <p class="text-xs text-gray-400">Link GitHub, LinkedIn, and Stack Overflow</p>
+                                        </div>
+                                    </div>
+                                    <button class="px-4 py-2 bg-gray-600 text-white text-sm rounded-lg cursor-not-allowed" disabled>
+                                        1/3 Done
+                                    </button>
+                                </div>
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-gray-400">Progress: GitHub ✓</span>
+                                    <span class="text-green-400">In Progress</span>
+                                </div>
+                            </div>
+
+                            <!-- Achievement Task 3 -->
+                            <div class="rounded-lg p-4 border-l-4 border-gray-500" style="background: #FFFFFF0D;">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="flex items-center space-x-2">
+                                            <span class="text-gray-400 font-bold text-lg">+0.025</span>
+                                            <span class="text-gray-400 font-bold">$twin3</span>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold text-white">Reach Global Score 200</h4>
+                                            <p class="text-xs text-gray-400">Achieve a Global Identity Score of 200 or higher</p>
+                                        </div>
+                                    </div>
+                                    <button class="px-4 py-2 bg-gray-600 text-gray-300 text-sm rounded-lg cursor-not-allowed">
+                                        Locked
+                                    </button>
+                                </div>
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-gray-400">Current: 187/200</span>
+                                    <span class="text-gray-400">Locked</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rewards Logs Content (Hidden by default) -->
+                <div id="rewards-content" class="space-y-4 hidden">
+                    <!-- Recent Rewards -->
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-4 rounded-lg border-l-4 border-green-500" style="background: #FFFFFF0D;">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center">
+                                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="white">
+                                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-white text-sm">GitHub Account Connected</h4>
+                                    <p class="text-xs text-gray-400">Aug 1, 2025 · 2:30 PM</p>
+                                    <p class="text-xs text-green-400">Triggered 0087 (Cybersecurity Awareness) +50</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="flex items-center space-x-2 mb-1">
+                                    <span class="text-white font-bold">+0.01</span>
+                                    <span class="text-gray-400 text-sm">$twin3</span>
+                                </div>
+                                <div class="text-xs text-gray-400">Matrix: +50</div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between p-4 rounded-lg border-l-4 border-green-500" style="background: #FFFFFF0D;">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center">
+                                    <span class="material-icons icon-sm text-white">psychology</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-white text-sm">Identity Verification Completed</h4>
+                                    <p class="text-xs text-gray-400">Jul 28, 2025 · 10:15 AM</p>
+                                    <p class="text-xs text-green-400">Humanity Trust Score +20</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="flex items-center space-x-2 mb-1">
+                                    <span class="text-white font-bold">+0.02</span>
+                                    <span class="text-gray-400 text-sm">$twin3</span>
+                                </div>
+                                <div class="text-xs text-gray-400">Humanity: +20</div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between p-4 rounded-lg border-l-4 border-green-500" style="background: #FFFFFF0D;">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center">
+                                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="white">
+                                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-white text-sm">LinkedIn Account Connected</h4>
+                                    <p class="text-xs text-gray-400">Jul 25, 2025 · 4:45 PM</p>
+                                    <p class="text-xs text-green-400">Triggered 00A3 (Professional Network) +30</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="flex items-center space-x-2 mb-1">
+                                    <span class="text-white font-bold">+0.008</span>
+                                    <span class="text-gray-400 text-sm">$twin3</span>
+                                </div>
+                                <div class="text-xs text-gray-400">Profession: +30</div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between p-4 rounded-lg border-l-4 border-green-500" style="background: #FFFFFF0D;">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center">
+                                    <span class="material-icons icon-sm text-white">task_alt</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-white text-sm">Daily Task Completed</h4>
+                                    <p class="text-xs text-gray-400">Jul 24, 2025 · 9:20 AM</p>
+                                    <p class="text-xs text-green-400">Code Review Task - Programming Skills +5</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="flex items-center space-x-2 mb-1">
+                                    <span class="text-white font-bold">+0.003</span>
+                                    <span class="text-gray-400 text-sm">$twin3</span>
+                                </div>
+                                <div class="text-xs text-gray-400">Trait: +5</div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between p-4 rounded-lg border-l-4 border-gray-500" style="background: #FFFFFF0D;">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center">
+                                    <span class="material-icons icon-sm text-white">account_circle</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-white text-sm">Initial Matrix Score Calculation</h4>
+                                    <p class="text-xs text-gray-400">Jul 20, 2025 · 3:00 PM</p>
+                                    <p class="text-xs text-gray-400">Welcome bonus for joining Twin3 Passport</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="flex items-center space-x-2 mb-1">
+                                    <span class="text-white font-bold">+0.005</span>
+                                    <span class="text-gray-400 text-sm">$twin3</span>
+                                </div>
+                                <div class="text-xs text-gray-400">Welcome</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <script>
+        // Application state
+        let currentStep = 'welcome';
+        let userData = { username: '', career: '' };
+        let level1Complete = false;
+        let level2Complete = false;
+
+        // DOM elements
+        const welcomePage = document.getElementById('welcome-page');
+        const proofPage = document.getElementById('proof-page');
+        const dashboardPage = document.getElementById('dashboard-page');
+        const usernameInput = document.getElementById('username');
+        const careerSelect = document.getElementById('career');
+        const nextBtn = document.getElementById('next-btn');
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const step1Btn = document.getElementById('step1-btn');
+        const startMobileAuthBtn = document.getElementById('start-mobile-auth');
+        const getStartedBtn = document.getElementById('get-started-btn');
+        const dashboardTitle = document.getElementById('dashboard-title');
+
+        // Tab elements
+        const taskTab = document.getElementById('task-tab');
+        const rewardsTab = document.getElementById('rewards-tab');
+        const taskContent = document.getElementById('task-content');
+        const rewardsContent = document.getElementById('rewards-content');
+
+        // Welcome page logic
+        function validateWelcomeForm() {
+            const username = usernameInput.value.trim();
+            const career = careerSelect.value;
+            
+            if (username && career) {
+                nextBtn.disabled = false;
+                nextBtn.classList.remove('opacity-50');
+            } else {
+                nextBtn.disabled = true;
+                nextBtn.classList.add('opacity-50');
+            }
+        }
+
+        usernameInput.addEventListener('input', validateWelcomeForm);
+        careerSelect.addEventListener('change', validateWelcomeForm);
+
+        nextBtn.addEventListener('click', () => {
+            userData.username = usernameInput.value.trim();
+            userData.career = careerSelect.value;
+            
+            if (userData.username && userData.career) {
+                showProofPage();
+            }
+        });
+
+        // Proof of Humanity page logic
+        let step1Completed = false;
+        let step2Completed = false;
+
+        // Initially set Step 1 as not completed (remove the completed class)
+        step1.classList.remove('completed');
+        step2.classList.remove('completed');
+
+        // Step 1: Click to complete reCAPTCHA
+        step1Btn.addEventListener('click', () => {
+            if (!step1Completed) {
+                step1Btn.textContent = 'Verifying...';
+                step1Btn.disabled = true;
+
+                setTimeout(() => {
+                    step1.classList.add('completed');
+                    step1Completed = true;
+
+                    // Update step 1 content to show completed state
+                    const stepContent = step1.querySelector('.step-content');
+                    stepContent.removeChild(step1Btn);
+
+                    const step1Status = document.createElement('div');
+                    step1Status.className = 'step-status completed';
+                    step1Status.innerHTML = `
+                        <svg class="check-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                    `;
+                    stepContent.appendChild(step1Status);
+
+                    checkAllStepsCompleted();
+                }, 1500);
+            }
+        });
+
+        // Step 2: Mobile Authentication
+        startMobileAuthBtn.addEventListener('click', () => {
+            if (step1Completed && !step2Completed) {
+                // Simulate mobile authentication process
+                startMobileAuthBtn.textContent = 'Authenticating...';
+                startMobileAuthBtn.disabled = true;
+
+                setTimeout(() => {
+                    step2.classList.add('completed');
+                    step2Completed = true;
+
+                    // Replace Start button with check mark
+                    const stepContent = step2.querySelector('.step-content');
+                    stepContent.removeChild(startMobileAuthBtn);
+
+                    const step2Status = document.createElement('div');
+                    step2Status.className = 'step-status completed';
+                    step2Status.innerHTML = `
+                        <svg class="check-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                    `;
+                    stepContent.appendChild(step2Status);
+
+                    checkAllStepsCompleted();
+                }, 2000);
+            }
+        });
+
+        function checkAllStepsCompleted() {
+            if (step1Completed && step2Completed) {
+                getStartedBtn.disabled = false;
+                getStartedBtn.classList.add('completed');
+            }
+        }
+
+        getStartedBtn.addEventListener('click', () => {
+            if (!getStartedBtn.disabled) {
+                showDashboard();
+            }
+        });
+
+        // Navigation functions
+        function showProofPage() {
+            welcomePage.classList.add('hidden');
+            proofPage.classList.remove('hidden');
+            currentStep = 'proof';
+        }
+
+        function showDashboard() {
+            proofPage.classList.add('hidden');
+            dashboardPage.classList.remove('hidden');
+
+            // Update dashboard with user data
+            dashboardTitle.textContent = `Hi, ${userData.username}!`;
+
+            // Update career-specific content
+            const careerData = getCareerData(userData.career);
+            document.getElementById('career-type').innerHTML = careerData.icon + ' ' + careerData.name;
+            document.getElementById('career-title').textContent = careerData.title;
+            document.getElementById('career-cta').textContent = careerData.cta;
+
+            currentStep = 'dashboard';
+        }
+
+        function getCareerData(career) {
+            const careerMap = {
+                'creative': {
+                    name: 'Creative Content Maker',
+                    title: 'Creative Virtuoso',
+                    icon: '<span class="material-icons">palette</span>',
+                    cta: 'Unleash your creativity across all mediums, inspire the world!'
+                },
+                'developer': {
+                    name: 'Developer',
+                    title: 'Code Architect',
+                    icon: '<span class="material-icons">code</span>',
+                    cta: 'Build the future with AI-powered development skills'
+                },
+                'researcher': {
+                    name: 'Research & Innovation Expert',
+                    title: 'Innovation Pioneer',
+                    icon: '<span class="material-icons">psychology</span>',
+                    cta: 'Drive breakthrough discoveries and innovation'
+                },
+                'web3': {
+                    name: 'Web3 Network Pioneer',
+                    title: 'Blockchain Visionary',
+                    icon: '<span class="material-icons">language</span>',
+                    cta: 'Shape the decentralized future of the internet'
+                },
+                'influencer': {
+                    name: 'Social Influencer',
+                    title: 'Community Leader',
+                    icon: '<span class="material-icons">groups</span>',
+                    cta: 'Build communities and inspire positive change'
+                },
+                'gamer': {
+                    name: 'Gamer',
+                    title: 'Gaming Champion',
+                    icon: '<span class="material-icons">sports_esports</span>',
+                    cta: 'Master virtual worlds and competitive gaming'
+                },
+                'artist': {
+                    name: 'Artist',
+                    title: 'Creative Master',
+                    icon: '<span class="material-icons">brush</span>',
+                    cta: 'Express your vision through artistic excellence'
+                },
+                'entrepreneur': {
+                    name: 'Entrepreneur',
+                    title: 'Business Innovator',
+                    icon: '<span class="material-icons">business_center</span>',
+                    cta: 'Build ventures that change the world'
+                },
+                'educator': {
+                    name: 'Educator',
+                    title: 'Knowledge Catalyst',
+                    icon: '<span class="material-icons">school</span>',
+                    cta: 'Empower minds and shape the future through education'
+                },
+                'healthcare': {
+                    name: 'Healthcare Professional',
+                    title: 'Health Guardian',
+                    icon: '<span class="material-icons">local_hospital</span>',
+                    cta: 'Heal, care, and improve lives through medical expertise'
+                },
+                'athlete': {
+                    name: 'Athlete',
+                    title: 'Performance Champion',
+                    icon: '<span class="material-icons">emoji_events</span>',
+                    cta: 'Push physical limits and inspire through sport'
+                },
+                'writer': {
+                    name: 'Writer',
+                    title: 'Storytelling Master',
+                    icon: '<span class="material-icons">edit</span>',
+                    cta: 'Craft compelling narratives that move the world'
+                },
+                'software-engineer': {
+                    name: 'Software Engineer',
+                    title: 'System Architect',
+                    icon: '<span class="material-icons">computer</span>',
+                    cta: 'Build and maintain robust software systems'
+                },
+                'data-scientist': {
+                    name: 'Data Scientist',
+                    title: 'Insight Generator',
+                    icon: '<span class="material-icons">analytics</span>',
+                    cta: 'Extract insights and patterns from complex data'
+                },
+                'product-manager': {
+                    name: 'Product Manager',
+                    title: 'Product Strategist',
+                    icon: '<span class="material-icons">track_changes</span>',
+                    cta: 'Guide product development and strategic vision'
+                },
+                'designer': {
+                    name: 'UX/UI Designer',
+                    title: 'Experience Architect',
+                    icon: '<span class="material-icons">design_services</span>',
+                    cta: 'Create user-centered design solutions'
+                },
+                'marketing': {
+                    name: 'Marketing Specialist',
+                    title: 'Growth Catalyst',
+                    icon: '<span class="material-icons">campaign</span>',
+                    cta: 'Drive growth and build compelling brand experiences'
+                },
+                'manager': {
+                    name: 'Product Manager',
+                    title: 'Product Strategist',
+                    icon: '<span class="material-icons">business_center</span>',
+                    cta: 'Lead products from vision to market success'
+                },
+                'writer': {
+                    name: 'Content Writer',
+                    title: 'Story Architect',
+                    icon: '<span class="material-icons">edit</span>',
+                    cta: 'Craft compelling narratives that engage audiences'
+                },
+                'consultant': {
+                    name: 'Consultant',
+                    title: 'Solution Expert',
+                    icon: '<span class="material-icons">work</span>',
+                    cta: 'Solve complex challenges with strategic expertise'
+                },
+                'entrepreneur': {
+                    name: 'Entrepreneur',
+                    title: 'Innovation Pioneer',
+                    icon: '<span class="material-icons">rocket_launch</span>',
+                    cta: 'Build ventures that change the world'
+                },
+                'researcher': {
+                    name: 'Researcher',
+                    title: 'Knowledge Explorer',
+                    icon: '<span class="material-icons">science</span>',
+                    cta: 'Discover insights that advance human understanding'
+                },
+                'educator': {
+                    name: 'Educator',
+                    title: 'Learning Facilitator',
+                    icon: '<span class="material-icons">school</span>',
+                    cta: 'Empower minds through transformative education'
+                },
+                'artist': {
+                    name: 'Artist',
+                    title: 'Creative Expression',
+                    icon: '<span class="material-icons">theater_comedy</span>',
+                    cta: 'Express creativity that moves hearts and minds'
+                },
+                'engineer': {
+                    name: 'Engineer',
+                    title: 'System Builder',
+                    icon: '<span class="material-icons">engineering</span>',
+                    cta: 'Engineer solutions that power the future'
+                },
+                'explorer': {
+                    name: 'Explorer',
+                    title: 'Boundary Pusher',
+                    icon: '<span class="material-icons">explore</span>',
+                    cta: 'Discover new frontiers and possibilities'
+                },
+                'community': {
+                    name: 'Community Builder',
+                    title: 'Connection Catalyst',
+                    icon: '<span class="material-icons">groups</span>',
+                    cta: 'Build communities that thrive and grow together'
+                }
+            };
+
+            return careerMap[career] || careerMap['developer'];
+        }
+
+        // Update CTA text based on selected career
+        function updateCareerCTA(career) {
+            const careerData = getCareerData(career);
+            const ctaElement = document.getElementById('career-cta');
+
+            if (ctaElement && careerData) {
+                ctaElement.innerHTML = `
+                    <div class="cta-main">${careerData.cta}</div>
+                    <div class="cta-description">
+                        Complete our quick 2 step verification to unlock your<br>
+                        supercharged digital identity and join our authentic community.
+                    </div>
+                `;
+            }
+        }
+
+        function updateProgress() {
+            let progress = 0;
+            if (level1Complete) progress += 50;
+            if (level2Complete) progress += 50;
+            
+            progressFill.style.width = progress + '%';
+        }
+
+        // Tab switching functionality
+        function switchToTaskTab() {
+            taskTab.classList.add('bg-green-600', 'text-white');
+            taskTab.classList.remove('text-gray-400');
+            rewardsTab.classList.remove('bg-green-600', 'text-white');
+            rewardsTab.classList.add('text-gray-400');
+
+            taskContent.classList.remove('hidden');
+            rewardsContent.classList.add('hidden');
+
+            document.getElementById('active-count').textContent = '5 Active Tasks';
+        }
+
+        function switchToRewardsTab() {
+            rewardsTab.classList.add('bg-green-600', 'text-white');
+            rewardsTab.classList.remove('text-gray-400');
+            taskTab.classList.remove('bg-green-600', 'text-white');
+            taskTab.classList.add('text-gray-400');
+
+            rewardsContent.classList.remove('hidden');
+            taskContent.classList.add('hidden');
+
+            document.getElementById('active-count').textContent = 'Total Earned: 0.247 $twin3';
+        }
+
+        // Add event listeners for tabs
+        if (taskTab && rewardsTab) {
+            taskTab.addEventListener('click', switchToTaskTab);
+            rewardsTab.addEventListener('click', switchToRewardsTab);
+        }
+
+        // Background animation is handled by CSS
+        // No JavaScript particle generation needed
+
+        // Custom Select Functionality
+        function initializeCustomSelect() {
+            const trigger = document.getElementById('career-trigger');
+            const options = document.getElementById('career-options');
+            const selected = document.getElementById('career-selected');
+            const hiddenInput = document.getElementById('career');
+
+            if (!trigger || !options || !selected || !hiddenInput) return;
+
+            // Toggle dropdown
+            trigger.addEventListener('click', function() {
+                const isOpen = options.classList.contains('show');
+                if (isOpen) {
+                    options.classList.remove('show');
+                    trigger.classList.remove('active');
+                } else {
+                    options.classList.add('show');
+                    trigger.classList.add('active');
+                }
+            });
+
+            // Handle option selection
+            const optionElements = options.querySelectorAll('.custom-select-option');
+            optionElements.forEach(option => {
+                option.addEventListener('click', function() {
+                    const value = this.getAttribute('data-value');
+                    const icon = this.querySelector('.material-icons').textContent;
+                    const text = this.querySelector('span:last-child').textContent;
+
+                    // Update selected display
+                    selected.innerHTML = `
+                        <span class="material-icons">${icon}</span>
+                        <span>${text}</span>
+                    `;
+
+                    // Update hidden input
+                    hiddenInput.value = value;
+
+                    // Update CTA text on page 2
+                    updateCareerCTA(value);
+
+                    // Close dropdown
+                    options.classList.remove('show');
+                    trigger.classList.remove('active');
+
+                    // Validate form
+                    validateWelcomeForm();
+                });
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!trigger.contains(event.target) && !options.contains(event.target)) {
+                    options.classList.remove('show');
+                    trigger.classList.remove('active');
+                }
+            });
+        }
+
+        // Username Input Functionality
+        function initializeUsernameInput() {
+            const usernameInput = document.getElementById('username');
+            const usernameWrapper = document.getElementById('username-wrapper');
+            const clearButton = document.getElementById('username-clear');
+
+            if (!usernameInput || !usernameWrapper || !clearButton) return;
+
+            // Update clear button visibility based on input value
+            function updateClearButton() {
+                if (usernameInput.value.trim()) {
+                    usernameWrapper.classList.add('has-value');
+                } else {
+                    usernameWrapper.classList.remove('has-value');
+                }
+            }
+
+            // Handle input changes
+            usernameInput.addEventListener('input', function() {
+                updateClearButton();
+                validateWelcomeForm();
+            });
+
+            // Handle clear button click
+            clearButton.addEventListener('click', function() {
+                usernameInput.value = '';
+                usernameInput.focus();
+                updateClearButton();
+                validateWelcomeForm();
+            });
+
+            // Initial check
+            updateClearButton();
+        }
+
+        // Initialize
+        initializeCustomSelect();
+        initializeUsernameInput();
+        validateWelcomeForm();
+
+        // Set initial CTA text for developer (default)
+        updateCareerCTA('developer');
+    </script>
+</body>
+</html>
