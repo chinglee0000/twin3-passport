@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>twin3 Product Roadmap 2024-2026</title>
+    <title>twin3 Product Roadmap</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         * {
@@ -255,14 +255,6 @@
             border-left: 4px solid;
             font-size: 0.9rem;
             line-height: 1.4;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .feature-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
-            background: #3a3a3a;
         }
 
         .user-layer .feature-item { border-left-color: #7F56D9; }
@@ -362,69 +354,7 @@
             background: rgba(0,0,0,0.3);
         }
 
-        /* 彈出詳情框 */
-        .detail-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #1a1a1a;
-            border: 1px solid #444;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
-            max-width: 500px;
-            width: 90%;
-            z-index: 1000;
-            display: none;
-            color: #fff;
-        }
 
-        .popup-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 999;
-            display: none;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #888;
-        }
-
-        .close-btn:hover {
-            color: #fff;
-        }
-
-        .detail-popup h2 {
-            color: #00d4ff;
-            margin-bottom: 20px;
-        }
-
-        .detail-popup h3 {
-            color: #fff;
-            margin: 15px 0 10px 0;
-        }
-
-        .detail-popup ul {
-            margin-left: 20px;
-            margin-bottom: 15px;
-        }
-
-        .detail-popup li {
-            margin-bottom: 5px;
-            color: #ccc;
-        }
 
         /* 移除所有Material Icons的margin並垂直對齊 */
         .material-icons {
@@ -482,20 +412,20 @@
     <div class="roadmap-container">
         <!-- 頂部標題區 -->
         <div class="header">
-            <h1 data-zh="twin3 產品路線圖" data-en="twin3 Product Roadmap">twin3 產品路線圖</h1>
+            <h1 data-zh="twin3 產品路線圖" data-en="twin3 Product Roadmap">twin3 Product Roadmap</h1>
             <div class="language-switcher">
                 <div class="language-dropdown">
                     <div class="language-toggle" onclick="toggleLanguageMenu(event)">
                         <span class="material-icons">language</span>
-                        <span id="currentLang">中文</span>
+                        <span id="currentLang">English</span>
                         <span class="material-icons">expand_more</span>
                     </div>
                     <div class="language-menu" id="languageMenu">
-                        <div class="language-option active" onclick="switchLanguage('zh', event)" data-lang="zh">
-                            <span>中文</span>
-                        </div>
-                        <div class="language-option" onclick="switchLanguage('en', event)" data-lang="en">
+                        <div class="language-option active" onclick="switchLanguage('en', event)" data-lang="en">
                             <span>English</span>
+                        </div>
+                        <div class="language-option" onclick="switchLanguage('zh', event)" data-lang="zh">
+                            <span>中文</span>
                         </div>
                     </div>
                 </div>
@@ -737,16 +667,9 @@ Data Accumulation → Enterprise Services → Ecosystem Platform">B2B模式層�
         </div>
     </div>
 
-    <!-- 彈出詳情框 -->
-    <div class="popup-overlay" id="popupOverlay"></div>
-    <div class="detail-popup" id="detailPopup">
-        <button class="close-btn" onclick="closePopup()">&times;</button>
-        <div id="popupContent"></div>
-    </div>
-
     <script>
         // 當前語言
-        let currentLanguage = 'zh';
+        let currentLanguage = 'en';
 
         // 切換語言下拉選單
         function toggleLanguageMenu(event) {
@@ -808,19 +731,10 @@ Data Accumulation → Enterprise Services → Ecosystem Platform">B2B模式層�
                 }
             });
 
-            // 更新彈出框內容的語言
-            updatePopupLanguage();
+
         }
 
-        // 更新彈出框語言
-        function updatePopupLanguage() {
-            // 如果彈出框正在顯示，重新設置內容
-            const popup = document.getElementById('detailPopup');
-            if (popup.style.display === 'block') {
-                // 重新觸發當前顯示的內容
-                closePopup();
-            }
-        }
+
 
         // 點擊外部關閉下拉選單
         document.addEventListener('click', function(event) {
@@ -832,6 +746,9 @@ Data Accumulation → Enterprise Services → Ecosystem Platform">B2B模式層�
 
         // 動畫初始化
         document.addEventListener('DOMContentLoaded', function() {
+            // 初始化為英文
+            initializeLanguage();
+
             // 為各個元素添加動畫類
             setTimeout(() => {
                 document.querySelector('.header').classList.add('animate-fade-in');
@@ -853,6 +770,22 @@ Data Accumulation → Enterprise Services → Ecosystem Platform">B2B模式層�
             addProgressIndicators();
         });
 
+        // 初始化語言為英文
+        function initializeLanguage() {
+            // 更新所有有語言屬性的元素為英文
+            document.querySelectorAll('[data-zh][data-en]').forEach(element => {
+                const enText = element.getAttribute('data-en');
+                if (element.querySelector('.material-icons')) {
+                    // 如果包含圖標，保留圖標並更新文字
+                    const icon = element.querySelector('.material-icons');
+                    const iconHtml = icon.outerHTML;
+                    element.innerHTML = iconHtml + enText;
+                } else {
+                    element.textContent = enText;
+                }
+            });
+        }
+
         // 添加進度指示器
         function addProgressIndicators() {
             const phases = document.querySelectorAll('.phase');
@@ -864,203 +797,11 @@ Data Accumulation → Enterprise Services → Ecosystem Platform">B2B模式層�
             });
         }
 
-        // 詳情數據
-        const detailData = {
-            'user-phase1': {
-                title: {
-                    zh: '🎨 用戶發展層 - Phase 1',
-                    en: '🎨 User Development - Phase 1'
-                },
-                content: {
-                    zh: `
-                        <h3>數位分身創造系統</h3>
-                        <ul>
-                            <li>直觀的捏臉編輯器，支援細緻的面部調整</li>
-                            <li>產品世界觀敘事系統，為每個角色創造獨特背景</li>
-                            <li>初始情感依附建立機制</li>
-                        </ul>
-                        <h3>養料互動機制</h3>
-                        <ul>
-                            <li>AI對話自動轉換為成長星星</li>
-                            <li>基礎traits解鎖系統</li>
-                            <li>視覺演化回饋機制</li>
-                        </ul>
-                        <h3>關鍵指標</h3>
-                        <ul>
-                            <li>命名率達到80%以上</li>
-                            <li>日均對話次數超過3次</li>
-                            <li>第7天留存率超過40%</li>
-                        </ul>
-                    `,
-                    en: `
-                        <h3>Digital Avatar Creation System</h3>
-                        <ul>
-                            <li>Intuitive face editor with detailed facial adjustments</li>
-                            <li>Product worldview narrative system for unique character backgrounds</li>
-                            <li>Initial emotional attachment establishment mechanism</li>
-                        </ul>
-                        <h3>Nurturing Interaction Mechanism</h3>
-                        <ul>
-                            <li>AI conversations automatically convert to matrix stars</li>
-                            <li>Basic traits unlock system</li>
-                            <li>Visual evolution feedback mechanism</li>
-                        </ul>
-                        <h3>Key Metrics</h3>
-                        <ul>
-                            <li>Naming rate above 80%</li>
-                            <li>Daily conversations over 3 times</li>
-                            <li>Day 7 retention rate over 40%</li>
-                        </ul>
-                    `
-                }
-            },
-            'market-phase1': {
-                title: {
-                    zh: '💰 市場拓展層 - Phase 1',
-                    en: '💰 Market Expansion - Phase 1'
-                },
-                content: {
-                    zh: `
-                        <h3>Freemium模式啟動</h3>
-                        <ul>
-                            <li>免費版：限制1個角色</li>
-                            <li>付費版：解鎖多角色功能</li>
-                            <li>月訂閱定價：$9.99</li>
-                        </ul>
-                        <h3>用戶獲取策略</h3>
-                        <ul>
-                            <li>針對GenZ的社群媒體行銷</li>
-                            <li>與相關網紅合作推廣</li>
-                            <li>應用商店搜尋優化(ASO)</li>
-                        </ul>
-                        <h3>目標達成</h3>
-                        <ul>
-                            <li>獲得1萬活躍用戶</li>
-                            <li>達到5%付費轉換率</li>
-                            <li>實現$50K月收入</li>
-                        </ul>
-                    `,
-                    en: `
-                        <h3>Freemium Model Launch</h3>
-                        <ul>
-                            <li>Free version: Limited to 1 character</li>
-                            <li>Premium version: Unlock multiple characters</li>
-                            <li>Monthly subscription pricing: $9.99</li>
-                        </ul>
-                        <h3>User Acquisition Strategy</h3>
-                        <ul>
-                            <li>GenZ-targeted social media marketing</li>
-                            <li>Influencer partnership promotions</li>
-                            <li>App Store Optimization (ASO)</li>
-                        </ul>
-                        <h3>Target Achievement</h3>
-                        <ul>
-                            <li>Acquire 10K active users</li>
-                            <li>Achieve 5% paid conversion rate</li>
-                            <li>Realize $50K monthly revenue</li>
-                        </ul>
-                    `
-                }
-            },
-            'b2b-phase1': {
-                title: {
-                    zh: '🏢 B2B模式層 - Phase 1',
-                    en: '🏢 B2B Model - Phase 1'
-                },
-                content: {
-                    zh: `
-                        <h3>數據收集基礎</h3>
-                        <ul>
-                            <li>建立完整的用戶行為追蹤系統</li>
-                            <li>開發對話品質分析工具</li>
-                            <li>構建個性化用戶畫像</li>
-                        </ul>
-                        <h3>市場研究</h3>
-                        <ul>
-                            <li>深度調研B端客戶需求</li>
-                            <li>完成競品分析報告</li>
-                            <li>制定服務定價策略</li>
-                        </ul>
-                        <h3>初期合作</h3>
-                        <ul>
-                            <li>與5家企業建立試點合作</li>
-                            <li>驗證數據服務價值</li>
-                            <li>優化商業模式</li>
-                        </ul>
-                    `,
-                    en: `
-                        <h3>Data Collection Foundation</h3>
-                        <ul>
-                            <li>Establish comprehensive user behavior tracking system</li>
-                            <li>Develop conversation quality analysis tools</li>
-                            <li>Build personalized user profiles</li>
-                        </ul>
-                        <h3>Market Research</h3>
-                        <ul>
-                            <li>In-depth research on B2B client needs</li>
-                            <li>Complete competitive analysis report</li>
-                            <li>Formulate service pricing strategy</li>
-                        </ul>
-                        <h3>Initial Partnerships</h3>
-                        <ul>
-                            <li>Establish pilot partnerships with 5 enterprises</li>
-                            <li>Validate data service value</li>
-                            <li>Optimize business model</li>
-                        </ul>
-                    `
-                }
-            }
-        };
 
-        // 點擊功能項目顯示詳情
-        document.addEventListener('click', function(e) {
-            if (e.target.closest('.feature-item')) {
-                const featureItem = e.target.closest('.feature-item');
-                const layer = featureItem.closest('.layer');
-                const phaseContent = featureItem.closest('.phase-content');
-                const phaseIndex = Array.from(phaseContent.parentNode.children).indexOf(phaseContent);
 
-                let layerType = '';
-                if (layer.querySelector('.user-layer')) layerType = 'user';
-                else if (layer.querySelector('.market-layer')) layerType = 'market';
-                else if (layer.querySelector('.b2b-layer')) layerType = 'b2b';
 
-                const dataKey = `${layerType}-phase${phaseIndex + 1}`;
-                showPopup(detailData[dataKey]);
-            }
-        });
 
-        // 顯示彈出框
-        function showPopup(data) {
-            if (!data) return;
 
-            const title = data.title[currentLanguage] || data.title.zh;
-            const content = data.content[currentLanguage] || data.content.zh;
-
-            document.getElementById('popupContent').innerHTML = `
-                <h2>${title}</h2>
-                ${content}
-            `;
-
-            document.getElementById('popupOverlay').style.display = 'block';
-            document.getElementById('detailPopup').style.display = 'block';
-        }
-
-        // 關閉彈出框
-        function closePopup() {
-            document.getElementById('popupOverlay').style.display = 'none';
-            document.getElementById('detailPopup').style.display = 'none';
-        }
-
-        // 點擊遮罩關閉彈出框
-        document.getElementById('popupOverlay').addEventListener('click', closePopup);
-
-        // 鍵盤ESC關閉彈出框
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closePopup();
-            }
-        });
 
         // 滑鼠懸停效果
         document.querySelectorAll('.phase').forEach(phase => {
