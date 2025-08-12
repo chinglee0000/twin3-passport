@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twin3 Passport Dashboard - Live Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        'twin-blue': {
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                        },
+                        'humanity-orange': {
+                            400: '#fb923c',
+                            500: '#f97316',
+                            600: '#ea580c',
+                        },
+                        'profession-green': {
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'float': 'float 6s ease-in-out infinite',
+                        'spin-slow': 'spin 3s linear infinite',
+                    },
+                    keyframes: {
+                        glow: {
+                            '0%': { boxShadow: '0 0 5px rgba(59, 130, 246, 0.5)' },
+                            '100%': { boxShadow: '0 0 20px rgba(59, 130, 246, 0.8)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --primary-bg: #0a0a0a;
+            --secondary-bg: #111111;
+            --card-bg: #1a1a1a;
+            --border-color: #333333;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --text-muted: #666666;
+            --accent-green: #00ff88;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--primary-bg);
+            min-height: 100vh;
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .card:hover {
+            border-color: #555555;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: var(--accent-green);
+            color: #000000;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background: #00cc6a;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            border-color: #555555;
+            color: var(--text-primary);
+        }
+
+        .progress-bar {
+            background: #222222;
+            height: 4px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: var(--accent-green);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .metric-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-connected {
+            color: var(--accent-green);
+        }
+
+        .status-pending {
+            color: #ffa500;
+        }
+
+        .status-disconnected {
+            color: var(--text-muted);
+        }
+
+        .minimal-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+    <!-- Minimal Grid Background -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute inset-0 opacity-5">
+            <div class="absolute inset-0" style="background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.1) 1px, transparent 0); background-size: 40px 40px;"></div>
+        </div>
+    </div>
+
+    <div class="relative z-10 container mx-auto px-4 py-6 max-w-7xl">
+        <!-- Header Section -->
+        <div class="glass-card p-6 rounded-2xl mb-8 relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-green-500/5 rounded-2xl"></div>
+
+            <div class="relative z-10 flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <div class="w-16 h-16 rounded-xl flex items-center justify-center text-2xl shadow-lg relative overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-br from-blue-500 via-purple-500 to-green-500 opacity-90"></div>
+                            <span class="relative z-10">👨‍💻</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h1 class="text-2xl font-bold text-white mb-1">
+                            Hi, <span class="gradient-text">Alex Chen</span>
+                        </h1>
+                        <div class="flex items-center space-x-4">
+                            <div class="glass-card px-3 py-1 rounded-lg border border-blue-500/20">
+                                <span class="text-gradient-blue text-sm font-semibold">💻 Developer</span>
+                            </div>
+                            <div class="glass-card px-3 py-1 rounded-lg border border-purple-500/20">
+                                <span class="text-gradient-purple text-sm font-semibold">Code Architect</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 text-sm mt-2">Build the future with AI-powered development skills</p>
+                    </div>
+                </div>
+
+                <div class="text-right">
+                    <button class="btn-primary px-6 py-3 rounded-xl font-semibold text-white shadow-lg hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105">
+                        <span class="flex items-center space-x-2">
+                            <span>�</span>
+                            <span>Start Coding Challenge</span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Main Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Twin Matrix Score -->
+            <div class="glass-card p-6 rounded-2xl border border-blue-500/20 neon-glow-blue card-hover relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-blue-500/5 rounded-2xl"></div>
+
+                <div class="relative z-10">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
+                                <span class="text-white text-lg">🧠</span>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-white">Twin Matrix Score</h3>
+                                <p class="text-gradient-blue text-xs">AI-Human Fusion</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mb-4">
+                        <div class="text-4xl font-bold text-gradient-blue mb-1">80</div>
+                        <div class="text-sm text-gray-400">/ 266</div>
+                        <div class="w-full bg-gray-700/50 rounded-full h-2 mt-2">
+                            <div class="h-2 bg-gradient-to-r from-blue-500 to-blue-400 rounded-full transition-all duration-700" style="width: 30%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- $twin3 Coin -->
+            <div class="glass-card p-6 rounded-2xl border border-yellow-500/20 neon-glow-green card-hover relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-yellow-500/10 via-transparent to-yellow-500/5 rounded-2xl"></div>
+
+                <div class="relative z-10">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-yellow-500 to-yellow-600 flex items-center justify-center shadow-lg">
+                                <span class="text-white text-lg">🪙</span>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-white">$twin3 Coins</h3>
+                                <p class="text-yellow-400 text-xs">Blockchain Wallet</p>
+                            </div>
+                        </div>
+                        <button class="text-yellow-400 hover:text-yellow-300 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="text-center mb-4">
+                        <div class="text-4xl font-bold text-yellow-400 mb-1">1,247</div>
+                        <div class="text-sm text-gray-400">Available Balance</div>
+                        <button class="mt-2 px-4 py-2 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white text-xs rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all">
+                            Connect Wallet
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Matrix Progress Overview -->
+            <div class="glass-card p-6 rounded-2xl border border-purple-500/20 neon-glow-purple card-hover relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-purple-500/5 rounded-2xl"></div>
+
+                <div class="relative z-10">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-lg">
+                                <span class="text-white text-lg">📊</span>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-white">Matrix Progress</h3>
+                                <p class="text-gradient-purple text-xs">Developer Traits</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-white text-sm">Humanity Score</span>
+                                <span class="text-purple-400 text-sm font-bold">82</span>
+                            </div>
+                            <div class="w-full bg-gray-700/50 rounded-full h-2">
+                                <div class="h-2 bg-gradient-to-r from-purple-500 to-purple-400 rounded-full transition-all duration-700" style="width: 82%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-white text-sm">Cybersecurity Awareness</span>
+                                <span class="text-blue-400 text-sm font-bold">75</span>
+                            </div>
+                            <div class="w-full bg-gray-700/50 rounded-full h-2">
+                                <div class="h-2 bg-gradient-to-r from-blue-500 to-blue-400 rounded-full transition-all duration-700" style="width: 75%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-white text-sm">Programming Level</span>
+                                <span class="text-green-400 text-sm font-bold">88</span>
+                            </div>
+                            <div class="w-full bg-gray-700/50 rounded-full h-2">
+                                <div class="h-2 bg-gradient-to-r from-green-500 to-green-400 rounded-full transition-all duration-700" style="width: 88%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-white text-sm">Technical Aptitude</span>
+                                <span class="text-orange-400 text-sm font-bold">79</span>
+                            </div>
+                            <div class="w-full bg-gray-700/50 rounded-full h-2">
+                                <div class="h-2 bg-gradient-to-r from-orange-500 to-orange-400 rounded-full transition-all duration-700" style="width: 79%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Account Approval Section -->
+        <div class="mb-8">
+            <div class="glass-card p-6 rounded-2xl border border-white/10 relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-r from-green-500/5 via-blue-500/5 to-purple-500/5 rounded-2xl"></div>
+
+                <div class="relative z-10">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center shadow-lg">
+                                <span class="text-white text-lg">🔗</span>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold text-white">Account Approval</h2>
+                                <p class="text-gray-400 text-sm">Connect required accounts for Developer verification</p>
+                            </div>
+                        </div>
+                        <div class="text-green-400 text-sm font-semibold">
+                            1/3 Required Connected
+                        </div>
+                    </div>
+
+                    <!-- Required Accounts -->
+                    <div class="mb-6">
+                        <h3 class="text-white font-semibold mb-4 flex items-center">
+                            <span class="w-2 h-2 bg-red-500 rounded-full mr-2"></span>
+                            Required Accounts
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- GitHub - Connected -->
+                            <div class="glass-card p-4 rounded-xl border border-green-500/30 bg-green-500/10 card-hover">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center">
+                                            <span class="text-xl">🐙</span>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold text-white text-sm">GitHub</h4>
+                                            <p class="text-xs text-green-400">@alexchen</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-green-400">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-gray-400">Rewards: +25 points</span>
+                                    <span class="px-2 py-1 bg-green-500 text-white rounded-full">Connected</span>
+                                </div>
+                            </div>
+
+                            <!-- Stack Overflow - Not Connected -->
+                            <div class="glass-card p-4 rounded-xl border border-orange-500/30 bg-orange-500/5 card-hover">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 rounded-lg bg-orange-600 flex items-center justify-center">
+                                            <span class="text-white text-xl">📚</span>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold text-white text-sm">Stack Overflow</h4>
+                                            <p class="text-xs text-gray-500">Not connected</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-orange-400">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-gray-400">Rewards: +20 points</span>
+                                    <button class="px-3 py-1 bg-orange-500 hover:bg-orange-600 text-white rounded-full transition-colors">
+                                        Approve
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- LinkedIn - Not Connected -->
+                            <div class="glass-card p-4 rounded-xl border border-blue-500/30 bg-blue-500/5 card-hover">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 rounded-lg bg-blue-600 flex items-center justify-center">
+                                            <span class="text-white text-xl">💼</span>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold text-white text-sm">LinkedIn</h4>
+                                            <p class="text-xs text-gray-500">Not connected</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-blue-400">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-gray-400">Rewards: +15 points</span>
+                                    <button class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-full transition-colors">
+                                        Approve
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recommended Accounts -->
+                    <div>
+                        <h3 class="text-white font-semibold mb-4 flex items-center">
+                            <span class="w-2 h-2 bg-yellow-500 rounded-full mr-2"></span>
+                            Recommended Accounts
+                        </h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <div class="glass-card p-3 rounded-lg border border-gray-600/30 text-center card-hover">
+                                <div class="text-2xl mb-2">🐦</div>
+                                <div class="text-xs text-white font-medium">Twitter</div>
+                                <div class="text-xs text-gray-400">+10 pts</div>
+                            </div>
+                            <div class="glass-card p-3 rounded-lg border border-gray-600/30 text-center card-hover">
+                                <div class="text-2xl mb-2">✍️</div>
+                                <div class="text-xs text-white font-medium">Medium</div>
+                                <div class="text-xs text-gray-400">+12 pts</div>
+                            </div>
+                            <div class="glass-card p-3 rounded-lg border border-gray-600/30 text-center card-hover">
+                                <div class="text-2xl mb-2">💬</div>
+                                <div class="text-xs text-white font-medium">Discord</div>
+                                <div class="text-xs text-gray-400">+8 pts</div>
+                            </div>
+                            <div class="glass-card p-3 rounded-lg border border-gray-600/30 text-center card-hover">
+                                <div class="text-2xl mb-2">📺</div>
+                                <div class="text-xs text-white font-medium">YouTube</div>
+                                <div class="text-xs text-gray-400">+15 pts</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Task & Rewards Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Tasks Section -->
+            <div class="glass-card p-6 rounded-2xl border border-white/10 relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5 rounded-2xl"></div>
+
+                <div class="relative z-10">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
+                                <span class="text-white text-lg">📋</span>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold text-white">Available Tasks</h2>
+                                <p class="text-gray-400 text-sm">Complete tasks to earn rewards</p>
+                            </div>
+                        </div>
+                        <div class="text-blue-400 text-sm font-semibold">
+                            3 Active
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Follow Twin3 X -->
+                        <div class="glass-card p-4 rounded-xl border border-blue-500/20 bg-blue-500/5 card-hover">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
+                                        <span class="text-white text-sm">�</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-white text-sm">Follow Twin3 on X</h4>
+                                        <p class="text-xs text-gray-400">Stay updated with latest news</p>
+                                    </div>
+                                </div>
+                                <button class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-xs rounded-full transition-colors">
+                                    Complete
+                                </button>
+                            </div>
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="text-blue-400">Reward: +10 $twin3</span>
+                                <span class="text-gray-400">Social Task</span>
+                            </div>
+                        </div>
+
+                        <!-- Join Discord -->
+                        <div class="glass-card p-4 rounded-xl border border-purple-500/20 bg-purple-500/5 card-hover">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 rounded-lg bg-purple-600 flex items-center justify-center">
+                                        <span class="text-white text-sm">�</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-white text-sm">Join Twin3 Discord</h4>
+                                        <p class="text-xs text-gray-400">Connect with the community</p>
+                                    </div>
+                                </div>
+                                <button class="px-3 py-1 bg-purple-500 hover:bg-purple-600 text-white text-xs rounded-full transition-colors">
+                                    Complete
+                                </button>
+                            </div>
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="text-purple-400">Reward: +15 $twin3</span>
+                                <span class="text-gray-400">Community Task</span>
+                            </div>
+                        </div>
+
+                        <!-- Complete Profile -->
+                        <div class="glass-card p-4 rounded-xl border border-green-500/20 bg-green-500/5 card-hover">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 rounded-lg bg-green-600 flex items-center justify-center">
+                                        <span class="text-white text-sm">👤</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-white text-sm">Complete Your Profile</h4>
+                                        <p class="text-xs text-gray-400">Add bio and skills</p>
+                                    </div>
+                                </div>
+                                <button class="px-3 py-1 bg-green-500 hover:bg-green-600 text-white text-xs rounded-full transition-colors">
+                                    Complete
+                                </button>
+                            </div>
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="text-green-400">Reward: +20 Matrix Points</span>
+                                <span class="text-gray-400">Profile Task</span>
+                            </div>
+                        </div>
+
+                        <!-- Weekly Challenge -->
+                        <div class="glass-card p-4 rounded-xl border border-yellow-500/20 bg-yellow-500/5 card-hover">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 rounded-lg bg-yellow-600 flex items-center justify-center">
+                                        <span class="text-white text-sm">🏆</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-white text-sm">Weekly Coding Challenge</h4>
+                                        <p class="text-xs text-gray-400">Solve algorithm problems</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-xs text-yellow-400 font-semibold">2/5 Complete</div>
+                                    <div class="w-16 bg-gray-700 rounded-full h-1 mt-1">
+                                        <div class="h-1 bg-yellow-500 rounded-full" style="width: 40%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="text-yellow-400">Reward: +50 Matrix Points</span>
+                                <span class="text-gray-400">Weekly Challenge</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rewards Section -->
+            <div class="glass-card p-6 rounded-2xl border border-white/10 relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-green-500/5 via-transparent to-yellow-500/5 rounded-2xl"></div>
+
+                <div class="relative z-10">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center shadow-lg">
+                                <span class="text-white text-lg">🎁</span>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold text-white">Recent Rewards</h2>
+                                <p class="text-gray-400 text-sm">Your latest achievements</p>
+                            </div>
+                        </div>
+                        <div class="text-green-400 text-sm font-semibold">
+                            +125 Today
+                        </div>
+                    </div>
+
+                    <!-- Rewards Summary -->
+                    <div class="grid grid-cols-3 gap-3 mb-6">
+                        <div class="glass-card p-3 rounded-lg text-center border border-yellow-500/20">
+                            <div class="text-2xl font-bold text-yellow-400">45</div>
+                            <div class="text-xs text-gray-400">$twin3 Coins</div>
+                        </div>
+                        <div class="glass-card p-3 rounded-lg text-center border border-blue-500/20">
+                            <div class="text-2xl font-bold text-blue-400">80</div>
+                            <div class="text-xs text-gray-400">Matrix Points</div>
+                        </div>
+                        <div class="glass-card p-3 rounded-lg text-center border border-purple-500/20">
+                            <div class="text-2xl font-bold text-purple-400">12</div>
+                            <div class="text-xs text-gray-400">Achievements</div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Rewards List -->
+                    <div class="space-y-3">
+                        <div class="glass-card p-3 rounded-lg border border-green-500/20 bg-green-500/5">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 rounded-lg bg-green-600 flex items-center justify-center">
+                                        <span class="text-white text-xs">🐙</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-white text-sm font-medium">GitHub Connected</h4>
+                                        <p class="text-xs text-gray-400">Account verification completed</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-green-400 text-sm font-bold">+25</div>
+                                    <div class="text-xs text-gray-400">2h ago</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-3 rounded-lg border border-blue-500/20 bg-blue-500/5">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
+                                        <span class="text-white text-xs">🧠</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-white text-sm font-medium">Daily Login Streak</h4>
+                                        <p class="text-xs text-gray-400">7 days in a row</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-blue-400 text-sm font-bold">+15</div>
+                                    <div class="text-xs text-gray-400">1d ago</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-3 rounded-lg border border-purple-500/20 bg-purple-500/5">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 rounded-lg bg-purple-600 flex items-center justify-center">
+                                        <span class="text-white text-xs">💻</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-white text-sm font-medium">Code Review Completed</h4>
+                                        <p class="text-xs text-gray-400">Helped team member</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-purple-400 text-sm font-bold">+20</div>
+                                    <div class="text-xs text-gray-400">2d ago</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-3 rounded-lg border border-yellow-500/20 bg-yellow-500/5">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 rounded-lg bg-yellow-600 flex items-center justify-center">
+                                        <span class="text-white text-xs">🏆</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-white text-sm font-medium">Algorithm Challenge</h4>
+                                        <p class="text-xs text-gray-400">Solved medium problem</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-yellow-400 text-sm font-bold">+30</div>
+                                    <div class="text-xs text-gray-400">3d ago</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- View All Button -->
+                    <div class="mt-6 text-center">
+                        <button class="px-4 py-2 bg-gradient-to-r from-green-500 to-blue-500 text-white text-sm rounded-lg hover:from-green-600 hover:to-blue-600 transition-all">
+                            View All Rewards
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <!-- Footer -->
+        <div class="text-center py-12 border-t border-white/5 mt-16">
+            <div class="mb-6">
+                <h3 class="text-2xl font-bold gradient-text mb-2">Twin3 Passport</h3>
+                <p class="text-gray-400 text-lg">Your journey to AI-Human collaboration excellence</p>
+            </div>
+
+            <div class="flex justify-center space-x-8 mb-8 text-sm text-gray-500">
+                <a href="#" class="hover:text-white transition-colors hover:underline">Privacy Policy</a>
+                <a href="#" class="hover:text-white transition-colors hover:underline">Terms of Service</a>
+                <a href="#" class="hover:text-white transition-colors hover:underline">Support</a>
+                <a href="#" class="hover:text-white transition-colors hover:underline">Documentation</a>
+            </div>
+
+            <div class="text-xs text-gray-600">
+                <p>© 2024 Twin3.ai - Empowering the future of human-AI collaboration</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 新的互動功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 任務完成按鈕
+            const taskCompleteButtons = document.querySelectorAll('button');
+            taskCompleteButtons.forEach(button => {
+                if (button.textContent.includes('Complete')) {
+                    button.addEventListener('click', function() {
+                        const taskCard = this.closest('.glass-card');
+                        const taskTitle = taskCard.querySelector('h4').textContent;
+
+                        // 更新按鈕狀態
+                        this.innerHTML = '✅ Completed';
+                        this.disabled = true;
+                        this.classList.remove('bg-blue-500', 'bg-purple-500', 'bg-green-500');
+                        this.classList.add('bg-gray-600', 'cursor-not-allowed');
+
+                        // 更新卡片樣式
+                        taskCard.classList.add('border-green-500/30', 'bg-green-500/10');
+
+                        // 顯示獎勵通知
+                        showNotification(`🎉 Task "${taskTitle}" completed!`, 'success');
+
+                        // 更新 Twin3 coin 數量
+                        const coinElement = document.querySelector('.text-4xl.font-bold.text-yellow-400');
+                        if (coinElement) {
+                            const currentCoins = parseInt(coinElement.textContent.replace(',', ''));
+                            const reward = Math.floor(Math.random() * 20) + 10;
+                            coinElement.textContent = (currentCoins + reward).toLocaleString();
+                        }
+                    });
+                }
+            });
+
+            // 帳戶批准按鈕
+            const approveButtons = document.querySelectorAll('button');
+            approveButtons.forEach(button => {
+                if (button.textContent.includes('Approve')) {
+                    button.addEventListener('click', function() {
+                        const accountCard = this.closest('.glass-card');
+                        const accountName = accountCard.querySelector('h4').textContent;
+
+                        // 模擬連接過程
+                        this.innerHTML = '⏳ Connecting...';
+                        this.disabled = true;
+
+                        setTimeout(() => {
+                            // 更新卡片狀態
+                            accountCard.classList.remove('border-orange-500/30', 'border-blue-500/30', 'bg-orange-500/5', 'bg-blue-500/5');
+                            accountCard.classList.add('border-green-500/30', 'bg-green-500/10');
+
+                            // 更新狀態文字
+                            const statusText = accountCard.querySelector('.text-gray-500');
+                            if (statusText) {
+                                statusText.textContent = '@connected_user';
+                                statusText.classList.remove('text-gray-500');
+                                statusText.classList.add('text-green-400');
+                            }
+
+                            // 更新按鈕
+                            this.innerHTML = 'Connected';
+                            this.classList.remove('bg-orange-500', 'bg-blue-500');
+                            this.classList.add('bg-green-500');
+
+                            // 更新圖標
+                            const icon = accountCard.querySelector('svg');
+                            if (icon) {
+                                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>';
+                                icon.classList.add('text-green-400');
+                            }
+
+                            showNotification(`✅ ${accountName} connected successfully!`, 'success');
+
+                            // 更新連接統計
+                            updateConnectionStats();
+
+                        }, 2000);
+                    });
+                }
+            });
+
+            // 錢包連接按鈕
+            const walletButton = document.querySelector('button');
+            if (walletButton && walletButton.textContent.includes('Connect Wallet')) {
+                walletButton.addEventListener('click', function() {
+                    this.innerHTML = '⏳ Connecting...';
+                    this.disabled = true;
+
+                    setTimeout(() => {
+                        this.innerHTML = '✅ Wallet Connected';
+                        this.classList.remove('from-yellow-500', 'to-yellow-600');
+                        this.classList.add('from-green-500', 'to-green-600');
+                        showNotification('🔗 Blockchain wallet connected!', 'success');
+                    }, 2000);
+                });
+            }
+
+            // 添加懸停效果
+            const cards = document.querySelectorAll('.card-hover');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-4px)';
+                    this.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+                });
+
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+
+            // 通知系統
+            function showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                const bgColor = type === 'success' ? 'bg-green-600' : type === 'error' ? 'bg-red-600' : 'bg-blue-600';
+
+                notification.className = `fixed top-4 right-4 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50 transition-all duration-300 transform translate-x-full`;
+                notification.textContent = message;
+                document.body.appendChild(notification);
+
+                // 動畫進入
+                setTimeout(() => {
+                    notification.classList.remove('translate-x-full');
+                }, 100);
+
+                // 自動消失
+                setTimeout(() => {
+                    notification.classList.add('translate-x-full');
+                    setTimeout(() => {
+                        if (document.body.contains(notification)) {
+                            document.body.removeChild(notification);
+                        }
+                    }, 300);
+                }, 3000);
+            }
+
+            // 更新連接統計
+            function updateConnectionStats() {
+                const connectedCount = document.querySelectorAll('.border-green-500\\/30').length;
+                const totalCount = 3; // Required accounts
+                const statusElement = document.querySelector('.text-green-400.text-sm.font-semibold');
+                if (statusElement) {
+                    statusElement.textContent = `${connectedCount}/${totalCount} Required Connected`;
+                }
+            }
+
+            // 模擬實時數據更新
+            setInterval(() => {
+                // 隨機更新 Matrix Progress 分數
+                const progressBars = document.querySelectorAll('.h-2.bg-gradient-to-r');
+                progressBars.forEach(bar => {
+                    if (Math.random() < 0.1) { // 10% 機率更新
+                        const currentWidth = parseInt(bar.style.width) || 0;
+                        const newWidth = Math.min(100, currentWidth + Math.floor(Math.random() * 2));
+                        bar.style.width = `${newWidth}%`;
+
+                        // 更新對應的分數文字
+                        const scoreElement = bar.closest('div').parentElement.querySelector('.font-bold');
+                        if (scoreElement) {
+                            scoreElement.textContent = newWidth;
+                        }
+                    }
+                });
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

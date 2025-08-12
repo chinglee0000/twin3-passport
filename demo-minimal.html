@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twin3 Passport - Minimal Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-bg: #0a0a0a;
+            --card-bg: #1a1a1a;
+            --border-color: #333333;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --text-muted: #666666;
+            --accent-green: #00ff88;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--primary-bg);
+            min-height: 100vh;
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .card:hover {
+            border-color: #555555;
+        }
+        
+        .btn-primary {
+            background: var(--accent-green);
+            color: #000000;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary:hover {
+            background: #00cc6a;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-secondary:hover {
+            border-color: #555555;
+            color: var(--text-primary);
+        }
+        
+        .metric-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .metric-label {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-connected {
+            color: var(--accent-green);
+        }
+        
+        .status-pending {
+            color: #ffa500;
+        }
+        
+        .minimal-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            background: var(--border-color);
+        }
+        
+        .grid-bg {
+            background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+<body class="grid-bg">
+    <div class="container mx-auto px-6 py-8 max-w-6xl">
+        <!-- Header -->
+        <div class="card p-6 mb-8">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
+                        <span class="text-black font-bold text-lg">T3</span>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-white mb-1">Twin3 Passport</h1>
+                        <p class="text-gray-400 text-sm">Digital Identity & Reputation System</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <button class="btn-secondary text-sm">Settings</button>
+                    <button class="btn-primary text-sm">Connect Wallet</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Twin Matrix Score Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Main Score -->
+            <div class="lg:col-span-1">
+                <div class="card p-6">
+                    <h2 class="text-lg font-semibold text-white mb-4">Twin Matrix Score</h2>
+                    <div class="text-center">
+                        <div class="text-5xl font-bold text-white mb-2">187</div>
+                        <div class="text-sm text-gray-400 mb-4">Wi = (0.25Hi + 0.25Bi + 0.30Di + 0.20Si)^1.2</div>
+                        <div class="w-full bg-gray-700 rounded-full h-2">
+                            <div class="bg-green-400 h-2 rounded-full" style="width: 73%"></div>
+                        </div>
+                        <div class="text-xs text-gray-400 mt-2">73% of maximum score</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Score Components -->
+            <div class="lg:col-span-2">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="metric-card">
+                        <div class="metric-value">142</div>
+                        <div class="metric-label">Hi - Human Intelligence</div>
+                        <div class="text-xs text-gray-400 mt-2">Problem solving & creativity</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">198</div>
+                        <div class="metric-label">Bi - Blockchain Integration</div>
+                        <div class="text-xs text-gray-400 mt-2">On-chain activity & DeFi</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">203</div>
+                        <div class="metric-label">Di - Digital Footprint</div>
+                        <div class="text-xs text-gray-400 mt-2">Online presence & reputation</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">156</div>
+                        <div class="metric-label">Si - Social Impact</div>
+                        <div class="text-xs text-gray-400 mt-2">Community contributions</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Connection Status -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div class="card p-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="minimal-icon">
+                            <span>🔗</span>
+                        </div>
+                        <div>
+                            <div class="text-sm font-medium text-white">GitHub</div>
+                            <div class="text-xs text-gray-400">@alexchen</div>
+                        </div>
+                    </div>
+                    <div class="status-connected text-sm">●</div>
+                </div>
+            </div>
+            
+            <div class="card p-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="minimal-icon">
+                            <span>💼</span>
+                        </div>
+                        <div>
+                            <div class="text-sm font-medium text-white">LinkedIn</div>
+                            <div class="text-xs text-gray-400">Professional</div>
+                        </div>
+                    </div>
+                    <div class="status-connected text-sm">●</div>
+                </div>
+            </div>
+            
+            <div class="card p-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="minimal-icon">
+                            <span>🐦</span>
+                        </div>
+                        <div>
+                            <div class="text-sm font-medium text-white">Twitter</div>
+                            <div class="text-xs text-gray-400">@alexdev</div>
+                        </div>
+                    </div>
+                    <div class="status-pending text-sm">●</div>
+                </div>
+            </div>
+            
+            <div class="card p-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="minimal-icon">
+                            <span>💰</span>
+                        </div>
+                        <div>
+                            <div class="text-sm font-medium text-white">Wallet</div>
+                            <div class="text-xs text-gray-400">0x1234...5678</div>
+                        </div>
+                    </div>
+                    <div class="status-connected text-sm">●</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="card p-6">
+            <h2 class="text-lg font-semibold text-white mb-4">Recent Activity</h2>
+            <div class="space-y-3">
+                <div class="flex items-center justify-between py-2 border-b border-gray-700">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+                        <span class="text-sm text-white">GitHub repository created: "ai-trading-bot"</span>
+                    </div>
+                    <span class="text-xs text-gray-400">2 hours ago</span>
+                </div>
+                <div class="flex items-center justify-between py-2 border-b border-gray-700">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-2 h-2 bg-blue-400 rounded-full"></div>
+                        <span class="text-sm text-white">LinkedIn profile updated</span>
+                    </div>
+                    <span class="text-xs text-gray-400">1 day ago</span>
+                </div>
+                <div class="flex items-center justify-between py-2">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-2 h-2 bg-purple-400 rounded-full"></div>
+                        <span class="text-sm text-white">DeFi transaction completed</span>
+                    </div>
+                    <span class="text-xs text-gray-400">3 days ago</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!-- User Info Page (username + profession badges) -->
+<div id="user-info-page" class="min-h-screen relative hidden">
+  <div class="welcome-container">
+    <div class="welcome-form">
+      <h2 class="form-title">Create your Passport</h2>
+      <p class="form-subtitle">What can I call you? Then pick up to 3 professions.</p>
+
+      <div class="space-y-4">
+        <div class="input-wrapper" id="ui-username-wrapper">
+          <input type="text" id="ui-username" class="input-field" placeholder="Your nickname" />
+          <button type="button" class="input-clear" id="ui-username-clear">
+            <span class="material-icons icon-sm">close</span>
+          </button>
+        </div>
+
+        <div>
+          <div class="career-tags-header mb-2 text-gray-300 text-sm">Select 1-3 occupations</div>
+          <div id="badge-grid" class="badge-grid">
+            <!-- Badges injected by JS to ensure alphabetical order -->
+          </div>
+        </div>
+
+        <button id="ui-next" class="btn-primary" disabled>Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+

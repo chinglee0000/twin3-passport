@@ -1,0 +1,11 @@
+{
+  "name": "twin3-static-server",
+  "version": "1.0.0",
+  "description": "Static server for twin3.ai site",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "build": "echo 'No build step required for static files'"
+  },
+  "private": true
+}

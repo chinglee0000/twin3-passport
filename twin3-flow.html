@@ -3,73 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Twin3 Passport - Complete Flow</title>
+    <title>twin3 Passport - Complete Flow</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+
+    <!-- Web3Modal v2 (更穩定的版本) -->
+    <script src="https://unpkg.com/web3modal@1.9.12/dist/index.js"></script>
+    <script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
+
+
+
     <style>
         :root {
             --primary-bg: #0a0a0a;
-            --card-bg: rgba(0, 0, 0, 0.5);
-            --border-color: rgba(34, 197, 94, 0.3);
+            --border-color: rgba(255, 255, 255, 0.1);
             --text-primary: #ffffff;
             --text-secondary: #a0a0a0;
-            --text-muted: #666666;
-            --accent-green: #22c55e;
-            --green-glow: rgba(34, 197, 94, 0.5);
+            --text-muted: #555555;
+            --accent-color: #ffffff;
+
+            /* Tailwind backdrop-filter variables */
+            --tw-backdrop-blur: blur(4px);
+            --tw-backdrop-brightness: ;
+            --tw-backdrop-contrast: ;
+            --tw-backdrop-grayscale: ;
+            --tw-backdrop-hue-rotate: ;
+            --tw-backdrop-invert: ;
+            --tw-backdrop-opacity: ;
+            --tw-backdrop-saturate: ;
+            --tw-backdrop-sepia: ;
         }
-        
+
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Kanit', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--primary-bg);
             min-height: 100vh;
             color: var(--text-primary);
             margin: 0;
             padding: 0;
         }
-        
+
         .card {
-            background: var(--card-bg);
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--border-color);
             border-radius: 12px;
             backdrop-filter: blur(8px);
-            box-shadow: 0 0 20px rgba(34, 197, 94, 0.1);
             transition: all 0.3s ease;
         }
 
         .card:hover {
-            border-color: var(--accent-green);
-            box-shadow: 0 0 30px rgba(34, 197, 94, 0.2);
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.08);
         }
-        
+
         .btn-primary {
-            background: var(--accent-green);
-            color: #000000;
-            border: none;
+            border: 1px solid #373737;
+            color: black;
+            background: white;
             padding: 12px 24px;
-            border-radius: 6px;
-            font-weight: 600;
+            border-radius: 8px;
+            font-weight: 300;
             cursor: pointer;
             transition: all 0.3s ease;
             width: 100%;
-            box-shadow: 0 0 15px rgba(34, 197, 94, 0.3);
+            font-family: 'Kanit', sans-serif;
         }
 
-        .btn-primary:hover {
-            background: #16a34a;
-            box-shadow: 0 0 25px rgba(34, 197, 94, 0.5);
+        .btn-primary:hover:not(:disabled) {
+            background: transparent;
+            color: white;
+            border-color: white;
             transform: translateY(-1px);
         }
 
         .btn-primary:disabled {
-            background: #333333;
+            background: rgba(255, 255, 255, 0.1);
             color: #666666;
+            border-color: rgba(255, 255, 255, 0.2);
             cursor: not-allowed;
-            box-shadow: none;
             transform: none;
         }
-        
+
         .btn-secondary {
             background: transparent;
             color: var(--text-secondary);
@@ -81,15 +98,15 @@
             transition: all 0.2s ease;
             width: 100%;
         }
-        
+
         .btn-secondary:hover {
             border-color: #555555;
             color: var(--text-primary);
         }
 
-        /* Green glow effect */
-        .shadow-green-glow {
-            box-shadow: 0 0 10px rgba(34, 197, 94, 0.5), 0 0 20px rgba(34, 197, 94, 0.3);
+        /* Subtle glow effect */
+        .shadow-glow {
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
         }
 
         /* Navigation bar styles */
@@ -101,64 +118,135 @@
             z-index: 1000;
             backdrop-filter: blur(8px);
             background: rgba(0, 0, 0, 0.3);
-            border-bottom: 1px solid rgba(34, 197, 94, 0.3);
-            padding: 1.5rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            padding: 1rem 1rem;
+        }
+
+        /* Responsive padding matching twin3_backup-main */
+        @media (min-width: 768px) {
+            .nav-bar {
+                padding: 1rem 2rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .nav-bar {
+                padding: 1rem 4rem;
+            }
         }
 
         .nav-logo {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            text-decoration: none;
         }
 
-        .nav-logo-icon {
-            width: 2rem;
-            height: 2rem;
-            background: var(--accent-green);
-            border-radius: 0.25rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .nav-logo img {
+            width: 2.5rem;
+            height: 2.5rem;
         }
 
-        .nav-logo-inner {
-            width: 1rem;
-            height: 1rem;
-            background: black;
-            border-radius: 0.25rem;
+        @media (min-width: 768px) {
+            .nav-logo img {
+                width: 2.5rem;
+                height: 2.5rem;
+            }
         }
 
-        .nav-brand {
+        .mobile-menu-btn {
+            display: block;
             color: white;
-            font-size: 1.125rem;
-            font-weight: bold;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        @media (min-width: 768px) {
+            .mobile-menu-btn {
+                display: none;
+            }
         }
 
         .nav-actions {
-            display: flex;
+            display: none;
             align-items: center;
-            gap: 1rem;
         }
 
-        .nav-social-icon {
-            width: 2rem;
-            height: 2rem;
-            background: var(--accent-green);
-            border-radius: 50%;
+        @media (min-width: 768px) {
+            .nav-actions {
+                display: flex;
+            }
+        }
+
+        .nav-link {
+            display: block;
+            padding: 0.5rem 1rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-weight: 200;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .wallet-button {
             display: flex;
             align-items: center;
-            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            color: white;
             cursor: pointer;
             transition: all 0.2s ease;
         }
 
-        .nav-social-icon:hover {
-            transform: scale(1.1);
+        .wallet-button:hover {
+            background: rgba(255, 255, 255, 0.2);
         }
-        
+
+        .wallet-balance {
+            margin-right: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 200;
+        }
+
+        .wallet-address {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 0.375rem;
+        }
+
+        .wallet-avatar {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            background: rgb(197, 218, 219);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+
+        .wallet-address-text {
+            font-size: 0.875rem;
+            font-weight: 200;
+        }
+
+        .dropdown-icon {
+            width: 0.875rem;
+            height: 0.4375rem;
+            margin-left: 0.25rem;
+        }
+
         .input-field {
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.15);
@@ -170,19 +258,19 @@
             font-weight: 400;
             transition: all 0.3s ease;
         }
-        
+
         .input-field:focus {
             outline: none;
-            border-color: var(--accent-green);
+            border-color: rgba(255, 255, 255, 0.3);
             background: rgba(255, 255, 255, 0.12);
-            box-shadow: 0 0 0 3px rgba(52, 199, 89, 0.1);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
         }
 
         .input-field::placeholder {
             color: #9C9C9C;
             font-weight: 400;
         }
-        
+
         .select-field {
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.15);
@@ -204,9 +292,9 @@
 
         .select-field:focus {
             outline: none;
-            border-color: var(--accent-green);
+            border-color: rgba(255, 255, 255, 0.3);
             background: rgba(255, 255, 255, 0.12);
-            box-shadow: 0 0 0 3px rgba(52, 199, 89, 0.1);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
         }
 
         .select-field option {
@@ -214,16 +302,16 @@
             color: white;
             padding: 12px;
         }
-        
+
         .progress-bar {
             background: #222222;
             height: 4px;
             border-radius: 2px;
             overflow: hidden;
         }
-        
+
         .progress-fill {
-            background: var(--accent-green);
+            background: rgba(255, 255, 255, 0.8);
             height: 100%;
             transition: width 0.3s ease;
         }
@@ -257,8 +345,8 @@
         }
 
         .custom-select-trigger.active {
-            border-color: var(--accent-green);
-            box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
         }
 
         .custom-select-options {
@@ -295,7 +383,7 @@
         }
 
         .custom-select-option .material-icons {
-            color: var(--accent-green);
+            color: white;
             font-size: 20px;
         }
 
@@ -306,7 +394,7 @@
         }
 
         .custom-select-selected .material-icons {
-            color: var(--accent-green);
+            color: white;
             font-size: 20px;
         }
 
@@ -343,7 +431,7 @@
         .input-wrapper.has-value .input-clear {
             display: block;
         }
-        
+
         .grid-bg {
             background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
             background-size: 40px 40px;
@@ -355,26 +443,23 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: #000000 url('3d-network-particle-flow-background.jpg') center center;
-            background-size: cover;
-            background-repeat: no-repeat;
+            background: #000000;
             overflow: hidden;
             z-index: 1;
             pointer-events: none;
         }
 
-        .particle-bg::before {
-            content: '';
+        .particle-bg video {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('3d-network-particle-flow-background.jpg') center center;
-            background-size: cover;
-            background-repeat: no-repeat;
-            animation: particle-flow 20s infinite linear;
-            opacity: 0.4;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            opacity: 0.6;
         }
 
         .particle-bg::after {
@@ -384,11 +469,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('3d-network-particle-flow-background.jpg') center center;
-            background-size: cover;
-            background-repeat: no-repeat;
-            animation: particle-flow-reverse 25s infinite linear;
-            opacity: 0.3;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 2;
         }
 
         @keyframes particle-flow {
@@ -421,19 +503,7 @@
             }
         }
 
-        .particle-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('3d-network-particle-flow-background.jpg') center center;
-            background-size: cover;
-            background-repeat: no-repeat;
-            animation: particle-drift 30s infinite ease-in-out;
-            opacity: 0.2;
-            mix-blend-mode: screen;
-        }
+
 
         /* Dark overlay to improve text readability */
         .particle-bg::after {
@@ -496,61 +566,352 @@
             }
         }
 
-        .welcome-container {
+        /* 統一的頁面容器 - 所有頁面都使用相同結構 */
+        .page-container {
+            position: relative;
+            min-height: 100vh;
+        }
+
+        .page-video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .page-content-container {
             position: relative;
             z-index: 10;
-            min-height: 100vh;
+            min-height: calc(100vh - 200px);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 2rem;
+            padding: 1.25rem;
             padding-top: 6rem; /* Add space for fixed nav bar */
+            padding-bottom: 2rem; /* Add space for footer */
+            max-width: 1400px;
+            margin: 0 auto;
+            gap: 2rem;
         }
 
-        .welcome-form {
-            background: rgba(26, 26, 26, 0.8);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .page-unified-content {
+            backdrop-filter: blur(8px);
             border-radius: 12px;
             padding: 2rem;
             width: 100%;
-            max-width: 480px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: space-between;
+            gap: 2rem;
+            min-height: fit-content;
         }
 
-        .welcome-title {
-            font-size: 3rem;
-            font-weight: 700;
-            color: white;
+        .page-left-content {
+            flex: 1;
+            max-width: 48rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             text-align: center;
+        }
+
+        .page-right-action {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            width: 100%;
+            align-self: stretch;
+            gap: 1.5rem;
+            padding: 2rem;
+        }
+
+        .page-main-title {
+            color: white;
+            font-size: 2.25rem;
+            font-weight: 300;
+            line-height: 1.2;
             margin-bottom: 1rem;
-            line-height: 1.1;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .page-subtitle {
+            color: #888888;
+            font-size: 1.25rem;
+            font-weight: 200;
+            margin-bottom: 2rem;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .page-description {
+            color: #cccccc;
+            font-size: 1rem;
+            font-weight: 200;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .page-action-button {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #373737;
+            color: black;
+            background: white;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 300;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .page-action-button:hover:not(:disabled) {
+            background: transparent;
+            color: white;
+            border-color: white;
+            transform: translateY(-1px);
+        }
+
+        .page-action-button:disabled {
+            background: rgba(255, 255, 255, 0.1);
+            color: #666666;
+            border-color: rgba(255, 255, 255, 0.2);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* 響應式設計 */
+        @media (min-width: 1024px) {
+            .page-content-container {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                padding: 2.5rem 4rem;
+                padding-top: 6rem;
+                gap: 4rem;
+            }
+
+            .page-unified-content {
+                flex-direction: row;
+                align-items: stretch;
+                gap: 2rem;
+            }
+
+            .page-left-content {
+                text-align: left;
+                justify-content: flex-start;
+            }
+
+            .page-right-action {
+                width: auto;
+                min-width: fit-content;
+            }
+
+            .page-main-title {
+                font-size: 4.5rem;
+                font-weight: bold;
+            }
+
+            .page-subtitle {
+                font-size: 1.875rem;
+            }
+
+            .page-description {
+                font-size: 1.125rem;
+            }
+        }
+
+        @media (min-width: 1536px) {
+            .page-main-title {
+                font-size: 7.25rem;
+            }
+        }
+
+        /* 保持原有的 welcome-container 類以向後兼容 */
+        .welcome-container {
+            position: relative;
+            z-index: 10;
+            min-height: calc(100vh - 200px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.25rem;
+            padding-top: 6rem; /* Add space for fixed nav bar */
+            padding-bottom: 2rem; /* Add space for footer */
+            max-width: 1400px;
+            margin: 0 auto;
+            gap: 2rem;
+        }
+
+        @media (min-width: 1024px) {
+            .welcome-container {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                padding: 2.5rem 4rem;
+                padding-top: 6rem;
+                gap: 4rem;
+            }
+        }
+
+        .welcome-content {
+            width: 100%;
+            background: transparent;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            backdrop-filter: blur(4px);
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .welcome-content {
+                align-items: center;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .welcome-content {
+                width: 60%;
+                align-items: flex-start;
+                padding: 2.5rem;
+                text-align: left;
+            }
         }
 
         .welcome-subtitle {
+            color: #525252;
             font-size: 1.125rem;
-            color: #9C9C9C;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .welcome-subtitle {
+                font-size: 1.5rem;
+            }
+        }
+
+        .welcome-title {
+            color: white;
+            font-size: 2.25rem;
+            font-weight: 500; /* Medium */
+            line-height: 1.2;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        @media (min-width: 768px) {
+            .welcome-title {
+                font-size: 3.75rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .welcome-title {
+                font-size: 4.5rem;
+                font-weight: bold;
+            }
+        }
+
+        @media (min-width: 1536px) {
+            .welcome-title {
+                font-size: 7.25rem;
+            }
+        }
+
+        .welcome-title .subtitle-text {
+            color: #525252;
+            font-weight: 300;
+        }
+
+        @media (min-width: 1024px) {
+            .welcome-title .subtitle-text {
+                font-weight: 300;
+            }
+        }
+
+        .tbold {
+            font-family: 'Kanit', sans-serif;
+            font-weight: 700; /* Bold */
+        }
+
+        .tlight {
+            font-family: 'Kanit', sans-serif;
+            font-weight: 300; /* Light */
+        }
+
+        .tsemibold {
+            font-family: 'Kanit', sans-serif;
+            font-weight: 500; /* Medium */
+        }
+
+        .backdrop-blur-sm, .backdrop-filter {
+            -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+            backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+        }
+
+        .footer-section {
+            position: relative;
+            z-index: 10;
+            padding: 2rem 0;
             text-align: center;
-            margin-bottom: 3rem;
-            line-height: 1.5;
+        }
+
+
+
+        .welcome-form {
+            background: transparent;
+            backdrop-filter: none;
+            border: none;
+            border-radius: 0;
+            padding: 0;
+            width: 100%;
+            max-width: none;
+            box-shadow: none;
         }
 
         .form-title {
             font-size: 1.5rem;
-            font-weight: 600;
+            font-weight: 300;
             color: white;
             text-align: center;
             margin-bottom: 0.5rem;
+            font-family: 'Kanit', sans-serif;
         }
 
         .form-subtitle {
-            color: #a0a0a0;
+            color: #888888;
             text-align: center;
             margin-bottom: 2rem;
             font-size: 0.875rem;
+            font-weight: 200;
+            font-family: 'Kanit', sans-serif;
         }
-        
+
         .verification-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -558,21 +919,21 @@
             padding: 20px;
             transition: all 0.3s ease;
         }
-        
+
         .verification-card.completed {
-            border-color: var(--accent-green);
-            background: rgba(0, 255, 136, 0.05);
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .verification-card.pending {
             border-color: var(--border-color);
             background: var(--card-bg);
         }
-        
+
         .hidden {
             display: none;
         }
-        
+
         .metric-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -580,14 +941,14 @@
             padding: 20px;
             text-align: center;
         }
-        
+
         .metric-value {
             font-size: 32px;
             font-weight: 700;
             color: var(--text-primary);
             margin-bottom: 8px;
         }
-        
+
         .metric-label {
             font-size: 14px;
             color: var(--text-muted);
@@ -611,10 +972,11 @@
 
         .proof-title {
             font-size: 3rem;
-            font-weight: bold;
+            font-weight: 300;
             color: white;
             margin-bottom: 1.5rem;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            font-family: 'Kanit', sans-serif;
         }
 
         .proof-subtitle {
@@ -625,15 +987,18 @@
         .cta-main {
             font-size: 24px;
             color: white;
-            font-weight: 600;
+            font-weight: 300;
             line-height: 1.4;
             margin-bottom: 1rem;
+            font-family: 'Kanit', sans-serif;
         }
 
         .cta-description {
             font-size: 16px;
-            color: #9C9C9C;
+            color: #888888;
             line-height: 1.6;
+            font-weight: 200;
+            font-family: 'Kanit', sans-serif;
         }
 
         .verification-steps {
@@ -655,8 +1020,8 @@
         }
 
         .verification-step.completed {
-            border-color: var(--accent-green);
-            background: rgba(52, 199, 89, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .step-content {
@@ -685,20 +1050,22 @@
         }
 
         .verification-step.completed .step-number {
-            background: var(--accent-green);
+            background: rgba(255, 255, 255, 0.8);
+            color: black;
         }
 
         .step-text {
             color: white;
             font-size: 1rem;
-            font-weight: 500;
+            font-weight: 300;
+            font-family: 'Kanit', sans-serif;
         }
 
         .step-status {
             width: 1.5rem;
             height: 1.5rem;
             border-radius: 50%;
-            background: var(--accent-green);
+            background: rgba(255, 255, 255, 0.8);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -711,79 +1078,66 @@
         }
 
         .start-btn {
-            background: var(--accent-green);
-            color: white;
-            border: none;
+            border: 1px solid #373737;
+            color: black;
+            background: white;
             border-radius: 8px;
             padding: 0.5rem 1.5rem;
-            font-weight: 600;
+            font-weight: 300;
             font-size: 0.875rem;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-family: 'Kanit', sans-serif;
         }
 
         .start-btn:hover {
-            background: #2BA84A;
+            background: transparent;
+            color: white;
+            border-color: white;
             transform: translateY(-1px);
         }
 
         .get-started-btn {
-            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #373737;
             color: #9CA3AF;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 12px;
             padding: 1rem 3rem;
             font-size: 1rem;
-            font-weight: 600;
+            font-weight: 300;
             cursor: not-allowed;
             transition: all 0.3s ease;
+            font-family: 'Kanit', sans-serif;
         }
 
         .get-started-btn:not(:disabled) {
-            background: var(--accent-green);
-            color: white;
+            background: white;
+            color: black;
             cursor: pointer;
-            border-color: var(--accent-green);
+            border-color: #373737;
         }
 
         .get-started-btn:not(:disabled):hover {
-            background: #2BA84A;
+            background: transparent;
+            color: white;
+            border-color: white;
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(52, 199, 89, 0.3);
         }
 
         .get-started-btn.completed {
-            background: var(--accent-green);
-            color: white;
+            background: white;
+            color: black;
             cursor: pointer;
-            border-color: var(--accent-green);
+            border-color: #373737;
         }
 
         /* Consistent button styles across all pages */
-        .btn-primary, .btn-secondary {
+        .btn-secondary {
             border-radius: 12px;
-            font-weight: 600;
+            font-weight: 300;
             transition: all 0.3s ease;
             border: 1px solid transparent;
-        }
-
-        .btn-primary {
-            background: var(--accent-green);
-            color: white;
-            border-color: var(--accent-green);
-        }
-
-        .btn-primary:hover:not(:disabled) {
-            background: #2BA84A;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(52, 199, 89, 0.3);
-        }
-
-        .btn-primary:disabled {
-            background: rgba(255, 255, 255, 0.1);
-            color: #9CA3AF;
-            border-color: rgba(255, 255, 255, 0.2);
-            cursor: not-allowed;
+            font-family: 'Kanit', sans-serif;
         }
 
         .btn-secondary {
@@ -862,60 +1216,433 @@
             height: 20px;
             display: inline-block;
         }
+
+        /* 錢包模態框樣式 - 仿照截圖設計 */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            z-index: 2000;
+            backdrop-filter: blur(4px);
+        }
+        .modal-backdrop.show {
+            display: block;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2001;
+            padding: 20px;
+        }
+        .modal.show {
+            display: flex;
+        }
+
+        /* 主要模態框卡片 - 完美居中，自適應內容 */
+        .wallet-modal-card {
+            background: #1a1a1a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            width: auto;
+            min-width: 520px;
+            max-width: 600px;
+            height: auto;
+            min-height: 450px;
+            overflow: visible;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        /* 關閉按鈕 */
+        .wallet-close-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+        .wallet-close-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        /* 模態框標題 */
+        .wallet-modal-title {
+            color: #fff;
+            font-size: 20px;
+            font-weight: 600;
+            text-align: center;
+            padding: 20px 24px 16px 24px;
+            margin: 0;
+        }
+
+        /* 主要內容區域 - 自適應高度 */
+        .wallet-modal-content {
+            display: flex;
+            min-height: 380px;
+            height: auto;
+        }
+
+        /* 左側錢包選項區域 */
+        .wallet-options-section {
+            flex: 1;
+            padding: 20px 24px;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            min-width: 240px;
+        }
+
+        .wallet-section-title {
+            color: #3b82f6;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* 錢包選項項目 */
+        .wallet-option-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .wallet-option-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .wallet-option-icon {
+            margin-right: 12px;
+        }
+
+        .wallet-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+        }
+
+        .wallet-option-info {
+            flex: 1;
+        }
+
+        .wallet-name {
+            color: #fff;
+            font-size: 16px;
+            font-weight: 500;
+            display: block;
+        }
+
+        .wallet-status {
+            color: #888;
+            font-size: 12px;
+            display: block;
+            margin-top: 2px;
+        }
+
+        /* 右側錢包介紹區域 */
+        .wallet-info-section {
+            flex: 1;
+            padding: 20px 24px;
+            background: rgba(255, 255, 255, 0.02);
+            min-width: 240px;
+        }
+
+        .wallet-info-title {
+            color: #fff;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        /* 功能介紹卡片 */
+        .wallet-feature-card {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding: 16px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .wallet-feature-icon {
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+        }
+
+        .wallet-feature-content {
+            flex: 1;
+        }
+
+        .wallet-feature-title {
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .wallet-feature-desc {
+            color: #888;
+            font-size: 12px;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        /* 獲取錢包按鈕 */
+        .get-wallet-btn {
+            width: 100%;
+            background: #3b82f6;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 16px;
+        }
+        .get-wallet-btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        /* 了解更多鏈接 */
+        .learn-more-link {
+            display: block;
+            text-align: center;
+            color: #3b82f6;
+            font-size: 14px;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .learn-more-link:hover {
+            color: #60a5fa;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .wallet-modal-card {
+                width: 90vw;
+                height: auto;
+                max-height: 80vh;
+                margin: 10px;
+            }
+
+            .wallet-modal-content {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .wallet-options-section {
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                padding-bottom: 20px;
+            }
+
+            .wallet-info-section {
+                padding-top: 20px;
+            }
+        }
+
+        /* User info badges */
+        .badge-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+        .career-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.06); color: white; cursor: pointer; user-select: none; }
+        .career-badge:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.25); }
+        .career-badge.selected { background: rgba(255, 255, 255, 0.2); color: white; border-color: rgba(255, 255, 255, 0.3); }
+        .career-badge.disabled { opacity: 0.5; cursor: not-allowed; }
+
     </style>
 </head>
 <body class="grid-bg">
     <!-- Navigation Bar -->
-    <nav class="nav-bar shadow-green-glow">
-        <div class="nav-logo">
-            <div class="nav-logo-icon shadow-green-glow">
-                <div class="nav-logo-inner"></div>
+    <nav class="nav-bar">
+        <a href="/" class="nav-logo">
+            <div class="flex items-center">
+                <img src="/assets/img/logo_dark.svg" alt="Logo" class="w-10 h-10 md:w-10 md:h-10">
             </div>
-            <span class="nav-brand">PILSO</span>
+        </a>
+
+        <!-- Mobile menu button -->
+        <div class="mobile-menu-btn">
+            <button class="text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 7.5h16.5M3.75 12h16.5m-16.5 4.5h16.5"></path>
+                </svg>
+            </button>
         </div>
+
+        <!-- Desktop navigation -->
         <div class="nav-actions">
-            <div class="nav-social-icon shadow-green-glow" title="Twitter">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="black">
-                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
-            </div>
-            <div class="nav-social-icon shadow-green-glow" title="GitHub">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="black">
-                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                </svg>
-            </div>
-            <div class="nav-social-icon shadow-green-glow" title="Discord">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="black">
-                    <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419-.0002 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9554 2.4189-2.1568 2.4189Z"/>
-                </svg>
+            <a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" rel="noreferrer noopener" class="nav-link">WHITEPAPER</a>
+            <a class="nav-link" href="/dashboard">MY TWIN</a>
+            <a class="nav-link" href="/passport">PASSPORT</a>
+
+            <!-- Wallet button -->
+            <div class="wallet-button">
+                <div class="wallet-balance">0 BNB</div>
+                <div class="wallet-address">
+                    <div class="wallet-avatar">👽</div>
+                    <div class="wallet-address-text">0x19…5ACe</div>
+                    <svg class="dropdown-icon" fill="none" height="7" width="14" xmlns="http://www.w3.org/2000/svg">
+                        <title>Dropdown</title>
+                        <path d="M12.75 1.54001L8.51647 5.0038C7.77974 5.60658 6.72026 5.60658 5.98352 5.0038L1.75 1.54001" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+                    </svg>
+                </div>
             </div>
         </div>
+
+
+
+
+            <!-- 錢包連接模態框 - 仿照截圖設計 -->
+            <div id="wallet-backdrop" class="modal-backdrop"></div>
+            <div id="wallet-modal" class="modal">
+                <div class="wallet-modal-card">
+                    <!-- 關閉按鈕 -->
+                    <button id="close-wallet-modal" class="wallet-close-btn">
+                        <span class="material-icons">close</span>
+                    </button>
+
+                    <!-- 模態框標題 -->
+                    <h2 class="wallet-modal-title">連接錢包</h2>
+
+                    <!-- 主要內容區域 -->
+                    <div class="wallet-modal-content">
+                        <!-- 左側：錢包選項 -->
+                        <div class="wallet-options-section">
+                            <h3 class="wallet-section-title">已安裝</h3>
+
+                            <!-- MetaMask 選項 -->
+                            <div class="wallet-option-item" data-wallet="metamask">
+                                <div class="wallet-option-icon">
+                                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iI0Y2ODUxQiIvPgo8cGF0aCBkPSJNMjQuNjI2NyA2LjY2NjY3TDE2LjcyIDEyLjY0TDE4LjI5MzMgOC45MDY2N0wyNC42MjY3IDYuNjY2NjdaIiBmaWxsPSIjRTI3NjFCIiBzdHJva2U9IiNFMjc2MUIiIHN0cm9rZS13aWR0aD0iMC4wNjY2NjY3Ii8+CjxwYXRoIGQ9Ik03LjM3MzMzIDYuNjY2NjdMMTUuMjI2NyAxMi42OTMzTDEzLjcwNjcgOC45MDY2N0w3LjM3MzMzIDYuNjY2NjdaIiBmaWxsPSIjRTQ3NjFCIiBzdHJva2U9IiNFNDc2MUIiIHN0cm9rZS13aWR0aD0iMC4wNjY2NjY3Ii8+CjxwYXRoIGQ9Ik0yMS4zNiAyMC4yNjY3TDE5LjQxMzMgMjMuMjhMMjQuMjQgMjQuNDhMMjUuNDQgMjAuMzJMMjEuMzYgMjAuMjY2N1oiIGZpbGw9IiNFNDc2MUIiIHN0cm9rZT0iI0U0NzYxQiIgc3Ryb2tlLXdpZHRoPSIwLjA2NjY2NjciLz4KPHBhdGggZD0iTTYuNTYgMjAuMzJMNy43NiAyNC40OEwxMi41ODY3IDIzLjI4TDEwLjY0IDIwLjI2NjdMNi41NiAyMC4zMloiIGZpbGw9IiNFNDc2MUIiIHN0cm9rZT0iI0U0NzYxQiIgc3Ryb2tlLXdpZHRoPSIwLjA2NjY2NjciLz4KPC9zdmc+" alt="MetaMask" class="wallet-icon">
+                                </div>
+                                <div class="wallet-option-info">
+                                    <span class="wallet-name">MetaMask</span>
+                                    <span class="wallet-status">瀏覽</span>
+                                </div>
+                            </div>
+
+                            <h3 class="wallet-section-title">推薦</h3>
+
+                            <!-- WalletConnect 選項 -->
+                            <div class="wallet-option-item" data-wallet="walletconnect">
+                                <div class="wallet-option-icon">
+                                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzM5OTZGRiIvPgo8cGF0aCBkPSJNMTAuNjY2NyAxMy4zMzMzQzEzLjYxMzMgMTAuMzg2NyAxOC4zODY3IDEwLjM4NjcgMjEuMzMzMyAxMy4zMzMzTDIxLjg2NjcgMTMuODY2N0MyMi4wNTMzIDE0LjA1MzMgMjIuMDUzMyAxNC4zNDY3IDIxLjg2NjcgMTQuNTMzM0wyMC44IDEzLjQ2NjdDMTguNzIgMTEuMzg2NyAxNS4yOCAxMS4zODY3IDEzLjIgMTMuNDY2N0wxMi4xMzMzIDE0LjUzMzNDMTEuOTQ2NyAxNC43MiAxMS42NTMzIDE0LjcyIDExLjQ2NjcgMTQuNTMzM0wxMC40IDE0LjUzMzNDMTAuMjEzMyAxNC4zNDY3IDEwLjIxMzMgMTQuMDUzMyAxMC40IDEzLjg2NjdMMTAuNjY2NyAxMy4zMzMzWiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+" alt="WalletConnect" class="wallet-icon">
+                                </div>
+                                <div class="wallet-option-info">
+                                    <span class="wallet-name">WalletConnect</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 右側：錢包介紹 -->
+                        <div class="wallet-info-section">
+                            <h3 class="wallet-info-title">什麼是錢包？</h3>
+
+                            <!-- 功能介紹卡片 -->
+                            <div class="wallet-feature-card">
+                                <div class="wallet-feature-icon">
+                                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iOCIgZmlsbD0iIzMzNzNkYyIvPgo8cGF0aCBkPSJNMjAgMTBDMTQuNDc3MiAxMCAxMCAxNC40NzcyIDEwIDIwQzEwIDI1LjUyMjggMTQuNDc3MiAzMCAyMCAzMEMyNS41MjI4IDMwIDMwIDI1LjUyMjggMzAgMjBDMzAgMTQuNDc3MiAyNS41MjI4IDEwIDIwIDEwWk0yMiAyNUgxOFYxOEgyMlYyNVpNMjIgMTZIMThWMTJIMjJWMTZaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4=" alt="Digital Assets" class="feature-icon">
+                                </div>
+                                <div class="wallet-feature-content">
+                                    <h4 class="wallet-feature-title">您的數字資產之家</h4>
+                                    <p class="wallet-feature-desc">錢包用於發送、接收、儲存及顯示數位資產以及與NFT這樣的數字資產。</p>
+                                </div>
+                            </div>
+
+                            <div class="wallet-feature-card">
+                                <div class="wallet-feature-icon">
+                                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iOCIgZmlsbD0iI2ZmNjU5MyIvPgo8cGF0aCBkPSJNMjAgMTBDMTQuNDc3MiAxMCAxMCAxNC40NzcyIDEwIDIwQzEwIDI1LjUyMjggMTQuNDc3MiAzMCAyMCAzMEMyNS41MjI4IDMwIDMwIDI1LjUyMjggMzAgMjBDMzAgMTQuNDc3MiAyNS41MjI4IDEwIDIwIDEwWk0yNSAyMEwyMCAyNUwxNSAyMEgxOFYxNUgyMlYyMEgyNVoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg==" alt="New Login" class="feature-icon">
+                                </div>
+                                <div class="wallet-feature-content">
+                                    <h4 class="wallet-feature-title">新的登入方式</h4>
+                                    <p class="wallet-feature-desc">不用再為每個網站創建新的帳戶和密碼，只需連接您的錢包。</p>
+                                </div>
+                            </div>
+
+                            <!-- 獲取錢包按鈕 -->
+                            <button class="get-wallet-btn">
+                                獲取錢包
+                            </button>
+
+                            <!-- 了解更多鏈接 -->
+                            <a href="#" class="learn-more-link">了解更多</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
     </nav>
 
     <!-- Welcome Page -->
-    <div id="welcome-page" class="min-h-screen relative">
-        <!-- Particle Background -->
-        <div class="particle-bg">
-            <!-- Additional animated layers for enhanced particle flow effect -->
-            <div class="particle-layer" style="animation-delay: 0s;"></div>
-            <div class="particle-layer" style="animation-delay: 5s;"></div>
-            <div class="particle-layer" style="animation-delay: 10s;"></div>
-        </div>
+    <div id="welcome-page" class="relative min-h-screen">
+        <!-- Video Background -->
+        <video class="absolute top-0 left-0 w-full h-full object-cover" autoplay loop muted playsinline style="z-index: 1;">
+            <source src="assets/img/v2.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
 
         <!-- Welcome Content -->
         <div class="welcome-container">
-            <!-- Main Title -->
-            <h1 class="welcome-title">Your digital identity, supercharged!</h1>
-            <p class="welcome-subtitle">
-                Connect your profiles, earn rewards, and show the world who you really are.
-            </p>
+            <!-- Unified Content Block (Left + Right combined with backdrop blur) -->
+            <div class="unified-content-block backdrop-blur-sm rounded-lg p-8 w-full flex flex-col lg:flex-row items-stretch justify-between gap-8 min-h-fit">
+                <!-- Left Content (Title + Description) -->
+                <div class="left-content flex-1 max-w-2xl flex flex-col justify-center lg:justify-start text-center lg:text-left">
+                    <h1 class="main-title text-white text-4xl md:text-6xl lg:text-7xl xl:text-8xl leading-tight mb-4" style="font-weight: 300;">
+                        Welcome to<br>
+                        Twin3 Passport!
+                    </h1>
+                    <p class="subtitle text-[#888888] text-xl md:text-2xl lg:text-3xl mb-8" style="font-weight: 200;">Your digital identity, supercharged!</p>
+                    <p class="description text-gray-300 text-base md:text-lg mb-6" style="font-weight: 200;">
+                        Start the process to obtain your Passport and begin your mission.<br>
+                        Connect your wallet to unlock your digital identity.
+                    </p>
+                </div>
 
-            <!-- Welcome Form -->
-            <div class="welcome-form">
-                <h2 class="form-title">Welcome to Twin3 Passport!</h2>
-                <p class="form-subtitle">Please enter your profile information to get start.</p>
+                <!-- Right Action (Registration Card) -->
+<div class="right-action flex flex-col justify-center lg:justify-between items-center text-center relative overflow-hidden rounded-lg border border-white border-opacity-20 hover:border-opacity-100 hover:shadow-lg hover:shadow-white transition-all duration-300 flex-shrink-0 w-full lg:w-auto lg:min-w-fit self-stretch space-y-6 lg:space-y-0" style="padding: 32px;">
+                    <p class="card-description text-[#888888] whitespace-normal lg:whitespace-nowrap text-base md:text-lg" style="font-weight: 200;">Free gas to mint your Twin NFT for AI agents.</p>
+                    <h1 class="card-number text-white text-6xl lg:text-7xl leading-none uppercase" style="font-weight: 300;">1824</h1>
+                    <button id="free-mint-btn" class="action-button w-full px-4 py-3 border border-[#373737] text-black bg-white rounded-lg hover:bg-transparent hover:text-white hover:border-white transition duration-300" style="font-weight: 300;">Get Your Passport</button>
+                </div>
+            </div>
 
-                <div class="space-y-4">
+        </div>
+
+    </div>
+
+        <!-- Hidden original form -->
+            <div class="hidden">
+                <div class="space-y-4 hidden">
                     <div class="input-wrapper" id="username-wrapper">
                         <input
                             type="text"
@@ -970,6 +1697,7 @@
                             </div>
                             <div class="custom-select-option" data-value="educator">
                                 <span class="material-icons">school</span>
+
                                 <span>Educator</span>
                             </div>
                             <div class="custom-select-option" data-value="healthcare">
@@ -1014,68 +1742,214 @@
                 </div>
             </div>
         </div>
+
+        <!-- Footer -->
+        <footer class="bg-black text-white px-8 py-10 xl:pr-20 lg:px-0 lg:py-12">
+            <div class="flex flex-col-reverse lg:flex-row xl:justify-between items-start space-y-10 lg:space-y-0">
+                <!-- Logo Section -->
+                <div class="w-full xl:w-1/5 lg:w-[13%] text-center lg:text-left">
+                    <div class="flex flex-col justify-center lg:justify-start items-center pt-6 lg:pt-0" style="gap: 4px;">
+                        <div class="flex items-center">
+                            <img src="assets/img/logo_dark.svg" alt="Logo" style="width: 40px; height: 40px;">
+                        </div>
+                        <span class="text-sm md:text-base" style="font-weight: 300; color: #888888;">twin3.ai</span>
+                    </div>
+                </div>
+
+                <!-- Links Section -->
+                <div class="flex flex-wrap lg:flex-nowrap w-full lg:w-2/4 lg:space-x-10">
+                    <!-- Social Media -->
+                    <div class="w-full md:w-1/3 text-center lg:text-left flex-row">
+                        <h5 class="uppercase text-sm lg:text-base" style="font-weight: 300; color: white; padding-bottom: 12px;">Social Media</h5>
+                        <div class="flex justify-center lg:justify-start space-x-4">
+                            <a href="https://x.com/twin3_ai" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+                                <div class="w-6 h-6 flex items-center justify-center" style="padding: 2px;">
+                                    <img src="assets/img/X_logo.svg" alt="X (Twitter)" class="w-full h-full object-contain">
+                                </div>
+                            </a>
+                            <a href="https://opensea.io/collection/twin3" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+                                <img src="assets/img/opensea_logo.svg" alt="OpenSea" class="w-6 h-6">
+                            </a>
+                            <a href="https://warpcast.com/twin3.eth" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+                                <img src="assets/img/farcaster_logo.svg" alt="Warpcast" class="w-6 h-6">
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Resource -->
+                    <div class="w-full md:w-1/3 text-center lg:text-left 2xl:mb-2 pt-4 md:pt-0">
+                        <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Resource</h5>
+                        <ul class="space-y-2">
+                            <li><a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" rel="noreferrer noopener" class="text-[#888888] hover:text-white text-sm lg:text-base" style="font-weight: 200;">Whitepaper</a></li>
+                            <li><a class="text-[#888888] hover:text-white text-sm lg:text-base" href="/tasks/1" style="font-weight: 200;">Tasks</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Features -->
+                    <div class="w-full md:w-1/3 text-center lg:text-left 2xl:mb-10 pt-4 md:pt-0">
+                        <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Features</h5>
+                        <ul class="space-y-2">
+                            <li><a class="text-[#888888] hover:text-white text-sm lg:text-base" href="/dashboard" style="font-weight: 200;">My Twin</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Newsletter Section -->
+                <div class="w-full lg:w-1/4 text-center lg:text-left space-y-5">
+                    <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Subscribe to Twin3 Newsletter</h5>
+                    <div class="flex flex-col lg:flex-row items-center lg:space-x-2 space-y-4 lg:space-y-0">
+                        <a href="https://www.linkedin.com/company/twin3-ai" target="_blank" rel="noreferrer noopener" class="px-4 py-2 border border-[#373737] text-black bg-white rounded-lg hover:bg-transparent hover:text-white hover:border-white transition duration-300 text-sm lg:text-base" style="font-weight: 300;">Subscribe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="mt-10 text-center text-gray-500 text-sm lg:text-base" style="font-weight: 200;">© 2025 Twin3.ai v1.0.6</div>
+        </footer>
     </div>
 
     <!-- Proof of Humanity Page -->
-    <div id="proof-page" class="min-h-screen relative hidden">
-        <!-- Same Particle Background as Welcome Page -->
-        <div class="particle-bg">
-            <!-- Additional animated layers for enhanced particle flow effect -->
-            <div class="particle-layer" style="animation-delay: 0s;"></div>
-            <div class="particle-layer" style="animation-delay: 5s;"></div>
-            <div class="particle-layer" style="animation-delay: 10s;"></div>
-        </div>
+    <div id="proof-page" class="relative min-h-screen hidden">
+        <!-- Video Background -->
+        <video class="absolute top-0 left-0 w-full h-full object-cover" autoplay loop muted playsinline style="z-index: 1;">
+            <source src="assets/img/v2.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
 
-        <!-- Proof of Humanity Content -->
-        <div class="proof-container">
-            <!-- Main Title -->
-            <h1 class="proof-title">Proof of Humanity</h1>
-            <div class="proof-subtitle" id="career-cta">
-                <div class="cta-main">Build the future with AI-powered development skills</div>
-                <div class="cta-description">
-                    Complete our quick 2 step verification to unlock your<br>
-                    supercharged digital identity and join our authentic community.
+        <!-- Proof Content -->
+        <div class="page-content-container">
+            <!-- Unified Content Block -->
+            <div class="page-unified-content">
+                <!-- Left Content (Title + Description) -->
+                <div class="page-left-content">
+                    <h1 class="page-main-title">
+                        Proof of<br>
+                        Humanity
+                    </h1>
+                    <p class="page-subtitle">You must prove you are not a robot to join us</p>
+                    <p class="page-description">
+                        The more verification tasks you complete, the higher the confidence that you are real.<br>
+                        Currently up to level 2. This process is only for verification and does not store your personal information.
+                    </p>
+                </div>
+
+                <!-- Right Action (Verification Steps) -->
+                <div class="page-right-action">
+                    <!-- Verification Steps -->
+                    <div class="verification-steps w-full space-y-4">
+                        <!-- Step 1: Google reCAPTCHA -->
+                        <div class="verification-step" id="step1">
+                            <div class="step-content flex items-center justify-between w-full">
+                                <div class="step-info flex items-center space-x-3">
+                                    <div class="step-number w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-medium">1</div>
+                                    <span class="step-text text-white text-sm font-medium">Click Google ReCAPTCHA v2</span>
+                                </div>
+                                <button class="start-btn px-4 py-2 bg-white text-black rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium" id="step1-btn">
+                                    Click
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Mobile Authentication -->
+                        <div class="verification-step" id="step2">
+                            <div class="step-content flex items-center justify-between w-full">
+                                <div class="step-info flex items-center space-x-3">
+                                    <div class="step-number w-8 h-8 bg-gray-600 text-white rounded-full flex items-center justify-center text-sm font-medium">2</div>
+                                    <span class="step-text text-gray-400 text-sm font-medium">Apple/Google Biometric (Face/Touch ID)</span>
+                                </div>
+                                <button class="start-btn px-4 py-2 bg-gray-600 text-gray-400 rounded-lg cursor-not-allowed text-sm font-medium" id="start-mobile-auth" disabled>
+                                    Start
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Get Started Button -->
+                    <button id="get-started-btn" class="page-action-button" disabled>
+                        Get Started!
+                    </button>
                 </div>
             </div>
+        </div>
 
-            <!-- Verification Steps -->
-            <div class="verification-steps">
-                <!-- Step 1: Google reCAPTCHA -->
-                <div class="verification-step" id="step1">
-                    <div class="step-content">
-                        <div class="step-info">
-                            <div class="step-number">1</div>
-                            <span class="step-text">Click Google ReCAPTCHA v2</span>
+        <!-- Footer -->
+        <footer class="bg-black text-white px-8 py-10 xl:pr-20 lg:px-0 lg:py-12">
+            <div class="flex flex-col-reverse lg:flex-row xl:justify-between items-start space-y-10 lg:space-y-0">
+                <!-- Logo Section -->
+                <div class="w-full xl:w-1/5 lg:w-[13%] text-center lg:text-left">
+                    <div class="flex flex-col justify-center lg:justify-start items-center pt-6 lg:pt-0" style="gap: 4px;">
+                        <div class="flex items-center">
+                            <img src="assets/img/logo_dark.svg" alt="Logo" style="width: 40px; height: 40px;">
                         </div>
-                        <button class="start-btn" id="step1-btn">
-                            Click
-                        </button>
+                        <span class="text-sm md:text-base" style="font-weight: 300; color: #888888;">twin3.ai</span>
                     </div>
                 </div>
 
-                <!-- Step 2: Mobile Authentication -->
-                <div class="verification-step" id="step2">
-                    <div class="step-content">
-                        <div class="step-info">
-                            <div class="step-number">2</div>
-                            <span class="step-text">Mobile Authentication</span>
+                <!-- Links Section -->
+                <div class="flex flex-wrap lg:flex-nowrap w-full lg:w-2/4 lg:space-x-10">
+                    <!-- Social Media -->
+                    <div class="w-full md:w-1/3 text-center lg:text-left flex-row">
+                        <h5 class="uppercase text-sm lg:text-base" style="font-weight: 300; color: white; padding-bottom: 12px;">Social Media</h5>
+                        <div class="flex justify-center lg:justify-start space-x-4">
+                            <a href="https://x.com/twin3_ai" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+                                <div class="w-6 h-6 flex items-center justify-center" style="padding: 2px;">
+                                    <img src="assets/img/X_logo.svg" alt="X (Twitter)" class="w-full h-full object-contain">
+                                </div>
+                            </a>
+                            <a href="https://opensea.io/collection/twin3" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+                                <img src="assets/img/opensea_logo.svg" alt="OpenSea" class="w-6 h-6">
+                            </a>
+                            <a href="https://warpcast.com/twin3.eth" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+                                <img src="assets/img/farcaster_logo.svg" alt="Warpcast" class="w-6 h-6">
+                            </a>
                         </div>
-                        <button class="start-btn" id="start-mobile-auth">
-                            Start
-                        </button>
+                    </div>
+
+                    <!-- Resource -->
+                    <div class="w-full md:w-1/3 text-center lg:text-left 2xl:mb-2 pt-4 md:pt-0">
+                        <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Resource</h5>
+                        <ul class="space-y-2">
+                            <li><a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" rel="noreferrer noopener" class="text-[#888888] hover:text-white text-sm lg:text-base" style="font-weight: 200;">Whitepaper</a></li>
+                            <li><a class="text-[#888888] hover:text-white text-sm lg:text-base" href="/tasks/1" style="font-weight: 200;">Tasks</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Features -->
+                    <div class="w-full md:w-1/3 text-center lg:text-left 2xl:mb-10 pt-4 md:pt-0">
+                        <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Features</h5>
+                        <ul class="space-y-2">
+                            <li><a class="text-[#888888] hover:text-white text-sm lg:text-base" href="/dashboard" style="font-weight: 200;">My Twin</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Newsletter Section -->
+                <div class="w-full lg:w-1/4 text-center lg:text-left space-y-5">
+                    <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Subscribe to Twin3 Newsletter</h5>
+                    <div class="flex flex-col lg:flex-row items-center lg:space-x-2 space-y-4 lg:space-y-0">
+                        <a href="https://www.linkedin.com/company/twin3-ai" target="_blank" rel="noreferrer noopener" class="px-4 py-2 border border-[#373737] text-black bg-white rounded-lg hover:bg-transparent hover:text-white hover:border-white transition duration-300 text-sm lg:text-base" style="font-weight: 300;">Subscribe</a>
                     </div>
                 </div>
             </div>
 
-            <!-- Get Started Button -->
-            <button id="get-started-btn" class="get-started-btn" disabled>
-                Get Started!
-            </button>
-        </div>
+            <!-- Copyright -->
+            <div class="mt-10 text-center text-gray-500 text-sm lg:text-base" style="font-weight: 200;">© 2025 Twin3.ai v1.0.6</div>
+        </footer>
+    </div>
+
+
     </div>
 
     <!-- Dashboard Page -->
-    <div id="dashboard-page" class="min-h-screen px-6 py-8 pt-24 hidden">
+    <div id="dashboard-page" class="relative min-h-screen hidden">
+        <!-- Video Background -->
+        <video class="absolute top-0 left-0 w-full h-full object-cover" autoplay loop muted playsinline style="z-index: 1;">
+            <source src="assets/img/v2.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <!-- Dashboard Content -->
+        <div class="px-6 py-8 pt-24">
         <div class="max-w-6xl mx-auto">
             <!-- Section 1: Profile Header -->
             <div class="card p-6 mb-6">
@@ -1093,7 +1967,7 @@
 
                         <!-- User Info -->
                         <div>
-                            <h1 id="dashboard-title" class="text-2xl font-bold text-white mb-1">Hi, User!</h1>
+                            <h1 id="dashboard-title" class="text-2xl text-white mb-1" style="font-weight: 500;">Hi, User!</h1>
                             <div class="flex items-center space-x-3 mb-2">
                                 <!-- Profession -->
                                 <div class="flex items-center space-x-2 px-3 py-1 bg-gray-700 rounded-full">
@@ -1659,63 +2533,207 @@
                                     <p class="text-xs text-green-400">Triggered 00A3 (Professional Network) +30</p>
                                 </div>
                             </div>
-                            <div class="text-right">
-                                <div class="flex items-center space-x-2 mb-1">
-                                    <span class="text-white font-bold">+0.008</span>
-                                    <span class="text-gray-400 text-sm">$twin3</span>
-                                </div>
-                                <div class="text-xs text-gray-400">Profession: +30</div>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center justify-between p-4 rounded-lg border-l-4 border-green-500" style="background: #FFFFFF0D;">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center">
-                                    <span class="material-icons icon-sm text-white">task_alt</span>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-white text-sm">Daily Task Completed</h4>
-                                    <p class="text-xs text-gray-400">Jul 24, 2025 · 9:20 AM</p>
-                                    <p class="text-xs text-green-400">Code Review Task - Programming Skills +5</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <div class="flex items-center space-x-2 mb-1">
-                                    <span class="text-white font-bold">+0.003</span>
-                                    <span class="text-gray-400 text-sm">$twin3</span>
-                                </div>
-                                <div class="text-xs text-gray-400">Trait: +5</div>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center justify-between p-4 rounded-lg border-l-4 border-gray-500" style="background: #FFFFFF0D;">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center">
-                                    <span class="material-icons icon-sm text-white">account_circle</span>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-white text-sm">Initial Matrix Score Calculation</h4>
-                                    <p class="text-xs text-gray-400">Jul 20, 2025 · 3:00 PM</p>
-                                    <p class="text-xs text-gray-400">Welcome bonus for joining Twin3 Passport</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <div class="flex items-center space-x-2 mb-1">
-                                    <span class="text-white font-bold">+0.005</span>
-                                    <span class="text-gray-400 text-sm">$twin3</span>
-                                </div>
-                                <div class="text-xs text-gray-400">Welcome</div>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-
         </div>
+
+        <!-- Footer -->
+        <footer class="bg-black text-white px-8 py-10 xl:pr-20 lg:px-0 lg:py-12">
+            <div class="flex flex-col-reverse lg:flex-row xl:justify-between items-start space-y-10 lg:space-y-0">
+                <!-- Logo Section -->
+                <div class="w-full xl:w-1/5 lg:w-[13%] text-center lg:text-left">
+                    <div class="flex flex-col justify-center lg:justify-start items-center pt-6 lg:pt-0" style="gap: 4px;">
+                        <div class="flex items-center">
+                            <img src="assets/img/logo_dark.svg" alt="Logo" style="width: 40px; height: 40px;">
+                        </div>
+                        <span class="text-sm md:text-base" style="font-weight: 300; color: #888888;">twin3.ai</span>
+                    </div>
+                </div>
+
+                <!-- Links Section -->
+                <div class="flex flex-wrap lg:flex-nowrap w-full lg:w-2/4 lg:space-x-10">
+                    <!-- Social Media -->
+                    <div class="w-full md:w-1/3 text-center lg:text-left flex-row">
+                        <h5 class="uppercase text-sm lg:text-base" style="font-weight: 300; color: white; padding-bottom: 12px;">Social Media</h5>
+                        <div class="flex justify-center lg:justify-start space-x-4">
+                            <a href="https://x.com/twin3_ai" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+                                <div class="w-6 h-6 flex items-center justify-center" style="padding: 2px;">
+                                    <img src="assets/img/X_logo.svg" alt="X (Twitter)" class="w-full h-full object-contain">
+                                </div>
+                            </a>
+                            <a href="https://opensea.io/collection/twin3" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+                                <img src="assets/img/opensea_logo.svg" alt="OpenSea" class="w-6 h-6">
+                            </a>
+                            <a href="https://warpcast.com/twin3.eth" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+                                <img src="assets/img/farcaster_logo.svg" alt="Warpcast" class="w-6 h-6">
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Resource -->
+                    <div class="w-full md:w-1/3 text-center lg:text-left 2xl:mb-2 pt-4 md:pt-0">
+                        <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Resource</h5>
+                        <ul class="space-y-2">
+                            <li><a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" rel="noreferrer noopener" class="text-[#888888] hover:text-white text-sm lg:text-base" style="font-weight: 200;">Whitepaper</a></li>
+                            <li><a class="text-[#888888] hover:text-white text-sm lg:text-base" href="/tasks/1" style="font-weight: 200;">Tasks</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Features -->
+                    <div class="w-full md:w-1/3 text-center lg:text-left 2xl:mb-10 pt-4 md:pt-0">
+                        <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Features</h5>
+                        <ul class="space-y-2">
+                            <li><a class="text-[#888888] hover:text-white text-sm lg:text-base" href="/dashboard" style="font-weight: 200;">My Twin</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Newsletter Section -->
+                <div class="w-full lg:w-1/4 text-center lg:text-left space-y-5">
+                    <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Subscribe to Twin3 Newsletter</h5>
+                    <div class="flex flex-col lg:flex-row items-center lg:space-x-2 space-y-4 lg:space-y-0">
+                        <a href="https://www.linkedin.com/company/twin3-ai" target="_blank" rel="noreferrer noopener" class="px-4 py-2 border border-[#373737] text-black bg-white rounded-lg hover:bg-transparent hover:text-white hover:border-white transition duration-300 text-sm lg:text-base" style="font-weight: 300;">Subscribe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="mt-10 text-center text-gray-500 text-sm lg:text-base" style="font-weight: 200;">© 2025 Twin3.ai v1.0.6</div>
+        </footer>
     </div>
 
+        <!-- User Info Page (injected) -->
+        <div id="user-info-page" class="min-h-screen relative hidden">
+            <!-- Navigation -->
+            <nav class="nav-container">
+                <div class="nav-content">
+                    <div class="nav-left">
+                        <img src="assets/img/logo.svg" alt="Twin3 Logo" class="nav-logo">
+                        <div class="nav-links">
+                            <a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" rel="noreferrer noopener" class="nav-link">WHITEPAPER</a>
+                            <a href="/dashboard" class="nav-link">MY TWIN</a>
+                            <a href="/passport" class="nav-link">PASSPORT</a>
+                        </div>
+                    </div>
+                    <div class="nav-right">
+                        <div class="wallet-info">
+                            <span class="wallet-balance">0 BNB</span>
+                            <span class="wallet-address-text">0x19…5ACe</span>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Video Background -->
+            <video class="absolute top-0 left-0 w-full h-full object-cover" autoplay loop muted playsinline>
+                <source src="assets/img/v2.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+
+            <!-- Overlay -->
+            <div class="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50"></div>
+
+            <div class="welcome-container">
+                <div class="welcome-form">
+                    <h2 class="form-title">Create your Passport</h2>
+                    <p class="form-subtitle">What can I call you? Then pick up to 3 professions.</p>
+
+                    <div class="space-y-4">
+                        <div class="input-wrapper" id="ui-username-wrapper">
+                            <input type="text" id="ui-username" class="input-field" placeholder="Your nickname" />
+                            <button type="button" class="input-clear" id="ui-username-clear">
+                                <span class="material-icons icon-sm">close</span>
+                            </button>
+                        </div>
+
+                        <div>
+                            <div class="career-tags-header mb-2 text-gray-300 text-sm">Select 1-3 occupations</div>
+                            <div id="badge-grid" class="badge-grid"></div>
+                        </div>
+
+                        <button id="ui-next" class="btn-primary" disabled>Continue</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="bg-black text-white px-8 py-10 xl:pr-20 lg:px-0 lg:py-12">
+                <div class="flex flex-col-reverse lg:flex-row xl:justify-between items-start space-y-10 lg:space-y-0">
+                    <!-- Logo Section -->
+                    <div class="w-full xl:w-1/5 lg:w-[13%] text-center lg:text-left">
+                        <div class="flex flex-col justify-center lg:justify-start items-center pt-6 lg:pt-0" style="gap: 4px;">
+                            <div class="flex items-center">
+                                <img src="assets/img/logo_dark.svg" alt="Logo" style="width: 40px; height: 40px;">
+                            </div>
+                            <span class="text-sm md:text-base" style="font-weight: 300; color: #888888;">twin3.ai</span>
+                        </div>
+                    </div>
+
+                    <!-- Links Section -->
+                    <div class="flex flex-wrap lg:flex-nowrap w-full lg:w-2/4 lg:space-x-10">
+                        <!-- Social Media -->
+                        <div class="w-full md:w-1/3 text-center lg:text-left flex-row">
+                            <h5 class="uppercase text-sm lg:text-base" style="font-weight: 300; color: white; padding-bottom: 12px;">Social Media</h5>
+                            <div class="flex justify-center lg:justify-start space-x-4">
+                                <a href="https://x.com/twin3_ai" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+                                    <div class="w-6 h-6 flex items-center justify-center" style="padding: 2px;">
+                                        <img src="assets/img/X_logo.svg" alt="X (Twitter)" class="w-full h-full object-contain">
+                                    </div>
+                                </a>
+                                <a href="https://opensea.io/collection/twin3" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+                                    <img src="assets/img/opensea_logo.svg" alt="OpenSea" class="w-6 h-6">
+                                </a>
+                                <a href="https://warpcast.com/twin3.eth" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+                                    <img src="assets/img/farcaster_logo.svg" alt="Warpcast" class="w-6 h-6">
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Resource -->
+                        <div class="w-full md:w-1/3 text-center lg:text-left 2xl:mb-2 pt-4 md:pt-0">
+                            <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Resource</h5>
+                            <ul class="space-y-2">
+                                <li><a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" rel="noreferrer noopener" class="text-[#888888] hover:text-white text-sm lg:text-base" style="font-weight: 200;">Whitepaper</a></li>
+                                <li><a class="text-[#888888] hover:text-white text-sm lg:text-base" href="/tasks/1" style="font-weight: 200;">Tasks</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- Features -->
+                        <div class="w-full md:w-1/3 text-center lg:text-left 2xl:mb-10 pt-4 md:pt-0">
+                            <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Features</h5>
+                            <ul class="space-y-2">
+                                <li><a class="text-[#888888] hover:text-white text-sm lg:text-base" href="/dashboard" style="font-weight: 200;">My Twin</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Newsletter Section -->
+                    <div class="w-full lg:w-1/4 text-center lg:text-left space-y-5">
+                        <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Subscribe to Twin3 Newsletter</h5>
+                        <div class="flex flex-col lg:flex-row items-center lg:space-x-2 space-y-4 lg:space-y-0">
+                            <a href="https://www.linkedin.com/company/twin3-ai" target="_blank" rel="noreferrer noopener" class="px-4 py-2 border border-[#373737] text-black bg-white rounded-lg hover:bg-transparent hover:text-white hover:border-white transition duration-300 text-sm lg:text-base" style="font-weight: 300;">Subscribe</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Copyright -->
+                <div class="mt-10 text-center text-gray-500 text-sm lg:text-base" style="font-weight: 200;">© 2025 Twin3.ai v1.0.6</div>
+            </footer>
+        </div>
+
     <script>
+        // Web3Modal 配置
+        let web3Modal = null;
+        let provider = null;
+
+        // 簡化的錢包連接 - 先使用自定義模態框
+        function initWeb3Modal() {
+            console.log('使用自定義錢包模態框');
+            return false; // 暫時停用 Web3Modal，使用自定義模態框
+        }
+
         // Application state
         let currentStep = 'welcome';
         let userData = { username: '', career: '' };
@@ -1746,7 +2764,7 @@
         function validateWelcomeForm() {
             const username = usernameInput.value.trim();
             const career = careerSelect.value;
-            
+
             if (username && career) {
                 nextBtn.disabled = false;
                 nextBtn.classList.remove('opacity-50');
@@ -1762,7 +2780,7 @@
         nextBtn.addEventListener('click', () => {
             userData.username = usernameInput.value.trim();
             userData.career = careerSelect.value;
-            
+
             if (userData.username && userData.career) {
                 showProofPage();
             }
@@ -1840,9 +2858,13 @@
             }
         }
 
+        // Navigate to User Info after verification complete
         getStartedBtn.addEventListener('click', () => {
             if (!getStartedBtn.disabled) {
-                showDashboard();
+                // Move to user info page instead of dashboard per new flow
+                document.getElementById('proof-page').classList.add('hidden');
+                document.getElementById('user-info-page').classList.remove('hidden');
+                currentStep = 'user_info';
             }
         });
 
@@ -2058,7 +3080,7 @@
             let progress = 0;
             if (level1Complete) progress += 50;
             if (level2Complete) progress += 50;
-            
+
             progressFill.style.width = progress + '%';
         }
 
@@ -2134,6 +3156,125 @@
                     // Update hidden input
                     hiddenInput.value = value;
 
+
+
+            // After verification complete -> go to user info
+            if (getStartedBtn) {
+                getStartedBtn.addEventListener('click', () => {
+                    if (!getStartedBtn.disabled) {
+                        proofPageEl.classList.add('hidden');
+                        userInfoPage.classList.remove('hidden');
+                        currentStep = 'user_info';
+                    }
+                });
+            }
+
+            // User info badges
+            const professionList = [
+                'Artist','Athlete','Community Builder','Creative Content Maker','Developer','Educator','Entrepreneur','Gamer','Healthcare Professional','Research & Innovation Expert','Social Influencer','Travel Explorer','Web3 Network Pioneer','Writer'
+            ];
+            const professionIcons = {
+                'Artist':'brush','Athlete':'emoji_events','Community Builder':'people','Creative Content Maker':'palette','Developer':'code','Educator':'school','Entrepreneur':'business_center','Gamer':'sports_esports','Healthcare Professional':'local_hospital','Research & Innovation Expert':'psychology','Social Influencer':'groups','Travel Explorer':'explore','Web3 Network Pioneer':'language','Writer':'edit'
+            };
+
+            const badgeGrid = document.getElementById('badge-grid');
+            const uiUsername = document.getElementById('ui-username');
+            const uiUsernameWrapper = document.getElementById('ui-username-wrapper');
+            const uiUsernameClear = document.getElementById('ui-username-clear');
+            const uiNext = document.getElementById('ui-next');
+            const selectedBadges = new Set();
+            const MAX_BADGES = 3;
+
+            function renderBadges() {
+                if (!badgeGrid) return;
+                badgeGrid.innerHTML = '';
+                // ensure alphabetical order
+                const sorted = [...professionList].sort((a,b)=>a.localeCompare(b));
+                sorted.forEach(name => {
+                    const div = document.createElement('div');
+                    div.className = 'career-badge';
+                    div.dataset.value = name;
+                    div.innerHTML = `<span class="material-icons icon-sm">${professionIcons[name]}</span><span>${name}</span>`;
+                    div.addEventListener('click', () => toggleBadge(div));
+                    badgeGrid.appendChild(div);
+                });
+            }
+
+            function toggleBadge(el) {
+                const name = el.dataset.value;
+                if (el.classList.contains('selected')) {
+                    el.classList.remove('selected');
+                    selectedBadges.delete(name);
+                } else {
+                    if (selectedBadges.size >= MAX_BADGES) return;
+                    el.classList.add('selected');
+                    selectedBadges.add(name);
+                }
+                updateBadgeDisabledState();
+                validateUserInfo();
+            }
+
+            function updateBadgeDisabledState() {
+                const all = badgeGrid ? badgeGrid.querySelectorAll('.career-badge') : [];
+                const disable = selectedBadges.size >= MAX_BADGES;
+                all.forEach(el => {
+                    if (!el.classList.contains('selected')) {
+                        el.classList.toggle('disabled', disable);
+                    } else {
+                        el.classList.remove('disabled');
+                    }
+                });
+            }
+
+            function validateUserInfo() {
+                const name = uiUsername ? uiUsername.value.trim() : '';
+                uiNext.disabled = !(name && selectedBadges.size >= 1 && selectedBadges.size <= MAX_BADGES);
+            }
+
+            if (uiUsername && uiUsernameWrapper && uiUsernameClear) {
+                const updateClear = () => {
+                    if (uiUsername.value.trim()) uiUsernameWrapper.classList.add('has-value');
+                    else uiUsernameWrapper.classList.remove('has-value');
+                };
+                uiUsername.addEventListener('input', () => { updateClear(); validateUserInfo(); });
+                uiUsernameClear.addEventListener('click', () => { uiUsername.value=''; uiUsername.focus(); updateClear(); validateUserInfo(); });
+                updateClear();
+            }
+
+            if (uiNext) {
+                uiNext.addEventListener('click', () => {
+                    userData.username = uiUsername.value.trim();
+                    // store first selected as primary career to reuse existing dashboard binding
+                    const primary = Array.from(selectedBadges)[0] || 'Developer';
+                    // map back to keys expected by getCareerData if needed
+                    const keyByName = {
+                        'Creative Content Maker':'creative',
+                        'Developer':'developer',
+                        'Research & Innovation Expert':'researcher',
+                        'Web3 Network Pioneer':'web3',
+                        'Social Influencer':'influencer',
+                        'Gamer':'gamer',
+                        'Artist':'artist',
+                        'Entrepreneur':'entrepreneur',
+                        'Educator':'educator',
+                        'Healthcare Professional':'healthcare',
+                        'Athlete':'athlete',
+                        'Writer':'writer',
+                        'Travel Explorer':'explorer',
+                        'Community Builder':'community'
+                    };
+                    userData.career = keyByName[primary] || 'developer';
+
+                    // proceed to dashboard
+                    userInfoPage.classList.add('hidden');
+                    showDashboard();
+                });
+            }
+
+            // initial renders
+            renderBadges();
+
+
                     // Update CTA text on page 2
                     updateCareerCTA(value);
 
@@ -2208,14 +3349,537 @@
             });
         }
 
+        // Initialize flow navigation with DOMContentLoaded
+        function initializeFlowNavigation() {
+            console.log('Initializing flow navigation...');
+
+            // 初始化背景視頻
+            initializeBackgroundVideo();
+
+            // 初始化 Web3Modal
+            const web3ModalInitialized = initWeb3Modal();
+            if (web3ModalInitialized) {
+                console.log('Web3Modal 已啟用');
+            } else {
+                console.log('使用自定義錢包模態框');
+            }
+        }
+
+        // 初始化背景視頻
+        function initializeBackgroundVideo() {
+            const videos = document.querySelectorAll('video');
+            console.log(`Found ${videos.length} video elements`);
+
+            videos.forEach((video, index) => {
+                console.log(`Initializing video ${index + 1}:`, video.src || video.querySelector('source')?.src);
+
+                // 確保視頻屬性正確設置
+                video.muted = true;
+                video.autoplay = true;
+                video.loop = true;
+                video.playsInline = true;
+
+                // 監聽視頻事件
+                video.addEventListener('loadstart', () => {
+                    console.log(`Video ${index + 1}: Load started`);
+                });
+
+                video.addEventListener('canplay', () => {
+                    console.log(`Video ${index + 1}: Can play`);
+                    video.play().catch(error => {
+                        console.error(`Video ${index + 1} play error:`, error);
+                    });
+                });
+
+                video.addEventListener('error', (e) => {
+                    console.error(`Video ${index + 1} error:`, e);
+                });
+
+                video.addEventListener('loadeddata', () => {
+                    console.log(`Video ${index + 1}: Data loaded`);
+                });
+
+                // 嘗試立即播放
+                video.play().catch(error => {
+                    console.log(`Video ${index + 1} initial play failed (normal):`, error.message);
+                });
+            });
+        }
+
+        // DOM elements - 全域變數
+        const walletModal = document.getElementById('wallet-modal');
+        const walletBackdrop = document.getElementById('wallet-backdrop');
+        const freeMintBtn = document.getElementById('free-mint-btn');
+        const userInfoPage = document.getElementById('user-info-page');
+        const proofPageEl = document.getElementById('proof-page');
+
+        console.log('Elements found:', {
+            walletModal: !!walletModal,
+            walletBackdrop: !!walletBackdrop,
+            freeMintBtn: !!freeMintBtn,
+            userInfoPage: !!userInfoPage,
+            proofPageEl: !!proofPageEl
+        });
+
+        // 測試函數是否可用
+        console.log('Functions available:', {
+            checkWalletStatus: typeof checkWalletStatus,
+            openWalletModal: typeof openWalletModal,
+            closeWalletModal: typeof closeWalletModal
+        });
+
+        // Passport Registration Flow Functions
+        function checkWalletStatus() {
+            console.log('🔍 系統正在檢查錢包連結狀態...');
+
+            // 顯示檢查狀態的 UI 反饋
+            showWalletCheckingStatus();
+
+            // 模擬系統檢查過程（2秒延遲）
+            setTimeout(() => {
+                // 假的錢包連結狀態檢查
+                const isWalletConnected = simulateWalletCheck();
+
+                if (isWalletConnected) {
+                    console.log('✅ 系統檢測到已連結的錢包');
+                    hideWalletCheckingStatus();
+                    showWalletConnectedMessage();
+
+                    // 延遲後進入人工驗證
+                    setTimeout(() => {
+                        proceedToHumanVerification();
+                    }, 1500);
+                } else {
+                    console.log('❌ 系統未檢測到已連結的錢包');
+                    hideWalletCheckingStatus();
+                    showWalletNotConnectedMessage();
+
+                    // 延遲後開始錢包連結流程
+                    setTimeout(() => {
+                        startWalletLinkingFlow();
+                    }, 1000);
+                }
+            }, 2000);
+        }
+
+        // 模擬錢包檢查（隨機返回結果，或者您可以設定固定結果）
+        function simulateWalletCheck() {
+            // 30% 機率返回已連結，70% 機率返回未連結
+            // 您可以改為 return false; 來總是顯示未連結
+            // 或改為 return true; 來總是顯示已連結
+            return Math.random() < 0.3;
+        }
+
+        // 顯示檢查狀態
+        function showWalletCheckingStatus() {
+            // 創建檢查狀態提示
+            const statusDiv = document.createElement('div');
+            statusDiv.id = 'wallet-checking-status';
+            statusDiv.innerHTML = `
+                    <div style="
+                        position: fixed;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        background: rgba(26, 26, 26, 0.95);
+                        border: 1px solid rgba(255, 255, 255, 0.1);
+                        border-radius: 12px;
+                        padding: 24px 32px;
+                        z-index: 3000;
+                        text-align: center;
+                        backdrop-filter: blur(10px);
+                    ">
+                        <div style="
+                            width: 24px;
+                            height: 24px;
+                            border: 2px solid rgba(255, 255, 255, 0.3);
+                            border-top: 2px solid #3b82f6;
+                            border-radius: 50%;
+                            animation: spin 1s linear infinite;
+                            margin: 0 auto 16px auto;
+                        "></div>
+                        <div style="color: #fff; font-size: 16px; font-weight: 500; margin-bottom: 8px;">
+                            系統檢查中...
+                        </div>
+                        <div style="color: #888; font-size: 14px;">
+                            正在確認錢包連結狀態
+                        </div>
+                    </div>
+                `;
+
+            // 添加旋轉動畫
+            if (!document.querySelector('#spin-animation')) {
+                const style = document.createElement('style');
+                style.id = 'spin-animation';
+                style.textContent = `
+                    @keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            document.body.appendChild(statusDiv);
+        }
+
+        // 隱藏檢查狀態
+        function hideWalletCheckingStatus() {
+            const statusDiv = document.getElementById('wallet-checking-status');
+            if (statusDiv) {
+                statusDiv.remove();
+            }
+        }
+
+        // 顯示已連結訊息
+        function showWalletConnectedMessage() {
+            showStatusMessage('✅ 錢包已連結', '系統檢測到您已連結錢包，即將進入人工驗證', '#10b981');
+        }
+
+        // 顯示未連結訊息
+        function showWalletNotConnectedMessage() {
+            showStatusMessage('🔗 需要連結錢包', '請選擇錢包進行連結以繼續', '#f59e0b');
+        }
+
+        // 通用狀態訊息顯示
+        function showStatusMessage(title, message, color) {
+            const messageDiv = document.createElement('div');
+            messageDiv.id = 'wallet-status-message';
+            messageDiv.innerHTML = `
+                    <div style="
+                        position: fixed;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        background: rgba(26, 26, 26, 0.95);
+                        border: 1px solid rgba(255, 255, 255, 0.1);
+                        border-radius: 12px;
+                        padding: 24px 32px;
+                        z-index: 3000;
+                        text-align: center;
+                        backdrop-filter: blur(10px);
+                        max-width: 320px;
+                    ">
+                        <div style="
+                            width: 48px;
+                            height: 48px;
+                            background: ${color};
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            margin: 0 auto 16px auto;
+                            font-size: 24px;
+                        ">
+                            ${title.charAt(0)}
+                        </div>
+                        <div style="color: #fff; font-size: 16px; font-weight: 500; margin-bottom: 8px;">
+                            ${title.substring(2)}
+                        </div>
+                        <div style="color: #888; font-size: 14px; line-height: 1.4;">
+                            ${message}
+                        </div>
+                    </div>
+                `;
+
+            document.body.appendChild(messageDiv);
+
+            // 自動移除訊息
+            setTimeout(() => {
+                if (messageDiv) {
+                    messageDiv.remove();
+                }
+            }, title.includes('已連結') ? 1500 : 1000);
+        }
+
+        async function startWalletLinkingFlow() {
+            console.log('🔗 Starting wallet linking flow...');
+
+            // 選項 1: 使用 Web3Modal (如果已初始化)
+            if (web3Modal) {
+                    try {
+                        console.log('🌐 Using Web3Modal for wallet connection');
+
+                        // 連接錢包
+                        provider = await web3Modal.connect();
+
+                        if (provider) {
+                            console.log('✅ 錢包連接成功');
+
+                            // 設置 provider 事件監聽
+                            provider.on("accountsChanged", (accounts) => {
+                                console.log('🔄 帳戶變更:', accounts);
+                                if (accounts.length > 0) {
+                                    proceedToHumanVerification();
+                                }
+                            });
+
+                            provider.on("chainChanged", (chainId) => {
+                                console.log('⛓️ 鏈變更:', chainId);
+                            });
+
+                            provider.on("disconnect", (code, reason) => {
+                                console.log('🔌 錢包斷開連接:', code, reason);
+                            });
+
+                            // 立即進入人工驗證
+                            proceedToHumanVerification();
+                        }
+
+                        return;
+                    } catch (error) {
+                        console.error('❌ Web3Modal 連接失敗:', error);
+                        // 如果 Web3Modal 失敗，回退到自定義模態框
+                    }
+                }
+
+            // 選項 2: 使用現有的自定義錢包模態框 (備用方案)
+            console.log('🎨 Using custom wallet modal');
+            openWalletModal();
+        }
+
+        function checkConnectionAfterModal() {
+            // 檢查錢包是否已連接
+            if (typeof window.ethereum !== 'undefined') {
+                window.ethereum.request({ method: 'eth_accounts' })
+                    .then(accounts => {
+                        if (accounts.length > 0) {
+                            console.log('錢包連接成功:', accounts[0]);
+                            proceedToHumanVerification();
+                        } else {
+                            console.log('用戶取消連接或連接失敗');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('檢查連接狀態失敗:', error);
+                    });
+            }
+        }
+
+        function proceedToHumanVerification() {
+            console.log('Proceeding to human verification...');
+            // Hide welcome page and show proof page
+            document.getElementById('welcome-page').classList.add('hidden');
+            document.getElementById('proof-page').classList.remove('hidden');
+            currentStep = 'proof';
+        }
+
+        function openWalletModal() {
+            console.log('🎨 Opening custom wallet modal...');
+            console.log('Modal elements:', { walletModal: !!walletModal, walletBackdrop: !!walletBackdrop });
+
+            if (walletModal && walletBackdrop) {
+                console.log('✅ Showing wallet modal');
+                walletModal.classList.add('show');
+                walletBackdrop.classList.add('show');
+
+                // 確認模態框是否顯示
+                setTimeout(() => {
+                    console.log('Modal visibility check:', {
+                        modalDisplay: getComputedStyle(walletModal).display,
+                        backdropDisplay: getComputedStyle(walletBackdrop).display,
+                        modalClasses: walletModal.className,
+                        backdropClasses: walletBackdrop.className
+                    });
+                }, 100);
+            } else {
+                console.error('❌ Wallet modal elements not found');
+                console.log('walletModal:', walletModal);
+                console.log('walletBackdrop:', walletBackdrop);
+            }
+        }
+
+        function closeWalletModal() {
+            console.log('🔒 Closing wallet modal...');
+            if (walletModal && walletBackdrop) {
+                walletModal.classList.remove('show');
+                walletBackdrop.classList.remove('show');
+            }
+        }
+
+        // 設置模態框事件監聽器
+        function setupWalletModalEvents() {
+            // 關閉按鈕
+            const closeBtn = document.getElementById('close-wallet-modal');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', closeWalletModal);
+            }
+
+            // 點擊背景關閉
+            if (walletBackdrop) {
+                walletBackdrop.addEventListener('click', closeWalletModal);
+            }
+
+            // 錢包選項點擊事件
+            const walletOptions = document.querySelectorAll('.wallet-option-item');
+            walletOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const walletType = this.getAttribute('data-wallet');
+                    console.log('🦊 Selected wallet:', walletType);
+
+                    if (walletType === 'metamask') {
+                        connectMetaMask();
+                    } else if (walletType === 'walletconnect') {
+                        connectWalletConnect();
+                    }
+                });
+            });
+
+            // 獲取錢包按鈕
+            const getWalletBtn = document.querySelector('.get-wallet-btn');
+            if (getWalletBtn) {
+                getWalletBtn.addEventListener('click', function() {
+                    console.log('📱 Get wallet button clicked');
+                    window.open('https://metamask.io/download/', '_blank');
+                });
+            }
+        }
+
+        // 連接 MetaMask
+        async function connectMetaMask() {
+            console.log('🦊 Connecting to MetaMask...');
+
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    const accounts = await window.ethereum.request({
+                        method: 'eth_requestAccounts'
+                    });
+
+                    if (accounts.length > 0) {
+                        console.log('✅ MetaMask connected:', accounts[0]);
+                        closeWalletModal();
+                        proceedToHumanVerification();
+                    }
+                } catch (error) {
+                    console.error('❌ MetaMask connection failed:', error);
+                }
+            } else {
+                console.log('❌ MetaMask not installed');
+                alert('請先安裝 MetaMask 錢包');
+            }
+        }
+
+        // 連接 WalletConnect
+        function connectWalletConnect() {
+            console.log('🔗 Connecting via WalletConnect...');
+            // 這裡可以整合 WalletConnect 邏輯
+            alert('WalletConnect 功能開發中...');
+        }
+
+        // Global function for testing
+        window.testFreeMint = function() {
+            console.log('Test function called');
+            checkWalletStatus();
+        };
+
+        // 初始化按鈕事件
+        if (freeMintBtn) {
+            console.log('✅ Free Mint button found, adding event listener');
+
+            // 清除之前的事件監聽器
+            freeMintBtn.onclick = null;
+
+            // 添加點擊事件
+            freeMintBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('🚀 Get Your Passport button clicked!');
+                console.log('Starting wallet status check...');
+                checkWalletStatus();
+            });
+
+            // 測試按鈕是否可點擊
+            console.log('Button element:', freeMintBtn);
+            console.log('Button disabled:', freeMintBtn.disabled);
+            console.log('Button style display:', getComputedStyle(freeMintBtn).display);
+        } else {
+            console.error('❌ Free Mint button not found');
+            console.log('Available buttons:', document.querySelectorAll('button'));
+        }
+
+
+
         // Initialize
         initializeCustomSelect();
         initializeUsernameInput();
         validateWelcomeForm();
         initializeNavigation();
+        initializeFlowNavigation();
+
+        // 設置模態框事件監聽器
+        setupWalletModalEvents();
 
         // Set initial CTA text for developer (default)
         updateCareerCTA('developer');
+
+        // Initialize new flow
+        renderBadges();
+
+        // 最終測試 - 確認所有功能都可用
+        console.log('🔧 Final system check:');
+        console.log('- checkWalletStatus function:', typeof checkWalletStatus);
+        console.log('- openWalletModal function:', typeof openWalletModal);
+        console.log('- freeMintBtn element:', !!freeMintBtn);
+        console.log('- walletModal element:', !!walletModal);
+        console.log('- walletBackdrop element:', !!walletBackdrop);
+
+        // 測試按鈕點擊（可選）
+        if (freeMintBtn) {
+            console.log('✅ 按鈕事件已綁定，可以點擊測試');
+        } else {
+            console.error('❌ 按鈕未找到，請檢查 HTML');
+        }
+
+        // 測試頁面切換功能
+        window.testProofPage = function() {
+            console.log('🧪 Testing Proof Page...');
+            document.getElementById('welcome-page').classList.add('hidden');
+            document.getElementById('proof-page').classList.remove('hidden');
+
+            // 檢查 Footer 位置
+            setTimeout(() => {
+                const proofFooter = document.querySelector('#proof-page footer');
+                if (proofFooter) {
+                    const rect = proofFooter.getBoundingClientRect();
+                    console.log('Proof page footer position:', {
+                        top: rect.top,
+                        bottom: rect.bottom,
+                        height: rect.height,
+                        visible: rect.top < window.innerHeight
+                    });
+                } else {
+                    console.log('No footer found in proof page');
+                }
+            }, 100);
+        };
+
+        window.testWelcomePage = function() {
+            console.log('🧪 Testing Welcome Page...');
+            document.getElementById('proof-page').classList.add('hidden');
+            document.getElementById('welcome-page').classList.remove('hidden');
+        };
+
+        // 檢查所有 Footer 的位置
+        window.checkAllFooters = function() {
+            const footers = document.querySelectorAll('footer');
+            console.log('Found footers:', footers.length);
+            footers.forEach((footer, index) => {
+                const parent = footer.parentElement;
+                const rect = footer.getBoundingClientRect();
+                console.log(`Footer ${index + 1}:`, {
+                    parentId: parent.id,
+                    parentClasses: parent.className,
+                    isVisible: !parent.classList.contains('hidden'),
+                    position: {
+                        top: rect.top,
+                        bottom: rect.bottom,
+                        height: rect.height,
+                        inViewport: rect.top < window.innerHeight && rect.bottom > 0
+                    }
+                });
+            });
+        };
     </script>
+
 </body>
 </html>
