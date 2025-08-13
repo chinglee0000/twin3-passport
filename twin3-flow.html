@@ -931,7 +931,12 @@
         }
 
         .hidden {
-            display: none;
+            display: none !important;
+        }
+
+        /* Ensure footers are hidden when their parent page is hidden */
+        .hidden footer {
+            display: none !important;
         }
 
         .metric-card {
@@ -1482,8 +1487,8 @@
     </style>
 </head>
 <body class="grid-bg">
-    <!-- Navigation Bar -->
-    <nav class="nav-bar">
+    <!-- Global Navigation Bar - 全域導航 -->
+    <nav id="global-nav" class="nav-bar">
         <a href="/" class="nav-logo">
             <div class="flex items-center">
                 <img src="/assets/img/logo_dark.svg" alt="Logo" class="w-10 h-10 md:w-10 md:h-10">
@@ -1518,89 +1523,6 @@
                 </div>
             </div>
         </div>
-
-
-
-
-            <!-- 錢包連接模態框 - 仿照截圖設計 -->
-            <div id="wallet-backdrop" class="modal-backdrop"></div>
-            <div id="wallet-modal" class="modal">
-                <div class="wallet-modal-card">
-                    <!-- 關閉按鈕 -->
-                    <button id="close-wallet-modal" class="wallet-close-btn">
-                        <span class="material-icons">close</span>
-                    </button>
-
-                    <!-- 模態框標題 -->
-                    <h2 class="wallet-modal-title">連接錢包</h2>
-
-                    <!-- 主要內容區域 -->
-                    <div class="wallet-modal-content">
-                        <!-- 左側：錢包選項 -->
-                        <div class="wallet-options-section">
-                            <h3 class="wallet-section-title">已安裝</h3>
-
-                            <!-- MetaMask 選項 -->
-                            <div class="wallet-option-item" data-wallet="metamask">
-                                <div class="wallet-option-icon">
-                                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iI0Y2ODUxQiIvPgo8cGF0aCBkPSJNMjQuNjI2NyA2LjY2NjY3TDE2LjcyIDEyLjY0TDE4LjI5MzMgOC45MDY2N0wyNC42MjY3IDYuNjY2NjdaIiBmaWxsPSIjRTI3NjFCIiBzdHJva2U9IiNFMjc2MUIiIHN0cm9rZS13aWR0aD0iMC4wNjY2NjY3Ii8+CjxwYXRoIGQ9Ik03LjM3MzMzIDYuNjY2NjdMMTUuMjI2NyAxMi42OTMzTDEzLjcwNjcgOC45MDY2N0w3LjM3MzMzIDYuNjY2NjdaIiBmaWxsPSIjRTQ3NjFCIiBzdHJva2U9IiNFNDc2MUIiIHN0cm9rZS13aWR0aD0iMC4wNjY2NjY3Ii8+CjxwYXRoIGQ9Ik0yMS4zNiAyMC4yNjY3TDE5LjQxMzMgMjMuMjhMMjQuMjQgMjQuNDhMMjUuNDQgMjAuMzJMMjEuMzYgMjAuMjY2N1oiIGZpbGw9IiNFNDc2MUIiIHN0cm9rZT0iI0U0NzYxQiIgc3Ryb2tlLXdpZHRoPSIwLjA2NjY2NjciLz4KPHBhdGggZD0iTTYuNTYgMjAuMzJMNy43NiAyNC40OEwxMi41ODY3IDIzLjI4TDEwLjY0IDIwLjI2NjdMNi41NiAyMC4zMloiIGZpbGw9IiNFNDc2MUIiIHN0cm9rZT0iI0U0NzYxQiIgc3Ryb2tlLXdpZHRoPSIwLjA2NjY2NjciLz4KPC9zdmc+" alt="MetaMask" class="wallet-icon">
-                                </div>
-                                <div class="wallet-option-info">
-                                    <span class="wallet-name">MetaMask</span>
-                                    <span class="wallet-status">瀏覽</span>
-                                </div>
-                            </div>
-
-                            <h3 class="wallet-section-title">推薦</h3>
-
-                            <!-- WalletConnect 選項 -->
-                            <div class="wallet-option-item" data-wallet="walletconnect">
-                                <div class="wallet-option-icon">
-                                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzM5OTZGRiIvPgo8cGF0aCBkPSJNMTAuNjY2NyAxMy4zMzMzQzEzLjYxMzMgMTAuMzg2NyAxOC4zODY3IDEwLjM4NjcgMjEuMzMzMyAxMy4zMzMzTDIxLjg2NjcgMTMuODY2N0MyMi4wNTMzIDE0LjA1MzMgMjIuMDUzMyAxNC4zNDY3IDIxLjg2NjcgMTQuNTMzM0wyMC44IDEzLjQ2NjdDMTguNzIgMTEuMzg2NyAxNS4yOCAxMS4zODY3IDEzLjIgMTMuNDY2N0wxMi4xMzMzIDE0LjUzMzNDMTEuOTQ2NyAxNC43MiAxMS42NTMzIDE0LjcyIDExLjQ2NjcgMTQuNTMzM0wxMC40IDE0LjUzMzNDMTAuMjEzMyAxNC4zNDY3IDEwLjIxMzMgMTQuMDUzMyAxMC40IDEzLjg2NjdMMTAuNjY2NyAxMy4zMzMzWiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+" alt="WalletConnect" class="wallet-icon">
-                                </div>
-                                <div class="wallet-option-info">
-                                    <span class="wallet-name">WalletConnect</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 右側：錢包介紹 -->
-                        <div class="wallet-info-section">
-                            <h3 class="wallet-info-title">什麼是錢包？</h3>
-
-                            <!-- 功能介紹卡片 -->
-                            <div class="wallet-feature-card">
-                                <div class="wallet-feature-icon">
-                                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iOCIgZmlsbD0iIzMzNzNkYyIvPgo8cGF0aCBkPSJNMjAgMTBDMTQuNDc3MiAxMCAxMCAxNC40NzcyIDEwIDIwQzEwIDI1LjUyMjggMTQuNDc3MiAzMCAyMCAzMEMyNS41MjI4IDMwIDMwIDI1LjUyMjggMzAgMjBDMzAgMTQuNDc3MiAyNS41MjI4IDEwIDIwIDEwWk0yMiAyNUgxOFYxOEgyMlYyNVpNMjIgMTZIMThWMTJIMjJWMTZaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4=" alt="Digital Assets" class="feature-icon">
-                                </div>
-                                <div class="wallet-feature-content">
-                                    <h4 class="wallet-feature-title">您的數字資產之家</h4>
-                                    <p class="wallet-feature-desc">錢包用於發送、接收、儲存及顯示數位資產以及與NFT這樣的數字資產。</p>
-                                </div>
-                            </div>
-
-                            <div class="wallet-feature-card">
-                                <div class="wallet-feature-icon">
-                                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iOCIgZmlsbD0iI2ZmNjU5MyIvPgo8cGF0aCBkPSJNMjAgMTBDMTQuNDc3MiAxMCAxMCAxNC40NzcyIDEwIDIwQzEwIDI1LjUyMjggMTQuNDc3MiAzMCAyMCAzMEMyNS41MjI4IDMwIDMwIDI1LjUyMjggMzAgMjBDMzAgMTQuNDc3MiAyNS41MjI4IDEwIDIwIDEwWk0yNSAyMEwyMCAyNUwxNSAyMEgxOFYxNUgyMlYyMEgyNVoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg==" alt="New Login" class="feature-icon">
-                                </div>
-                                <div class="wallet-feature-content">
-                                    <h4 class="wallet-feature-title">新的登入方式</h4>
-                                    <p class="wallet-feature-desc">不用再為每個網站創建新的帳戶和密碼，只需連接您的錢包。</p>
-                                </div>
-                            </div>
-
-                            <!-- 獲取錢包按鈕 -->
-                            <button class="get-wallet-btn">
-                                獲取錢包
-                            </button>
-
-                            <!-- 了解更多鏈接 -->
-                            <a href="#" class="learn-more-link">了解更多</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
     </nav>
 
     <!-- Welcome Page -->
@@ -1743,8 +1665,8 @@
             </div>
         </div>
 
-        <!-- Footer -->
-        <footer class="bg-black text-white px-8 py-10 xl:pr-20 lg:px-0 lg:py-12">
+        <!-- Footer Section -->
+        <footer class="bg-black text-white px-8 py-10 xl:pr-20 lg:px-0 lg:py-12" style="position: relative; z-index: 5;">
             <div class="flex flex-col-reverse lg:flex-row xl:justify-between items-start space-y-10 lg:space-y-0">
                 <!-- Logo Section -->
                 <div class="w-full xl:w-1/5 lg:w-[13%] text-center lg:text-left">
@@ -1872,8 +1794,8 @@
             </div>
         </div>
 
-        <!-- Footer -->
-        <footer class="bg-black text-white px-8 py-10 xl:pr-20 lg:px-0 lg:py-12">
+        <!-- Footer Section -->
+        <footer class="bg-black text-white px-8 py-10 xl:pr-20 lg:px-0 lg:py-12" style="position: relative; z-index: 5;">
             <div class="flex flex-col-reverse lg:flex-row xl:justify-between items-start space-y-10 lg:space-y-0">
                 <!-- Logo Section -->
                 <div class="w-full xl:w-1/5 lg:w-[13%] text-center lg:text-left">
@@ -1935,9 +1857,6 @@
             <!-- Copyright -->
             <div class="mt-10 text-center text-gray-500 text-sm lg:text-base" style="font-weight: 200;">© 2025 Twin3.ai v1.0.6</div>
         </footer>
-    </div>
-
-
     </div>
 
     <!-- Dashboard Page -->
@@ -2606,25 +2525,7 @@
 
         <!-- User Info Page (injected) -->
         <div id="user-info-page" class="min-h-screen relative hidden">
-            <!-- Navigation -->
-            <nav class="nav-container">
-                <div class="nav-content">
-                    <div class="nav-left">
-                        <img src="assets/img/logo.svg" alt="Twin3 Logo" class="nav-logo">
-                        <div class="nav-links">
-                            <a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" rel="noreferrer noopener" class="nav-link">WHITEPAPER</a>
-                            <a href="/dashboard" class="nav-link">MY TWIN</a>
-                            <a href="/passport" class="nav-link">PASSPORT</a>
-                        </div>
-                    </div>
-                    <div class="nav-right">
-                        <div class="wallet-info">
-                            <span class="wallet-balance">0 BNB</span>
-                            <span class="wallet-address-text">0x19…5ACe</span>
-                        </div>
-                    </div>
-                </div>
-            </nav>
+
 
             <!-- Video Background -->
             <video class="absolute top-0 left-0 w-full h-full object-cover" autoplay loop muted playsinline>
@@ -2722,6 +2623,85 @@
                 <div class="mt-10 text-center text-gray-500 text-sm lg:text-base" style="font-weight: 200;">© 2025 Twin3.ai v1.0.6</div>
             </footer>
         </div>
+
+    <!-- 錢包連接模態框 - 仿照截圖設計 -->
+    <div id="wallet-backdrop" class="modal-backdrop"></div>
+    <div id="wallet-modal" class="modal">
+        <div class="wallet-modal-card">
+            <!-- 關閉按鈕 -->
+            <button id="close-wallet-modal" class="wallet-close-btn">
+                <span class="material-icons">close</span>
+            </button>
+
+            <!-- 模態框標題 -->
+            <h2 class="wallet-modal-title">連接錢包</h2>
+
+            <!-- 主要內容區域 -->
+            <div class="wallet-modal-content">
+                <!-- 左側：錢包選項 -->
+                <div class="wallet-options-section">
+                    <h3 class="wallet-section-title">已安裝</h3>
+
+                    <!-- MetaMask 選項 -->
+                    <div class="wallet-option-item" data-wallet="metamask">
+                        <div class="wallet-option-icon">
+                            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iI0Y2ODUxQiIvPgo8cGF0aCBkPSJNMjQuNjI2NyA2LjY2NjY3TDE2LjcyIDEyLjY0TDE4LjI5MzMgOC45MDY2N0wyNC42MjY3IDYuNjY2NjdaIiBmaWxsPSIjRTI3NjFCIiBzdHJva2U9IiNFMjc2MUIiIHN0cm9rZS13aWR0aD0iMC4wNjY2NjY3Ii8+CjxwYXRoIGQ9Ik03LjM3MzMzIDYuNjY2NjdMMTUuMjI2NyAxMi42OTMzTDEzLjcwNjcgOC45MDY2N0w3LjM3MzMzIDYuNjY2NjdaIiBmaWxsPSIjRTQ3NjFCIiBzdHJva2U9IiNFNDc2MUIiIHN0cm9rZS13aWR0aD0iMC4wNjY2NjY3Ii8+CjxwYXRoIGQ9Ik0yMS4zNiAyMC4yNjY3TDE5LjQxMzMgMjMuMjhMMjQuMjQgMjQuNDhMMjUuNDQgMjAuMzJMMjEuMzYgMjAuMjY2N1oiIGZpbGw9IiNFNDc2MUIiIHN0cm9rZT0iI0U0NzYxQiIgc3Ryb2tlLXdpZHRoPSIwLjA2NjY2NjciLz4KPHBhdGggZD0iTTYuNTYgMjAuMzJMNy43NiAyNC40OEwxMi41ODY3IDIzLjI4TDEwLjY0IDIwLjI2NjdMNi41NiAyMC4zMloiIGZpbGw9IiNFNDc2MUIiIHN0cm9rZT0iI0U0NzYxQiIgc3Ryb2tlLXdpZHRoPSIwLjA2NjY2NjciLz4KPC9zdmc+" alt="MetaMask" class="wallet-icon">
+                        </div>
+                        <div class="wallet-option-info">
+                            <span class="wallet-name">MetaMask</span>
+                            <span class="wallet-status">瀏覽</span>
+                        </div>
+                    </div>
+
+                    <h3 class="wallet-section-title">推薦</h3>
+
+                    <!-- WalletConnect 選項 -->
+                    <div class="wallet-option-item" data-wallet="walletconnect">
+                        <div class="wallet-option-icon">
+                            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzM5OTZGRiIvPgo8cGF0aCBkPSJNMTAuNjY2NyAxMy4zMzMzQzEzLjYxMzMgMTAuMzg2NyAxOC4zODY3IDEwLjM4NjcgMjEuMzMzMyAxMy4zMzMzTDIxLjg2NjcgMTMuODY2N0MyMi4wNTMzIDE0LjA1MzMgMjIuMDUzMyAxNC4zNDY3IDIxLjg2NjcgMTQuNTMzM0wyMC44IDEzLjQ2NjdDMTguNzIgMTEuMzg2NyAxNS4yOCAxMS4zODY3IDEzLjIgMTMuNDY2N0wxMi4xMzMzIDE0LjUzMzNDMTEuOTQ2NyAxNC43MiAxMS42NTMzIDE0LjcyIDExLjQ2NjcgMTQuNTMzM0wxMC40IDE0LjUzMzNDMTAuMjEzMyAxNC4zNDY3IDEwLjIxMzMgMTQuMDUzMyAxMC40IDEzLjg2NjdMMTAuNjY2NyAxMy4zMzMzWiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+" alt="WalletConnect" class="wallet-icon">
+                        </div>
+                        <div class="wallet-option-info">
+                            <span class="wallet-name">WalletConnect</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右側：錢包介紹 -->
+                <div class="wallet-info-section">
+                    <h3 class="wallet-info-title">什麼是錢包？</h3>
+
+                    <!-- 功能介紹卡片 -->
+                    <div class="wallet-feature-card">
+                        <div class="wallet-feature-icon">
+                            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iOCIgZmlsbD0iIzMzNzNkYyIvPgo8cGF0aCBkPSJNMjAgMTBDMTQuNDc3MiAxMCAxMCAxNC40NzcyIDEwIDIwQzEwIDI1LjUyMjggMTQuNDc3MiAzMCAyMCAzMEMyNS41MjI4IDMwIDMwIDI1LjUyMjggMzAgMjBDMzAgMTQuNDc3MiAyNS41MjI4IDEwIDIwIDEwWk0yMiAyNUgxOFYxOEgyMlYyNVpNMjIgMTZIMThWMTJIMjJWMTZaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4=" alt="Digital Assets" class="feature-icon">
+                        </div>
+                        <div class="wallet-feature-content">
+                            <h4 class="wallet-feature-title">您的數字資產之家</h4>
+                            <p class="wallet-feature-desc">錢包用於發送、接收、儲存及顯示數位資產以及與NFT這樣的數字資產。</p>
+                        </div>
+                    </div>
+
+                    <div class="wallet-feature-card">
+                        <div class="wallet-feature-icon">
+                            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iOCIgZmlsbD0iI2ZmNjU5MyIvPgo8cGF0aCBkPSJNMjAgMTBDMTQuNDc3MiAxMCAxMCAxNC40NzcyIDEwIDIwQzEwIDI1LjUyMjggMTQuNDc3MiAzMCAyMCAzMEMyNS41MjI4IDMwIDMwIDI1LjUyMjggMzAgMjBDMzAgMTQuNDc3MiAyNS41MjI4IDEwIDIwIDEwWk0yNSAyMEwyMCAyNUwxNSAyMEgxOFYxNUgyMlYyMEgyNVoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg==" alt="New Login" class="feature-icon">
+                        </div>
+                        <div class="wallet-feature-content">
+                            <h4 class="wallet-feature-title">新的登入方式</h4>
+                            <p class="wallet-feature-desc">不用再為每個網站創建新的帳戶和密碼，只需連接您的錢包。</p>
+                        </div>
+                    </div>
+
+                    <!-- 獲取錢包按鈕 -->
+                    <button class="get-wallet-btn">
+                        獲取錢包
+                    </button>
+
+                    <!-- 了解更多鏈接 -->
+                    <a href="#" class="learn-more-link">了解更多</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         // Web3Modal 配置
@@ -2870,14 +2850,42 @@
 
         // Navigation functions
         function showProofPage() {
+            // Hide all pages first
             welcomePage.classList.add('hidden');
+            dashboardPage.classList.add('hidden');
+            // Show proof page
             proofPage.classList.remove('hidden');
             currentStep = 'proof';
+
+            // Force hide all footers except the one in proof page
+            const allFooters = document.querySelectorAll('footer');
+            allFooters.forEach(footer => {
+                const parentPage = footer.closest('[id$="-page"]');
+                if (parentPage && parentPage.id !== 'proof-page') {
+                    footer.style.display = 'none';
+                } else if (parentPage && parentPage.id === 'proof-page') {
+                    footer.style.display = '';
+                }
+            });
         }
 
         function showDashboard() {
+            // Hide all pages first
+            welcomePage.classList.add('hidden');
             proofPage.classList.add('hidden');
+            // Show dashboard page
             dashboardPage.classList.remove('hidden');
+
+            // Force hide all footers except the one in dashboard page
+            const allFooters = document.querySelectorAll('footer');
+            allFooters.forEach(footer => {
+                const parentPage = footer.closest('[id$="-page"]');
+                if (parentPage && parentPage.id !== 'dashboard-page') {
+                    footer.style.display = 'none';
+                } else if (parentPage && parentPage.id === 'dashboard-page') {
+                    footer.style.display = '';
+                }
+            });
 
             // Update dashboard with user data
             dashboardTitle.textContent = `Hi, ${userData.username}!`;
@@ -3658,10 +3666,39 @@
 
         function proceedToHumanVerification() {
             console.log('Proceeding to human verification...');
-            // Hide welcome page and show proof page
+            // Hide all pages first
             document.getElementById('welcome-page').classList.add('hidden');
+            document.getElementById('dashboard-page').classList.add('hidden');
+            // Show proof page
             document.getElementById('proof-page').classList.remove('hidden');
             currentStep = 'proof';
+
+            // Force hide all footers except the one in proof page
+            const allFooters = document.querySelectorAll('footer');
+            allFooters.forEach(footer => {
+                const parentPage = footer.closest('[id$="-page"]');
+                if (parentPage && parentPage.id !== 'proof-page') {
+                    footer.style.display = 'none';
+                } else if (parentPage && parentPage.id === 'proof-page') {
+                    footer.style.display = '';
+                }
+            });
+
+            // Debug: Check footer visibility after page switch
+            setTimeout(() => {
+                console.log('🔍 Footer check after switching to Proof page:');
+                allFooters.forEach((footer, index) => {
+                    const parentPage = footer.closest('[id$="-page"]');
+                    const isParentHidden = parentPage && parentPage.classList.contains('hidden');
+                    const rect = footer.getBoundingClientRect();
+                    console.log(`Footer ${index + 1}:`, {
+                        parentPage: parentPage ? parentPage.id : 'no parent',
+                        parentHidden: isParentHidden,
+                        visible: rect.width > 0 && rect.height > 0,
+                        position: { top: rect.top, height: rect.height }
+                    });
+                });
+            }, 100);
         }
 
         function openWalletModal() {
@@ -3833,8 +3870,38 @@
         // 測試頁面切換功能
         window.testProofPage = function() {
             console.log('🧪 Testing Proof Page...');
+            // Hide all pages first
             document.getElementById('welcome-page').classList.add('hidden');
+            document.getElementById('dashboard-page').classList.add('hidden');
+            // Show proof page
             document.getElementById('proof-page').classList.remove('hidden');
+
+            // Force hide all footers except the one in proof page
+            const allFooters = document.querySelectorAll('footer');
+            allFooters.forEach(footer => {
+                const parentPage = footer.closest('[id$="-page"]');
+                if (parentPage && parentPage.id !== 'proof-page') {
+                    footer.style.display = 'none';
+                } else if (parentPage && parentPage.id === 'proof-page') {
+                    footer.style.display = '';
+                }
+            });
+
+            // 檢查所有可見的 Footer
+            setTimeout(() => {
+                const allFooters = document.querySelectorAll('footer');
+                console.log('🔍 Total footers found:', allFooters.length);
+                allFooters.forEach((footer, index) => {
+                    const rect = footer.getBoundingClientRect();
+                    const isVisible = rect.width > 0 && rect.height > 0;
+                    const parentPage = footer.closest('[id$="-page"]');
+                    console.log(`Footer ${index + 1}:`, {
+                        parentPage: parentPage ? parentPage.id : 'no parent page',
+                        isVisible: isVisible,
+                        position: { top: rect.top, bottom: rect.bottom, height: rect.height }
+                    });
+                });
+            }, 100);
 
             // 檢查 Footer 位置
             setTimeout(() => {
@@ -3855,8 +3922,22 @@
 
         window.testWelcomePage = function() {
             console.log('🧪 Testing Welcome Page...');
+            // Hide all pages first
             document.getElementById('proof-page').classList.add('hidden');
+            document.getElementById('dashboard-page').classList.add('hidden');
+            // Show welcome page
             document.getElementById('welcome-page').classList.remove('hidden');
+
+            // Force hide all footers except the one in welcome page
+            const allFooters = document.querySelectorAll('footer');
+            allFooters.forEach(footer => {
+                const parentPage = footer.closest('[id$="-page"]');
+                if (parentPage && parentPage.id !== 'welcome-page') {
+                    footer.style.display = 'none';
+                } else if (parentPage && parentPage.id === 'welcome-page') {
+                    footer.style.display = '';
+                }
+            });
         };
 
         // 檢查所有 Footer 的位置
@@ -3866,20 +3947,49 @@
             footers.forEach((footer, index) => {
                 const parent = footer.parentElement;
                 const rect = footer.getBoundingClientRect();
+                const isVisible = !parent.classList.contains('hidden');
+                const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
+
                 console.log(`Footer ${index + 1}:`, {
                     parentId: parent.id,
                     parentClasses: parent.className,
-                    isVisible: !parent.classList.contains('hidden'),
+                    isVisible: isVisible,
+                    isInViewport: isInViewport,
                     position: {
                         top: rect.top,
                         bottom: rect.bottom,
-                        height: rect.height,
-                        inViewport: rect.top < window.innerHeight && rect.bottom > 0
+                        height: rect.height
                     }
                 });
+
+                // 如果 Footer 可見且在視窗內，高亮顯示
+                if (isVisible && isInViewport) {
+                    footer.style.border = '3px solid red';
+                    footer.style.boxShadow = '0 0 10px red';
+                    console.log(`🚨 Footer ${index + 1} is VISIBLE and IN VIEWPORT!`);
+                }
             });
         };
+
+        // 專門檢查 Proof Page 的 Footer
+        window.checkProofPageFooters = function() {
+            console.log('🔍 Checking Proof Page specifically...');
+            const proofPage = document.getElementById('proof-page');
+            const footersInProof = proofPage.querySelectorAll('footer');
+            console.log('Footers inside proof-page:', footersInProof.length);
+
+            if (footersInProof.length > 0) {
+                footersInProof.forEach((footer, index) => {
+                    console.log(`🚨 Found footer ${index + 1} inside proof-page!`);
+                    footer.style.border = '5px solid yellow';
+                });
+            } else {
+                console.log('✅ No footers found inside proof-page');
+            }
+        };
     </script>
+
+
 
 </body>
 </html>
