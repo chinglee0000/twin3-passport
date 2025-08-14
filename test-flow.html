@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twin3 Passport Flow Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #0a0a0a;
+            color: white;
+        }
+        .test-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .test-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #22c55e;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin: 5px;
+            transition: all 0.2s ease;
+        }
+        .test-link:hover {
+            background: #16a34a;
+            transform: translateY(-1px);
+        }
+        .flow-step {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+        .checklist li {
+            padding: 5px 0;
+            position: relative;
+            padding-left: 25px;
+        }
+        .checklist li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #22c55e;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 Twin3 Passport Flow Test</h1>
+    
+    <div class="test-section">
+        <h2>📋 Complete Flow Test</h2>
+        <p>Test the complete user journey from welcome to dashboard:</p>
+        
+        <div class="flow-step">
+            <h3>Step 1: Welcome & Wallet Connection</h3>
+            <a href="welcome.html" class="test-link">Start Here: Welcome Page</a>
+            <ul class="checklist">
+                <li>Click "Get Your Passport" button</li>
+                <li>Wallet modal should open</li>
+                <li>Only MetaMask should be clickable</li>
+                <li>Click MetaMask to simulate connection</li>
+                <li>Should redirect to proof.html</li>
+            </ul>
+        </div>
+
+        <div class="flow-step">
+            <h3>Step 2: Proof of Humanity</h3>
+            <a href="proof.html" class="test-link">Direct Link: Proof Page</a>
+            <ul class="checklist">
+                <li>Two verification options available</li>
+                <li>Complete either reCAPTCHA or Biometric (2選1)</li>
+                <li>Next button should enable after completion</li>
+                <li>Should redirect to user-info.html</li>
+            </ul>
+        </div>
+
+        <div class="flow-step">
+            <h3>Step 3: User Information</h3>
+            <a href="user-info.html" class="test-link">Direct Link: User Info Page</a>
+            <ul class="checklist">
+                <li>Enter nickname (required)</li>
+                <li>Select 1-3 careers from 14 options</li>
+                <li>Clear button should work for nickname</li>
+                <li>Continue button enables when valid</li>
+                <li>Should redirect to dashboard.html</li>
+            </ul>
+        </div>
+
+        <div class="flow-step">
+            <h3>Step 4: Dashboard</h3>
+            <a href="dashboard.html" class="test-link">Direct Link: Dashboard</a>
+            <ul class="checklist">
+                <li>Shows personalized welcome message</li>
+                <li>Displays user avatar with first letter</li>
+                <li>Shows selected career</li>
+                <li>Displays passport metrics</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>🔧 Individual Component Tests</h2>
+        
+        <h3>Navigation Tests</h3>
+        <ul class="checklist">
+            <li>Logo links should go to welcome.html</li>
+            <li>WHITEPAPER should open IEEE paper</li>
+            <li>MY TWIN should go to dashboard.html</li>
+            <li>PASSPORT should go to welcome.html</li>
+            <li>Mobile menu should work on small screens</li>
+        </ul>
+
+        <h3>Wallet Modal Tests</h3>
+        <ul class="checklist">
+            <li>Modal should open when clicking "Get Your Passport"</li>
+            <li>Only MetaMask should be enabled</li>
+            <li>WalletConnect and Coinbase should be disabled</li>
+            <li>Close button should work</li>
+            <li>Backdrop click should close modal</li>
+        </ul>
+
+        <h3>Form Validation Tests</h3>
+        <ul class="checklist">
+            <li>Proof page: Next disabled until verification complete</li>
+            <li>User info: Continue disabled until nickname + career selected</li>
+            <li>Career selection: Maximum 3 careers allowed</li>
+            <li>Clear button: Should appear when nickname has content</li>
+        </ul>
+
+        <h3>Data Persistence Tests</h3>
+        <ul class="checklist">
+            <li>User data should save to localStorage</li>
+            <li>Dashboard should load data from localStorage</li>
+            <li>URL parameters should work as backup</li>
+            <li>Career mapping should be consistent</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>📱 Responsive Design Tests</h2>
+        <ul class="checklist">
+            <li>Test on mobile (< 768px)</li>
+            <li>Test on tablet (768px - 1024px)</li>
+            <li>Test on desktop (> 1024px)</li>
+            <li>Mobile menu should work properly</li>
+            <li>All text should be readable</li>
+            <li>Buttons should be easily clickable</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>🎨 Visual Consistency Tests</h2>
+        <ul class="checklist">
+            <li>All pages use same fonts (Kanit)</li>
+            <li>Background videos play on all pages</li>
+            <li>Footer appears on all pages</li>
+            <li>Color scheme consistent across pages</li>
+            <li>Button styles match original design</li>
+            <li>Spacing and layout consistent</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>🚨 Known Issues to Check</h2>
+        <ul style="list-style: none; padding: 0;">
+            <li style="padding: 5px 0; position: relative; padding-left: 25px; color: #fbbf24;">
+                <span style="position: absolute; left: 0;">⚠️</span>
+                Video files (v2.mp4) need to be in assets/img/ folder
+            </li>
+            <li style="padding: 5px 0; position: relative; padding-left: 25px; color: #fbbf24;">
+                <span style="position: absolute; left: 0;">⚠️</span>
+                Logo and icon files need to be in assets/img/ folder
+            </li>
+            <li style="padding: 5px 0; position: relative; padding-left: 25px; color: #fbbf24;">
+                <span style="position: absolute; left: 0;">⚠️</span>
+                Material Icons require internet connection
+            </li>
+            <li style="padding: 5px 0; position: relative; padding-left: 25px; color: #fbbf24;">
+                <span style="position: absolute; left: 0;">⚠️</span>
+                Tailwind CSS requires internet connection
+            </li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>✅ Success Criteria</h2>
+        <p>The flow is working correctly when:</p>
+        <ol style="color: #22c55e;">
+            <li>User can complete entire flow from welcome to dashboard</li>
+            <li>All form validations work properly</li>
+            <li>User data persists between pages</li>
+            <li>All navigation links work correctly</li>
+            <li>Mobile responsive design works</li>
+            <li>Visual design matches original twin3-flow.html</li>
+        </ol>
+    </div>
+
+    <div style="text-align: center; margin: 40px 0;">
+        <a href="welcome.html" class="test-link" style="font-size: 18px; padding: 15px 30px;">
+            🚀 Start Complete Flow Test
+        </a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Spacing Test - Twin3</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background: #0a0a0a;
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .comparison-section {
+            margin: 40px 0;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .demo-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: stretch;
+            flex-wrap: wrap;
+        }
+        
+        /* 原始設定 - justify-content: center */
+        .original-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 350px;
+            min-height: 350px;
+            padding: 2rem;
+            gap: 1.5rem;
+        }
+        
+        /* 新設定 - justify-content: space-between */
+        .auto-spacing-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* 自動間距 */
+            align-items: center;
+            text-align: center;
+            border-radius: 12px;
+            border: 1px solid rgba(34, 197, 94, 0.4);
+            background: rgba(34, 197, 94, 0.1);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 350px;
+            min-height: 350px;
+            padding: 2rem;
+            /* 移除 gap，讓 space-between 控制間距 */
+        }
+        
+        /* 不同高度測試 */
+        .height-200 { min-height: 200px; }
+        .height-300 { min-height: 300px; }
+        .height-400 { min-height: 400px; }
+        .height-500 { min-height: 500px; }
+        
+        .card-description {
+            color: #888888;
+            font-weight: 200;
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+        
+        .card-number {
+            color: white;
+            font-weight: 300;
+            font-size: 4rem;
+            line-height: 1;
+            text-transform: uppercase;
+        }
+        
+        .card-button {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #373737;
+            color: black;
+            background: white;
+            border-radius: 8px;
+            font-weight: 300;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .card-button:hover {
+            background: transparent;
+            color: white;
+            border-color: white;
+        }
+        
+        .info-box {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid #3b82f6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .success-box {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid #22c55e;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .height-controls {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .height-btn {
+            padding: 8px 16px;
+            background: #374151;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .height-btn:hover {
+            background: #4b5563;
+        }
+        
+        .height-btn.active {
+            background: #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1 style="font-size: 2.5rem; margin-bottom: 2rem; text-align: center;">📏 Auto Spacing 測試</h1>
+        
+        <div class="info-box">
+            <h3>🎯 測試目標：</h3>
+            <p>比較 <code>justify-content: center</code> 和 <code>justify-content: space-between</code> 的效果。</p>
+            <p><strong>space-between</strong> 會讓三個元素根據容器高度自動調整間距：</p>
+            <ul>
+                <li>第一個元素貼近頂部</li>
+                <li>最後一個元素貼近底部</li>
+                <li>中間元素自動居中</li>
+            </ul>
+        </div>
+
+        <!-- 基本比較 -->
+        <div class="comparison-section">
+            <h2 style="color: #3b82f6; margin-bottom: 2rem; text-align: center;">📊 基本比較 (350px 高度)</h2>
+            
+            <div class="demo-container">
+                <!-- 原始設定 -->
+                <div>
+                    <h3 style="text-align: center; margin-bottom: 1rem; color: #ef4444;">❌ 原始 (center)</h3>
+                    <div class="original-card">
+                        <p class="card-description">Free gas to mint your Twin NFT for AI agents.</p>
+                        <h1 class="card-number">1824</h1>
+                        <button class="card-button">Get Your Passport</button>
+                    </div>
+                </div>
+                
+                <!-- 新設定 -->
+                <div>
+                    <h3 style="text-align: center; margin-bottom: 1rem; color: #22c55e;">✅ 新設定 (space-between)</h3>
+                    <div class="auto-spacing-card">
+                        <p class="card-description">Free gas to mint your Twin NFT for AI agents.</p>
+                        <h1 class="card-number">1824</h1>
+                        <button class="card-button">Get Your Passport</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 不同高度測試 -->
+        <div class="comparison-section">
+            <h2 style="color: #22c55e; margin-bottom: 2rem; text-align: center;">📐 不同高度測試 - Auto Spacing</h2>
+            
+            <div class="height-controls">
+                <button class="height-btn active" onclick="changeHeight(200)">200px</button>
+                <button class="height-btn" onclick="changeHeight(300)">300px</button>
+                <button class="height-btn" onclick="changeHeight(400)">400px</button>
+                <button class="height-btn" onclick="changeHeight(500)">500px</button>
+            </div>
+            
+            <div class="demo-container">
+                <div>
+                    <h3 style="text-align: center; margin-bottom: 1rem;">動態高度測試</h3>
+                    <div class="auto-spacing-card height-200" id="dynamic-card">
+                        <p class="card-description">Free gas to mint your Twin NFT for AI agents.</p>
+                        <h1 class="card-number">1824</h1>
+                        <button class="card-button">Get Your Passport</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="success-box">
+            <h3>✅ 修正總結：</h3>
+            <p><strong>welcome.html</strong> 中的右側操作區域現在使用 <code>justify-content: space-between</code>：</p>
+            <ul>
+                <li>✅ 描述文字會貼近容器頂部</li>
+                <li>✅ 數字 "1824" 會自動居中</li>
+                <li>✅ 按鈕會貼近容器底部</li>
+                <li>✅ 間距會根據容器高度自動調整</li>
+                <li>✅ 在不同螢幕尺寸下都能正確顯示</li>
+            </ul>
+        </div>
+
+        <div class="info-box">
+            <h3>🔧 技術細節：</h3>
+            <p><strong>修改的 CSS 屬性：</strong></p>
+            <pre style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 6px; overflow-x: auto;">
+.page-right-action {
+    justify-content: space-between; /* 改為 space-between */
+    min-height: 350px; /* 確保有足夠高度 */
+    /* 移除 gap 屬性 */
+}</pre>
+            <p><strong>響應式斷點：</strong> 在所有螢幕尺寸下都保持 space-between 效果。</p>
+        </div>
+
+        <div style="text-align: center; margin: 40px 0;">
+            <a href="welcome.html" style="display: inline-block; padding: 15px 30px; background: #22c55e; color: white; text-decoration: none; border-radius: 8px; font-weight: 500;">
+                查看 Welcome 頁面效果
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function changeHeight(height) {
+            const card = document.getElementById('dynamic-card');
+            const buttons = document.querySelectorAll('.height-btn');
+            
+            // 移除所有高度類別
+            card.classList.remove('height-200', 'height-300', 'height-400', 'height-500');
+            
+            // 添加新的高度類別
+            card.classList.add(`height-${height}`);
+            
+            // 更新按鈕狀態
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

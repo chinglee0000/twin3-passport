@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>twin3 Passport - User Information</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-bg: #0a0a0a;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --text-muted: #555555;
+            --accent-color: #ffffff;
+        }
+
+        body {
+            font-family: 'Kanit', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--primary-bg);
+            min-height: 100vh;
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navigation Styles */
+        .nav-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            font-weight: 300;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-weight: 300;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: white;
+        }
+
+        .nav-actions {
+            display: none;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .nav-actions {
+                display: flex;
+            }
+        }
+
+        .mobile-menu-btn {
+            display: block;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+
+        /* Mobile menu styles */
+        .mobile-menu {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 1rem;
+            z-index: 1000;
+            display: none;
+            max-height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+
+        .mobile-menu.show {
+            display: block;
+        }
+
+        .mobile-menu-close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        .mobile-menu-links {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .mobile-menu-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 400;
+            padding: 1rem 1rem; /* px-4 py-4 */
+            background: linear-gradient(to right, rgba(0, 0, 0, 1), transparent); /* bg-gradient-to-r from-black to-transparent */
+            backdrop-filter: blur(4px); /* backdrop-blur-sm */
+            margin: 0;
+            border-radius: 0;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .mobile-menu-link:hover {
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(6px);
+        }
+
+        .mobile-menu-link-focused {
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            font-weight: 500;
+            backdrop-filter: blur(6px);
+        }
+
+        /* Wallet connection styles */
+        .wallet-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 0.875rem;
+        }
+
+        .wallet-status.connected {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .wallet-status.disconnected {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        /* Page video background */
+        .page-video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .page-content-container {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            padding-top: 6rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            gap: 2rem;
+        }
+
+        .page-unified-content {
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            padding: 2rem;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            min-height: fit-content;
+        }
+
+        .page-left-content {
+            flex: 1;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .page-right-action {
+            flex-shrink: 0;
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* 改為 space-between 保持一致 */
+            align-items: center;
+            min-height: 350px; /* 確保有足夠高度 */
+        }
+
+        .page-main-title {
+            font-weight: 300;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .page-subtitle {
+            font-weight: 200;
+            margin-bottom: 2rem;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .page-description {
+            font-weight: 200;
+            margin-bottom: 1.5rem;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .page-action-button {
+            font-family: 'Kanit', sans-serif;
+            font-weight: 300;
+        }
+
+        /* Responsive design */
+        @media (min-width: 1024px) {
+            .page-content-container {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                padding: 2.5rem 4rem;
+                padding-top: 6rem;
+                gap: 4rem;
+            }
+
+            .page-unified-content {
+                flex-direction: row;
+                align-items: stretch;
+                gap: 2rem;
+            }
+
+            .page-left-content {
+                text-align: left;
+            }
+
+            .page-main-title {
+                font-size: 4.5rem; /* 72px - 最大字級限制 */
+            }
+        }
+
+        @media (min-width: 1280px) {
+            .page-main-title {
+                font-size: 4.5rem; /* 72px - 符合原始規範 */
+            }
+        }
+
+        @media (min-width: 1536px) {
+            .page-main-title {
+                font-size: 4.5rem; /* 72px - 最大字級限制 */
+            }
+        }
+
+        /* Form styles */
+        .input-field {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: var(--text-primary);
+            font-family: 'Kanit', sans-serif;
+            font-weight: 300;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .input-field::placeholder {
+            color: var(--text-muted);
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-clear {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 50%;
+            display: none;
+            transition: all 0.2s ease;
+        }
+
+        .input-clear:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        .input-wrapper.has-value .input-clear {
+            display: block;
+        }
+
+        .input-wrapper:hover .input-clear,
+        .input-field:focus + .input-clear {
+            display: block;
+        }
+
+        /* Career badge styles */
+        .career-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .career-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 0.5rem;
+            }
+        }
+
+        .career-badge {
+            padding: 0.5rem 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 300;
+            text-align: center;
+            justify-content: center;
+        }
+
+        .career-badge:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        .career-badge.selected {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: white;
+            color: white;
+        }
+
+        /* Icon styles */
+        .icon-sm {
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav-container">
+        <div class="nav-content">
+            <a href="welcome.html" class="nav-logo">
+                <img src="assets/img/logo_dark.svg" alt="twin3" style="width: 32px; height: 32px;">
+                <span style="font-weight: 300;">twin3.ai</span>
+            </a>
+            
+            <div class="nav-links">
+                <a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" class="nav-link">WHITEPAPER</a>
+                <a href="dashboard.html" class="nav-link">MY TWIN</a>
+                <a href="welcome.html" class="nav-link">PASSPORT</a>
+                <a href="#" class="nav-link">登錄</a>
+                
+                <div class="nav-actions">
+                    <div class="wallet-status connected" id="wallet-status">
+                        <div class="status-dot"></div>
+                        <span>0x1234...7890</span>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobile-menu-btn">
+                <span class="material-icons">menu</span>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobile-menu">
+            <button class="mobile-menu-close" id="mobile-menu-close">
+                <span class="material-icons">close</span>
+            </button>
+            <div class="mobile-menu-links">
+                <a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" rel="noreferrer noopener" class="mobile-menu-link">WHITEPAPER</a>
+                <a href="https://twin3.ai/dashboard" class="mobile-menu-link">MY TWIN</a>
+                <a href="welcome.html" class="mobile-menu-link">PASSPORT</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- User Info Page -->
+    <div id="user-info-page" class="relative min-h-screen">
+        <!-- Video Background -->
+        <video class="page-video-background" autoplay loop muted playsinline style="z-index: 1;">
+            <source src="assets/img/v2.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <!-- User Info Content -->
+        <div class="page-content-container">
+            <!-- Unified Content Block -->
+            <div class="page-unified-content">
+                <!-- Left Content (Title + Description) -->
+                <div class="page-left-content">
+                    <h1 class="page-main-title text-white text-4xl md:text-6xl lg:text-7xl leading-tight mb-4">
+                        Your<br>
+                        Details
+                    </h1>
+                    <p class="page-subtitle text-[#888888] text-xl md:text-2xl lg:text-3xl mb-8">Please provide your 暱稱 and careers</p>
+                    <p class="page-description text-gray-300 text-base md:text-lg mb-6">Pick a nickname and select 1–3 careers that describe you. This helps personalize your twin3 experience.</p>
+                </div>
+
+                <!-- Right Action (Form) -->
+                <div class="page-right-action">
+                    <div class="w-full space-y-6">
+                        <div>
+                            <label class="text-white text-sm mb-2 block" style="font-weight:300;">Nickname</label>
+                            <div class="input-wrapper" id="username-wrapper">
+                                <input type="text" id="username" class="input-field w-full" placeholder="Your nickname" />
+                                <button type="button" class="input-clear" id="username-clear"><span class="material-icons icon-sm">close</span></button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-white text-sm mb-2 block" style="font-weight:300;">Select 1–3 careers</label>
+                            <div id="career-grid" class="career-grid"></div>
+                        </div>
+                        <button id="continue-btn" class="page-action-button w-full px-4 py-3 border border-[#373737] text-black bg-white rounded-lg hover:bg-transparent hover:text-white hover:border-white transition duration-300" disabled>Continue</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Section -->
+        <footer class="bg-black text-white px-8 py-10 xl:pr-20 lg:px-0 lg:py-12" style="position: relative; z-index: 5;">
+            <div class="flex flex-col-reverse lg:flex-row xl:justify-between items-start space-y-10 lg:space-y-0">
+                <!-- Logo Section -->
+                <div class="w-full xl:w-1/5 lg:w-[13%] text-center lg:text-left">
+                    <div class="flex flex-col justify-center lg:justify-start items-center pt-6 lg:pt-0" style="gap: 4px;">
+                        <div class="flex items-center">
+                            <img src="assets/img/logo_dark.svg" alt="Logo" style="width: 40px; height: 40px;">
+                        </div>
+                        <span class="text-sm md:text-base" style="font-weight: 300; color: #888888;">twin3.ai</span>
+                    </div>
+                </div>
+
+                <!-- Links Section -->
+                <div class="flex flex-wrap lg:flex-nowrap w-full lg:w-2/4 lg:space-x-10">
+                    <!-- Social Media -->
+                    <div class="w-full md:w-1/3 text-center lg:text-left flex-row">
+                        <h5 class="uppercase text-sm lg:text-base" style="font-weight: 300; color: white; padding-bottom: 12px;">Social Media</h5>
+                        <div class="flex justify-center lg:justify-start space-x-4">
+                            <a href="https://x.com/twin3_ai" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+                                <div class="w-6 h-6 flex items-center justify-center" style="padding: 2px;">
+                                    <img src="assets/img/X_logo.svg" alt="X (Twitter)" class="w-full h-full object-contain">
+                                </div>
+                            </a>
+                            <a href="https://opensea.io/collection/twin3" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+                                <img src="assets/img/opensea_logo.svg" alt="OpenSea" class="w-6 h-6">
+                            </a>
+                            <a href="https://warpcast.com/twin3.eth" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+                                <img src="assets/img/farcaster_logo.svg" alt="Warpcast" class="w-6 h-6">
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Resource -->
+                    <div class="w-full md:w-1/3 text-center lg:text-left 2xl:mb-2 pt-4 md:pt-0">
+                        <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Resource</h5>
+                        <ul class="space-y-2">
+                            <li><a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" rel="noreferrer noopener" class="text-[#888888] hover:text-white text-sm lg:text-base" style="font-weight: 200;">Whitepaper</a></li>
+                            <li><a class="text-[#888888] hover:text-white text-sm lg:text-base" href="dashboard.html" style="font-weight: 200;">Tasks</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Features -->
+                    <div class="w-full md:w-1/3 text-center lg:text-left 2xl:mb-10 pt-4 md:pt-0">
+                        <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Features</h5>
+                        <ul class="space-y-2">
+                            <li><a class="text-[#888888] hover:text-white text-sm lg:text-base" href="dashboard.html" style="font-weight: 200;">My Twin</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Newsletter Section -->
+                <div class="w-full lg:w-1/4 text-center lg:text-left space-y-5">
+                    <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Subscribe to twin3 Newsletter</h5>
+                    <div class="flex flex-col lg:flex-row items-center lg:space-x-2 space-y-4 lg:space-y-0">
+                        <a href="https://www.linkedin.com/company/twin3-ai" target="_blank" rel="noreferrer noopener" class="px-4 py-2 border border-[#373737] text-black bg-white rounded-lg hover:bg-transparent hover:text-white hover:border-white transition duration-300 text-sm lg:text-base" style="font-weight: 300;">Subscribe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="mt-10 text-center text-gray-500 text-sm lg:text-base" style="font-weight: 200;">© 2025 twin3.ai v1.0.6</div>
+        </footer>
+    </div>
+
+    <script>
+        // Application state
+        let currentStep = 'user_info';
+        let userData = { username: '', career: '' };
+        let selectedCareers = new Set();
+
+        // Career data with icons (完整的 14 個職業)
+        const professionList = [
+            'Artist', 'Athlete', 'Community Builder', 'Creative Content Maker', 'Developer',
+            'Educator', 'Entrepreneur', 'Gamer', 'Healthcare Professional', 'Research & Innovation Expert',
+            'Social Influencer', 'Travel Explorer', 'Web3 Network Pioneer', 'Writer'
+        ];
+
+        const professionIcons = {
+            'Artist': 'brush',
+            'Athlete': 'emoji_events',
+            'Community Builder': 'people',
+            'Creative Content Maker': 'palette',
+            'Developer': 'code',
+            'Educator': 'school',
+            'Entrepreneur': 'business_center',
+            'Gamer': 'sports_esports',
+            'Healthcare Professional': 'local_hospital',
+            'Research & Innovation Expert': 'psychology',
+            'Social Influencer': 'groups',
+            'Travel Explorer': 'explore',
+            'Web3 Network Pioneer': 'language',
+            'Writer': 'edit'
+        };
+
+        const MAX_BADGES = 3;
+
+        // DOM elements
+        const username = document.getElementById('username');
+        const usernameWrapper = document.getElementById('username-wrapper');
+        const usernameClear = document.getElementById('username-clear');
+        const careerGrid = document.getElementById('career-grid');
+        const continueBtn = document.getElementById('continue-btn');
+
+        // Initialize career grid
+        function renderBadges() {
+            if (!careerGrid) return;
+            careerGrid.innerHTML = '';
+
+            // Ensure alphabetical order
+            const sorted = [...professionList].sort((a, b) => a.localeCompare(b));
+            sorted.forEach(name => {
+                const div = document.createElement('div');
+                div.className = 'career-badge';
+                div.dataset.value = name;
+                div.innerHTML = `<span class="material-icons icon-sm">${professionIcons[name]}</span><span>${name}</span>`;
+                div.addEventListener('click', () => toggleBadge(div));
+                careerGrid.appendChild(div);
+            });
+        }
+
+        // Toggle career selection
+        function toggleBadge(badge) {
+            const name = badge.dataset.value;
+            if (badge.classList.contains('selected')) {
+                badge.classList.remove('selected');
+                selectedCareers.delete(name);
+            } else {
+                if (selectedCareers.size >= MAX_BADGES) return; // Limit to 3
+                badge.classList.add('selected');
+                selectedCareers.add(name);
+            }
+            validateUserInfo();
+        }
+
+        // Validate form
+        function validateUserInfo() {
+            const name = username ? username.value.trim() : '';
+            continueBtn.disabled = !(name && selectedCareers.size >= 1 && selectedCareers.size <= MAX_BADGES);
+        }
+
+        // Update clear button visibility
+        function updateClearButton() {
+            if (username && usernameWrapper && usernameClear) {
+                if (username.value.trim()) {
+                    usernameWrapper.classList.add('has-value');
+                } else {
+                    usernameWrapper.classList.remove('has-value');
+                }
+            }
+        }
+
+        // Navigation functions
+        function initializeNavigation() {
+            console.log('🔧 Initializing navigation...');
+
+            // Mobile menu toggle
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuClose = document.getElementById('mobile-menu-close');
+
+            console.log('📱 Mobile menu elements:', {
+                btn: !!mobileMenuBtn,
+                menu: !!mobileMenu,
+                close: !!mobileMenuClose
+            });
+
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('🔘 Mobile menu button clicked');
+                    mobileMenu.classList.add('show');
+                    console.log('✅ Added show class to mobile menu');
+                });
+                console.log('✅ Mobile menu button event listener added');
+            } else {
+                console.error('❌ Mobile menu button or menu element not found');
+            }
+
+            if (mobileMenuClose && mobileMenu) {
+                mobileMenuClose.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('❌ Mobile menu close button clicked');
+                    mobileMenu.classList.remove('show');
+                    console.log('✅ Removed show class from mobile menu');
+                });
+                console.log('✅ Mobile menu close event listener added');
+            }
+
+            // Close mobile menu when clicking outside
+            if (mobileMenu) {
+                mobileMenu.addEventListener('click', (e) => {
+                    if (e.target === mobileMenu) {
+                        console.log('🔘 Clicked outside mobile menu content');
+                        mobileMenu.classList.remove('show');
+                        console.log('✅ Removed show class from mobile menu');
+                    }
+                });
+                console.log('✅ Mobile menu background click event listener added');
+            }
+
+            console.log('🎉 Navigation initialization complete');
+        }
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('User Info page loaded');
+
+            // Initialize navigation
+            initializeNavigation();
+
+            // Initialize careers
+            renderBadges();
+
+            // Show connected wallet status
+            const walletStatus = document.getElementById('wallet-status');
+            if (walletStatus) {
+                walletStatus.className = 'wallet-status connected';
+                walletStatus.innerHTML = '<div class="status-dot"></div><span>0x1234...7890</span>';
+            }
+
+            // Username input events
+            if (username && usernameWrapper && usernameClear) {
+                username.addEventListener('input', () => {
+                    updateClearButton();
+                    validateUserInfo();
+                });
+
+                usernameClear.addEventListener('click', () => {
+                    username.value = '';
+                    username.focus();
+                    updateClearButton();
+                    validateUserInfo();
+                });
+
+                updateClearButton();
+            }
+
+            // Continue button
+            continueBtn.addEventListener('click', () => {
+                if (!continueBtn.disabled) {
+                    // Save user data
+                    userData.username = username.value.trim() || 'Friend';
+                    const primary = Array.from(selectedCareers)[0] || 'Developer';
+
+                    // Map back to keys expected by dashboard
+                    const keyByName = {
+                        'Creative Content Maker': 'creative',
+                        'Developer': 'developer',
+                        'Research & Innovation Expert': 'researcher',
+                        'Web3 Network Pioneer': 'web3',
+                        'Social Influencer': 'influencer',
+                        'Gamer': 'gamer',
+                        'Artist': 'artist',
+                        'Entrepreneur': 'entrepreneur',
+                        'Educator': 'educator',
+                        'Healthcare Professional': 'healthcare',
+                        'Athlete': 'athlete',
+                        'Writer': 'writer',
+                        'Travel Explorer': 'explorer',
+                        'Community Builder': 'community'
+                    };
+
+                    userData.career = keyByName[primary] || 'developer';
+
+                    // Store in localStorage for dashboard
+                    localStorage.setItem('twin3_user_data', JSON.stringify(userData));
+
+                    console.log('User data saved:', userData);
+
+                    // Navigate to dashboard with URL params as backup
+                    const params = new URLSearchParams({
+                        username: userData.username,
+                        career: userData.career
+                    });
+                    window.location.href = `dashboard.html?${params.toString()}`;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

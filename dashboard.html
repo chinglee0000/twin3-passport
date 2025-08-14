@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>twin3 Passport - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-bg: #0a0a0a;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --text-muted: #555555;
+            --accent-color: #ffffff;
+        }
+
+        body {
+            font-family: 'Kanit', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--primary-bg);
+            min-height: 100vh;
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navigation Styles */
+        .nav-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            font-weight: 300;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-weight: 300;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: white;
+        }
+
+        .nav-actions {
+            display: none;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .nav-actions {
+                display: flex;
+            }
+        }
+
+        .mobile-menu-btn {
+            display: block;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+
+        /* Mobile menu styles */
+        .mobile-menu {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 1rem;
+            z-index: 1000;
+            display: none;
+            max-height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+
+        .mobile-menu.show {
+            display: block;
+        }
+
+        .mobile-menu-close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        .mobile-menu-links {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .mobile-menu-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 400;
+            padding: 1rem 1rem; /* px-4 py-4 */
+            background: linear-gradient(to right, rgba(0, 0, 0, 1), transparent); /* bg-gradient-to-r from-black to-transparent */
+            backdrop-filter: blur(4px); /* backdrop-blur-sm */
+            margin: 0;
+            border-radius: 0;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .mobile-menu-link:hover {
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(6px);
+        }
+
+        .mobile-menu-link-focused {
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            font-weight: 500;
+            backdrop-filter: blur(6px);
+        }
+
+        /* Wallet connection styles */
+        .wallet-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 0.875rem;
+        }
+
+        .wallet-status.connected {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .wallet-status.disconnected {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        /* Page video background */
+        .page-video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .page-content-container {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            padding-top: 6rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            gap: 2rem;
+        }
+
+        .page-unified-content {
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            padding: 2rem;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            min-height: fit-content;
+        }
+
+        .page-left-content {
+            flex: 1;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .page-right-action {
+            flex-shrink: 0;
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* 改為 space-between 保持一致 */
+            align-items: center;
+            min-height: 350px; /* 確保有足夠高度 */
+        }
+
+        .page-main-title {
+            font-weight: 300;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .page-subtitle {
+            font-weight: 200;
+            margin-bottom: 2rem;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .page-description {
+            font-weight: 200;
+            margin-bottom: 1.5rem;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .page-action-button {
+            font-family: 'Kanit', sans-serif;
+            font-weight: 300;
+        }
+
+        /* Responsive design */
+        @media (min-width: 1024px) {
+            .page-content-container {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                padding: 2.5rem 4rem;
+                padding-top: 6rem;
+                gap: 4rem;
+            }
+
+            .page-unified-content {
+                flex-direction: row;
+                align-items: stretch;
+                gap: 2rem;
+            }
+
+            .page-left-content {
+                text-align: left;
+            }
+
+            .page-main-title {
+                font-size: 4.5rem; /* 72px - 最大字級限制 */
+            }
+        }
+
+        @media (min-width: 1280px) {
+            .page-main-title {
+                font-size: 4.5rem; /* 72px - 符合原始規範 */
+            }
+        }
+
+        @media (min-width: 1536px) {
+            .page-main-title {
+                font-size: 4.5rem; /* 72px - 最大字級限制 */
+            }
+        }
+
+        /* Dashboard specific styles */
+        .metric-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 300;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 200;
+        }
+
+        .user-info-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+            font-weight: 300;
+            color: white;
+        }
+
+        .user-name {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .user-career {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 200;
+            text-transform: capitalize;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Icon styles */
+        .icon-sm {
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav-container">
+        <div class="nav-content">
+            <a href="welcome.html" class="nav-logo">
+                <img src="assets/img/logo_dark.svg" alt="twin3" style="width: 32px; height: 32px;">
+                <span style="font-weight: 300;">twin3.ai</span>
+            </a>
+            
+            <div class="nav-links">
+                <a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" class="nav-link">WHITEPAPER</a>
+                <a href="dashboard.html" class="nav-link">MY TWIN</a>
+                <a href="welcome.html" class="nav-link">PASSPORT</a>
+                <a href="#" class="nav-link">登錄</a>
+                
+                <div class="nav-actions">
+                    <div class="wallet-status connected" id="wallet-status">
+                        <div class="status-dot"></div>
+                        <span>0x1234...7890</span>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobile-menu-btn">
+                <span class="material-icons">menu</span>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobile-menu">
+            <button class="mobile-menu-close" id="mobile-menu-close">
+                <span class="material-icons">close</span>
+            </button>
+            <div class="mobile-menu-links">
+                <a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" rel="noreferrer noopener" class="mobile-menu-link">WHITEPAPER</a>
+                <span class="mobile-menu-link mobile-menu-link-focused" aria-current="page">MY TWIN</span>
+                <a href="welcome.html" class="mobile-menu-link">PASSPORT</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Page -->
+    <div id="dashboard-page" class="relative min-h-screen">
+        <!-- Video Background -->
+        <video class="page-video-background" autoplay loop muted playsinline style="z-index: 1;">
+            <source src="assets/img/v2.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <!-- Dashboard Content -->
+        <div class="page-content-container">
+            <!-- Unified Content Block -->
+            <div class="page-unified-content">
+                <!-- Left Content (Title + Description) -->
+                <div class="page-left-content">
+                    <h1 class="page-main-title text-white text-4xl md:text-6xl lg:text-7xl leading-tight mb-4">
+                        Welcome<br>
+                        <span id="user-display-name">Friend</span>
+                    </h1>
+                    <p class="page-subtitle text-[#888888] text-xl md:text-2xl lg:text-3xl mb-8">Your twin3 Passport is ready!</p>
+                    <p class="page-description text-gray-300 text-base md:text-lg mb-6">
+                        Congratulations! You've successfully completed the verification process.<br>
+                        Your digital identity is now secured and ready for the twin3 ecosystem.
+                    </p>
+                </div>
+
+                <!-- Right Action (Dashboard Info) -->
+                <div class="page-right-action">
+                    <!-- User Info Card -->
+                    <div class="user-info-card mb-6">
+                        <div class="user-avatar" id="user-avatar">
+                            F
+                        </div>
+                        <div class="user-name" id="user-name">Friend</div>
+                        <div class="user-career" id="user-career">Developer</div>
+                    </div>
+
+                    <!-- Metrics Grid -->
+                    <div class="dashboard-grid">
+                        <div class="metric-card">
+                            <div class="metric-value">1</div>
+                            <div class="metric-label">Passport Level</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">100%</div>
+                            <div class="metric-label">Verification</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">Active</div>
+                            <div class="metric-label">Status</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Section -->
+        <footer class="bg-black text-white px-8 py-10 xl:pr-20 lg:px-0 lg:py-12" style="position: relative; z-index: 5;">
+            <div class="flex flex-col-reverse lg:flex-row xl:justify-between items-start space-y-10 lg:space-y-0">
+                <!-- Logo Section -->
+                <div class="w-full xl:w-1/5 lg:w-[13%] text-center lg:text-left">
+                    <div class="flex flex-col justify-center lg:justify-start items-center pt-6 lg:pt-0" style="gap: 4px;">
+                        <div class="flex items-center">
+                            <img src="assets/img/logo_dark.svg" alt="Logo" style="width: 40px; height: 40px;">
+                        </div>
+                        <span class="text-sm md:text-base" style="font-weight: 300; color: #888888;">twin3.ai</span>
+                    </div>
+                </div>
+
+                <!-- Links Section -->
+                <div class="flex flex-wrap lg:flex-nowrap w-full lg:w-2/4 lg:space-x-10">
+                    <!-- Social Media -->
+                    <div class="w-full md:w-1/3 text-center lg:text-left flex-row">
+                        <h5 class="uppercase text-sm lg:text-base" style="font-weight: 300; color: white; padding-bottom: 12px;">Social Media</h5>
+                        <div class="flex justify-center lg:justify-start space-x-4">
+                            <a href="https://x.com/twin3_ai" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+                                <div class="w-6 h-6 flex items-center justify-center" style="padding: 2px;">
+                                    <img src="assets/img/X_logo.svg" alt="X (Twitter)" class="w-full h-full object-contain">
+                                </div>
+                            </a>
+                            <a href="https://opensea.io/collection/twin3" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+                                <img src="assets/img/opensea_logo.svg" alt="OpenSea" class="w-6 h-6">
+                            </a>
+                            <a href="https://warpcast.com/twin3.eth" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+                                <img src="assets/img/farcaster_logo.svg" alt="Warpcast" class="w-6 h-6">
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Resource -->
+                    <div class="w-full md:w-1/3 text-center lg:text-left 2xl:mb-2 pt-4 md:pt-0">
+                        <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Resource</h5>
+                        <ul class="space-y-2">
+                            <li><a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" rel="noreferrer noopener" class="text-[#888888] hover:text-white text-sm lg:text-base" style="font-weight: 200;">Whitepaper</a></li>
+                            <li><a class="text-[#888888] hover:text-white text-sm lg:text-base" href="dashboard.html" style="font-weight: 200;">Tasks</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Features -->
+                    <div class="w-full md:w-1/3 text-center lg:text-left 2xl:mb-10 pt-4 md:pt-0">
+                        <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Features</h5>
+                        <ul class="space-y-2">
+                            <li><a class="text-[#888888] hover:text-white text-sm lg:text-base" href="dashboard.html" style="font-weight: 200;">My Twin</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Newsletter Section -->
+                <div class="w-full lg:w-1/4 text-center lg:text-left space-y-5">
+                    <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Subscribe to twin3 Newsletter</h5>
+                    <div class="flex flex-col lg:flex-row items-center lg:space-x-2 space-y-4 lg:space-y-0">
+                        <a href="https://www.linkedin.com/company/twin3-ai" target="_blank" rel="noreferrer noopener" class="px-4 py-2 border border-[#373737] text-black bg-white rounded-lg hover:bg-transparent hover:text-white hover:border-white transition duration-300 text-sm lg:text-base" style="font-weight: 300;">Subscribe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="mt-10 text-center text-gray-500 text-sm lg:text-base" style="font-weight: 200;">© 2025 twin3.ai v1.0.6</div>
+        </footer>
+    </div>
+
+    <script>
+        // Application state
+        let currentStep = 'dashboard';
+        let userData = { username: 'Friend', career: 'developer' };
+
+        // Career data mapping
+        const careerData = {
+            'developer': {
+                title: 'Developer',
+                description: 'Building the future with code',
+                icon: 'code',
+                color: '#3b82f6'
+            },
+            'artist': {
+                title: 'Artist',
+                description: 'Creating beauty through art',
+                icon: 'brush',
+                color: '#8b5cf6'
+            },
+            'gamer': {
+                title: 'Gamer',
+                description: 'Mastering virtual worlds',
+                icon: 'sports_esports',
+                color: '#10b981'
+            },
+            'creative': {
+                title: 'Creative Content Maker',
+                description: 'Crafting engaging content',
+                icon: 'palette',
+                color: '#f59e0b'
+            },
+            'researcher': {
+                title: 'Research & Innovation Expert',
+                description: 'Pushing boundaries of knowledge',
+                icon: 'psychology',
+                color: '#ef4444'
+            },
+            'web3': {
+                title: 'Web3 Network Pioneer',
+                description: 'Building decentralized future',
+                icon: 'language',
+                color: '#06b6d4'
+            },
+            'influencer': {
+                title: 'Social Influencer',
+                description: 'Inspiring communities',
+                icon: 'groups',
+                color: '#ec4899'
+            },
+            'athlete': {
+                title: 'Athlete',
+                description: 'Achieving peak performance',
+                icon: 'emoji_events',
+                color: '#f97316'
+            },
+            'community': {
+                title: 'Community Builder',
+                description: 'Connecting people together',
+                icon: 'people',
+                color: '#84cc16'
+            },
+            'educator': {
+                title: 'Educator',
+                description: 'Sharing knowledge and wisdom',
+                icon: 'school',
+                color: '#6366f1'
+            },
+            'entrepreneur': {
+                title: 'Entrepreneur',
+                description: 'Building innovative businesses',
+                icon: 'business_center',
+                color: '#14b8a6'
+            },
+            'healthcare': {
+                title: 'Healthcare Professional',
+                description: 'Caring for human wellbeing',
+                icon: 'local_hospital',
+                color: '#dc2626'
+            },
+            'explorer': {
+                title: 'Travel Explorer',
+                description: 'Discovering new horizons',
+                icon: 'explore',
+                color: '#059669'
+            },
+            'writer': {
+                title: 'Writer',
+                description: 'Crafting stories and ideas',
+                icon: 'edit',
+                color: '#7c3aed'
+            }
+        };
+
+        // Load user data from localStorage or URL params
+        function loadUserData() {
+            // Try to get from localStorage first
+            const stored = localStorage.getItem('twin3_user_data');
+            if (stored) {
+                try {
+                    userData = JSON.parse(stored);
+                } catch (e) {
+                    console.log('Failed to parse stored user data');
+                }
+            }
+
+            // Override with URL params if present
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('username')) {
+                userData.username = urlParams.get('username');
+            }
+            if (urlParams.get('career')) {
+                userData.career = urlParams.get('career');
+            }
+
+            // Fallback defaults
+            userData.username = userData.username || 'Friend';
+            userData.career = userData.career || 'developer';
+        }
+
+        // Update dashboard with user data
+        function updateDashboard() {
+            const career = careerData[userData.career] || careerData['developer'];
+
+            // Update display name in title
+            const displayName = document.getElementById('user-display-name');
+            if (displayName) {
+                displayName.textContent = userData.username;
+            }
+
+            // Update user info card
+            const userAvatar = document.getElementById('user-avatar');
+            const userName = document.getElementById('user-name');
+            const userCareer = document.getElementById('user-career');
+
+            if (userAvatar) {
+                userAvatar.textContent = userData.username.charAt(0).toUpperCase();
+                userAvatar.style.background = `linear-gradient(135deg, ${career.color}, ${career.color}80)`;
+            }
+
+            if (userName) {
+                userName.textContent = userData.username;
+            }
+
+            if (userCareer) {
+                userCareer.textContent = career.title;
+            }
+        }
+
+        // Navigation functions
+        function initializeNavigation() {
+            console.log('🔧 Initializing navigation...');
+
+            // Mobile menu toggle
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuClose = document.getElementById('mobile-menu-close');
+
+            console.log('📱 Mobile menu elements:', {
+                btn: !!mobileMenuBtn,
+                menu: !!mobileMenu,
+                close: !!mobileMenuClose
+            });
+
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('🔘 Mobile menu button clicked');
+                    mobileMenu.classList.add('show');
+                    console.log('✅ Added show class to mobile menu');
+                });
+                console.log('✅ Mobile menu button event listener added');
+            } else {
+                console.error('❌ Mobile menu button or menu element not found');
+            }
+
+            if (mobileMenuClose && mobileMenu) {
+                mobileMenuClose.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('❌ Mobile menu close button clicked');
+                    mobileMenu.classList.remove('show');
+                    console.log('✅ Removed show class from mobile menu');
+                });
+                console.log('✅ Mobile menu close event listener added');
+            }
+
+            // Close mobile menu when clicking outside
+            if (mobileMenu) {
+                mobileMenu.addEventListener('click', (e) => {
+                    if (e.target === mobileMenu) {
+                        console.log('🔘 Clicked outside mobile menu content');
+                        mobileMenu.classList.remove('show');
+                        console.log('✅ Removed show class from mobile menu');
+                    }
+                });
+                console.log('✅ Mobile menu background click event listener added');
+            }
+
+            console.log('🎉 Navigation initialization complete');
+        }
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Dashboard page loaded');
+
+            // Initialize navigation
+            initializeNavigation();
+
+            // Load and display user data
+            loadUserData();
+            updateDashboard();
+
+            // Show connected wallet status
+            const walletStatus = document.getElementById('wallet-status');
+            if (walletStatus) {
+                walletStatus.className = 'wallet-status connected';
+                walletStatus.innerHTML = '<div class="status-dot"></div><span>0x1234...7890</span>';
+            }
+
+            console.log('Dashboard initialized with user data:', userData);
+        });
+    </script>
+</body>
+</html>
