@@ -4556,6 +4556,18 @@
             }, 100);
         };
 
+        window.testDashboard = function() {
+            console.log('🧪 Testing Dashboard Page...');
+            // Set some test user data
+            userData.username = 'Test User';
+            userData.career = 'developer';
+
+            // Call the showDashboard function
+            showDashboard();
+
+            console.log('✅ Dashboard should now be visible');
+        };
+
         window.testWelcomePage = function() {
             console.log('🧪 Testing Welcome Page...');
             // Hide all pages first

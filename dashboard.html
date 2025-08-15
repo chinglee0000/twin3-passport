@@ -34,6 +34,12 @@
             border: 1px solid var(--border-color);
             border-radius: 12px;
             backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .progress-bar {
@@ -222,34 +228,6 @@
             display: inline-block;
         }
 
-        .btn-primary {
-            border: 1px solid #373737;
-            color: black;
-            background: white;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: 300;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            font-family: 'Kanit', sans-serif;
-        }
-
-        .btn-primary:hover:not(:disabled) {
-            background: transparent;
-            color: white;
-            border-color: white;
-            transform: translateY(-1px);
-        }
-
-        .btn-primary:disabled {
-            background: rgba(255, 255, 255, 0.1);
-            color: #666666;
-            border-color: rgba(255, 255, 255, 0.2);
-            cursor: not-allowed;
-            transform: none;
-        }
-
         .btn-secondary {
             background: transparent;
             color: var(--text-secondary);
@@ -263,7 +241,7 @@
         }
 
         .btn-secondary:hover {
-            border-color: rgba(255, 255, 255, 0.3);
+            border-color: #555555;
             color: var(--text-primary);
         }
     </style>
@@ -271,15 +249,15 @@
 <body>
     <!-- Navigation Bar -->
     <nav class="nav-bar">
-        <a href="../" class="nav-logo">
-            <img src="../assets/img/logo_dark.svg" alt="twin3 Logo">
+        <a href="/" class="nav-logo">
+            <img src="assets/img/logo_dark.svg" alt="twin3 Logo">
         </a>
 
         <!-- Desktop navigation -->
         <div class="nav-actions">
             <a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" rel="noreferrer noopener" class="nav-link">WHITEPAPER</a>
-            <a class="nav-link" href="dashboard.html">MY TWIN</a>
-            <span class="nav-link nav-link-focused" aria-current="page">PASSPORT</span>
+            <span class="nav-link nav-link-focused" aria-current="page">MY TWIN</span>
+            <a class="nav-link" href="/">PASSPORT</a>
 
             <!-- Wallet button -->
             <div class="wallet-button">
@@ -295,7 +273,11 @@
         </div>
     </nav>
 
-
+    <!-- Video Background -->
+    <video class="fixed top-0 left-0 w-full h-full object-cover" autoplay loop muted playsinline style="z-index: 1;">
+        <source src="assets/img/v2.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
 
     <!-- Dashboard Content -->
     <div class="relative z-10 px-6 py-8 pt-24">
@@ -307,7 +289,7 @@
                         <!-- Profile Photo (Editable) -->
                         <div class="relative">
                             <div class="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity">
-                                <span class="text-white text-2xl" style="font-weight: 300;">A</span>
+                                <span class="text-white text-2xl font-bold">A</span>
                             </div>
                             <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-gray-700 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-600 transition-colors">
                                 <span class="material-icons icon-sm text-white">edit</span>
@@ -316,14 +298,14 @@
 
                         <!-- User Info -->
                         <div>
-                            <h1 id="dashboard-title" class="text-2xl text-white mb-1" style="font-weight: 300; font-family: 'Kanit', sans-serif;">Hi, Alex!</h1>
+                            <h1 id="dashboard-title" class="text-2xl text-white mb-1" style="font-weight: 300;">Hi, Alex!</h1>
                             <div class="flex items-center space-x-3 mb-2">
                                 <!-- Profession -->
                                 <div class="flex items-center space-x-2 px-3 py-1 bg-gray-700 rounded-full">
                                     <span id="career-type" class="text-white text-sm font-medium">💻 Developer</span>
                                 </div>
                                 <!-- Title -->
-                                <div class="flex items-center space-x-2 px-3 py-1 bg-gray-600 rounded-full">
+                                <div class="flex items-center space-x-2 px-3 py-1 bg-green-600 rounded-full">
                                     <span class="material-icons icon-sm text-white">star</span>
                                     <span class="text-white text-sm font-medium">Code Architect</span>
                                 </div>
@@ -336,8 +318,8 @@
                         <!-- $twin3 Balance Display -->
                         <div class="flex items-center bg-gray-800 rounded-full px-4 py-2 border border-gray-600">
                             <span class="material-icons icon-sm text-white mr-2">monetization_on</span>
-                            <span class="text-white text-lg" style="font-weight: 300;">0.247</span>
-                            <span class="text-[#888888] text-sm ml-1">$twin3</span>
+                            <span class="text-white font-bold text-lg">0.247</span>
+                            <span class="text-gray-400 text-sm ml-1">$twin3</span>
                         </div>
 
                         <!-- Language Selector -->
@@ -365,35 +347,35 @@
                 <!-- Twin Matrix Score -->
                 <div class="card p-6">
                     <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-lg text-white flex items-center space-x-2" style="font-weight: 300; font-family: 'Kanit', sans-serif;">
+                        <h2 class="text-lg font-semibold text-white flex items-center space-x-2">
                             <span class="material-icons icon-md text-white">psychology</span>
                             <span>Global Identity Score</span>
                         </h2>
                         <div class="relative group">
-                            <span class="material-icons icon-sm text-[#888888] cursor-help">help_outline</span>
-                            <div class="absolute right-0 top-6 w-80 p-3 bg-gray-800 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10 text-xs text-[#888888]">
-                                <div class="mb-2" style="font-weight: 300;">Calculation Formula:</div>
+                            <span class="material-icons icon-sm text-gray-400 cursor-help">help_outline</span>
+                            <div class="absolute right-0 top-6 w-80 p-3 bg-gray-800 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10 text-xs text-gray-300">
+                                <div class="font-semibold mb-2">Calculation Formula:</div>
                                 <div class="mb-2 font-mono text-blue-400">Wi = (0.25Hi + 0.25Bi + 0.30Di + 0.20Si)^1.2</div>
-                                <div style="font-weight: 200;">Hi (Humanity Integration): 0-63</div>
-                                <div style="font-weight: 200;">Bi (Blockchain Behavior): 0-63</div>
-                                <div style="font-weight: 200;">Di (Digital Asset Stickiness): 0-63</div>
-                                <div style="font-weight: 200;">Si (Social Contribution): 0-63</div>
-                                <div class="mt-2" style="font-weight: 300;">Total Score Range: 0-266</div>
+                                <div>Hi (Humanity Integration): 0-63</div>
+                                <div>Bi (Blockchain Behavior): 0-63</div>
+                                <div>Di (Digital Asset Stickiness): 0-63</div>
+                                <div>Si (Social Contribution): 0-63</div>
+                                <div class="mt-2 font-semibold">Total Score Range: 0-266</div>
                             </div>
                         </div>
                     </div>
                     <div class="text-center">
-                        <div class="text-4xl text-white mb-2" style="font-weight: 300;">187<span class="text-2xl text-[#888888]"> / 266</span></div>
+                        <div class="text-4xl font-bold text-white mb-2">187<span class="text-2xl text-gray-400"> / 266</span></div>
                         <div class="progress-bar">
-                            <div class="progress-fill bg-white" style="width: 70%"></div>
+                            <div class="progress-fill bg-green-500" style="width: 70%"></div>
                         </div>
-                        <div class="text-xs text-[#888888] mt-2">70% of maximum score</div>
+                        <div class="text-xs text-gray-400 mt-2">70% of maximum score</div>
                     </div>
                 </div>
 
                 <!-- Profession Trait Scores -->
                 <div class="card p-6">
-                    <h2 class="text-lg text-white mb-4 flex items-center space-x-2" style="font-weight: 300; font-family: 'Kanit', sans-serif;">
+                    <h2 class="text-lg font-semibold text-white mb-4 flex items-center space-x-2">
                         <span class="material-icons icon-md text-white">bar_chart</span>
                         <span>Developer Traits</span>
                     </h2>
@@ -401,40 +383,40 @@
                         <div>
                             <div class="flex justify-between items-center mb-1">
                                 <span class="text-white text-sm">Programming Skills</span>
-                                <span class="text-white text-sm" style="font-weight: 300;">240</span>
+                                <span class="text-white text-sm font-bold">240</span>
                             </div>
                             <div class="progress-bar">
-                                <div class="progress-fill bg-white" style="width: 80%"></div>
+                                <div class="progress-fill bg-green-500" style="width: 80%"></div>
                             </div>
                         </div>
 
                         <div>
                             <div class="flex justify-between items-center mb-1">
                                 <span class="text-white text-sm">Cybersecurity Awareness</span>
-                                <span class="text-white text-sm" style="font-weight: 300;">185</span>
+                                <span class="text-white text-sm font-bold">185</span>
                             </div>
                             <div class="progress-bar">
-                                <div class="progress-fill bg-white" style="width: 62%"></div>
+                                <div class="progress-fill bg-green-500" style="width: 62%"></div>
                             </div>
                         </div>
 
                         <div>
                             <div class="flex justify-between items-center mb-1">
                                 <span class="text-white text-sm">Technical Innovation</span>
-                                <span class="text-white text-sm" style="font-weight: 300;">210</span>
+                                <span class="text-white text-sm font-bold">210</span>
                             </div>
                             <div class="progress-bar">
-                                <div class="progress-fill bg-white" style="width: 70%"></div>
+                                <div class="progress-fill bg-green-500" style="width: 70%"></div>
                             </div>
                         </div>
 
                         <div>
                             <div class="flex justify-between items-center mb-1">
                                 <span class="text-white text-sm">Code Quality</span>
-                                <span class="text-white text-sm" style="font-weight: 300;">195</span>
+                                <span class="text-white text-sm font-bold">195</span>
                             </div>
                             <div class="progress-bar">
-                                <div class="progress-fill bg-white" style="width: 65%"></div>
+                                <div class="progress-fill bg-green-500" style="width: 65%"></div>
                             </div>
                         </div>
                     </div>
@@ -445,20 +427,20 @@
             <div class="card p-6 mb-6">
                 <div class="flex items-center justify-between mb-6">
                     <div class="flex items-center space-x-3">
-                        <span class="material-icons icon-md text-white">link</span>
+                        <span class="material-icons icon-md text-green-400">link</span>
                         <div>
-                            <h2 class="text-xl text-white" style="font-weight: 300; font-family: 'Kanit', sans-serif;">Account Approval</h2>
-                            <p class="text-[#888888] text-sm" style="font-weight: 200; font-family: 'Kanit', sans-serif;">Connect required accounts for Developer verification</p>
+                            <h2 class="text-xl font-bold text-white">Account Approval</h2>
+                            <p class="text-gray-400 text-sm">Connect required accounts for Developer verification</p>
                         </div>
                     </div>
-                    <div class="text-white text-sm" style="font-weight: 300;">
+                    <div class="text-green-400 text-sm font-semibold">
                         1/3 Required Connected
                     </div>
                 </div>
 
                 <!-- Required Accounts -->
                 <div class="mb-6">
-                    <h3 class="text-white mb-4 flex items-center" style="font-weight: 300; font-family: 'Kanit', sans-serif;">
+                    <h3 class="text-white font-semibold mb-4 flex items-center">
                         <span class="w-2 h-2 bg-red-500 rounded-full mr-2"></span>
                         Required Accounts
                     </h3>
@@ -473,16 +455,16 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <h4 class="text-white text-sm" style="font-weight: 300; font-family: 'Kanit', sans-serif;">GitHub</h4>
-                                        <p class="text-xs text-white" style="font-weight: 200; font-family: 'Kanit', sans-serif;">@alexchen</p>
+                                        <h4 class="font-semibold text-white text-sm">GitHub</h4>
+                                        <p class="text-xs text-green-400">@alexchen</p>
                                     </div>
                                 </div>
-                                <div class="text-white">
+                                <div class="text-green-400">
                                     <span class="material-icons icon-sm">check</span>
                                 </div>
                             </div>
                             <div class="flex items-center justify-between text-xs">
-                                <span class="px-2 py-1 bg-gray-700 text-white rounded-full">Connected</span>
+                                <span class="px-2 py-1 bg-gray-700 text-green-400 rounded-full">Connected</span>
                             </div>
                         </div>
 
@@ -494,16 +476,16 @@
                                         <span class="material-icons icon-sm">help</span>
                                     </div>
                                     <div>
-                                        <h4 class="text-white text-sm" style="font-weight: 300; font-family: 'Kanit', sans-serif;">Stack Overflow</h4>
-                                        <p class="text-xs text-[#888888]" style="font-weight: 200; font-family: 'Kanit', sans-serif;">Not connected</p>
+                                        <h4 class="font-semibold text-white text-sm">Stack Overflow</h4>
+                                        <p class="text-xs text-gray-500">Not connected</p>
                                     </div>
                                 </div>
-                                <div class="text-[#888888]">
+                                <div class="text-gray-400">
                                     <span class="material-icons icon-sm">add</span>
                                 </div>
                             </div>
                             <div class="flex items-center justify-between text-xs">
-                                <button class="btn-primary text-xs" style="width: auto; padding: 8px 16px;">
+                                <button class="btn-secondary text-xs" style="width: auto; padding: 4px 12px;">
                                     Connect
                                 </button>
                             </div>
@@ -519,16 +501,16 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <h4 class="text-white text-sm" style="font-weight: 300; font-family: 'Kanit', sans-serif;">LinkedIn</h4>
-                                        <p class="text-xs text-[#888888]" style="font-weight: 200; font-family: 'Kanit', sans-serif;">Not connected</p>
+                                        <h4 class="font-semibold text-white text-sm">LinkedIn</h4>
+                                        <p class="text-xs text-gray-500">Not connected</p>
                                     </div>
                                 </div>
-                                <div class="text-[#888888]">
+                                <div class="text-gray-400">
                                     <span class="material-icons icon-sm">add</span>
                                 </div>
                             </div>
                             <div class="flex items-center justify-between text-xs">
-                                <button class="btn-primary text-xs" style="width: auto; padding: 8px 16px;">
+                                <button class="btn-secondary text-xs" style="width: auto; padding: 4px 12px;">
                                     Connect
                                 </button>
                             </div>
@@ -538,12 +520,12 @@
 
                 <!-- Recommended Accounts -->
                 <div>
-                    <h3 class="text-white mb-4 flex items-center" style="font-weight: 300; font-family: 'Kanit', sans-serif;">
-                        <span class="w-2 h-2 bg-white rounded-full mr-2"></span>
+                    <h3 class="text-white font-semibold mb-4 flex items-center">
+                        <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
                         Recommended Accounts
                     </h3>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        <div class="card p-3 text-center">
+                        <div class="card p-3 text-center hover:border-gray-500 cursor-pointer">
                             <div class="flex justify-center mb-2">
                                 <svg class="platform-logo" viewBox="0 0 24 24" fill="white">
                                     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
@@ -551,7 +533,7 @@
                             </div>
                             <div class="text-xs text-white font-medium">X (Twitter)</div>
                         </div>
-                        <div class="card p-3 text-center">
+                        <div class="card p-3 text-center hover:border-gray-500 cursor-pointer">
                             <div class="flex justify-center mb-2">
                                 <svg class="platform-logo" viewBox="0 0 24 24" fill="white">
                                     <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/>
@@ -559,7 +541,7 @@
                             </div>
                             <div class="text-xs text-white font-medium">Medium</div>
                         </div>
-                        <div class="card p-3 text-center">
+                        <div class="card p-3 text-center hover:border-gray-500 cursor-pointer">
                             <div class="flex justify-center mb-2">
                                 <svg class="platform-logo" viewBox="0 0 24 24" fill="white">
                                     <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419-.0002 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9554 2.4189-2.1568 2.4189Z"/>
@@ -567,7 +549,7 @@
                             </div>
                             <div class="text-xs text-white font-medium">Discord</div>
                         </div>
-                        <div class="card p-3 text-center">
+                        <div class="card p-3 text-center hover:border-gray-500 cursor-pointer">
                             <div class="flex justify-center mb-2">
                                 <svg class="platform-logo" viewBox="0 0 24 24" fill="white">
                                     <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
@@ -584,14 +566,14 @@
                 <!-- Tab Navigation -->
                 <div class="flex items-center justify-between mb-6">
                     <div class="flex space-x-1 rounded-lg p-1" style="background: #FFFFFF0D;">
-                        <button id="task-tab" class="px-4 py-2 text-sm font-medium text-white bg-gray-600 rounded-md transition-colors">
+                        <button id="task-tab" class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md transition-colors">
                             Task List
                         </button>
-                        <button id="rewards-tab" class="px-4 py-2 text-sm font-medium text-[#888888] hover:text-white transition-colors">
+                        <button id="rewards-tab" class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white transition-colors">
                             Rewards Logs
                         </button>
                     </div>
-                    <div class="text-white text-sm" style="font-weight: 300;">
+                    <div class="text-green-400 text-sm font-semibold">
                         <span id="active-count">5 Active Tasks</span>
                     </div>
                 </div>
@@ -604,76 +586,76 @@
                             <div class="w-8 h-8 bg-gray-700 rounded-lg flex items-center justify-center">
                                 <span class="material-icons icon-sm text-white">today</span>
                             </div>
-                            <h3 class="text-lg text-white" style="font-weight: 300; font-family: 'Kanit', sans-serif;">Daily Tasks</h3>
+                            <h3 class="text-lg font-semibold text-white">Daily Tasks</h3>
                         </div>
 
                         <div class="space-y-3">
                             <!-- Task 1 -->
-                            <div class="rounded-lg p-4 border-l-4 border-white" style="background: #FFFFFF0D;">
+                            <div class="rounded-lg p-4 border-l-4 border-green-500" style="background: #FFFFFF0D;">
                                 <div class="flex items-center justify-between mb-2">
                                     <div class="flex items-center space-x-3">
                                         <div class="flex items-center space-x-2">
-                                            <span class="text-white text-lg" style="font-weight: 300;">+0.005</span>
-                                            <span class="text-[#888888]" style="font-weight: 300;">$twin3</span>
+                                            <span class="text-white font-bold text-lg">+0.005</span>
+                                            <span class="text-gray-400 font-bold">$twin3</span>
                                         </div>
                                         <div>
-                                            <h4 class="text-white" style="font-weight: 300; font-family: 'Kanit', sans-serif;">Complete Code Review</h4>
-                                            <p class="text-xs text-[#888888]" style="font-weight: 200; font-family: 'Kanit', sans-serif;">Review 3 pull requests from team members</p>
+                                            <h4 class="font-semibold text-white">Complete Code Review</h4>
+                                            <p class="text-xs text-gray-400">Review 3 pull requests from team members</p>
                                         </div>
                                     </div>
-                                    <button class="btn-primary text-sm" style="width: auto; padding: 8px 16px;">
+                                    <button class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm rounded-lg transition-colors">
                                         Start
                                     </button>
                                 </div>
                                 <div class="flex items-center justify-between text-xs">
-                                    <span class="text-[#888888]">Progress: 1/3</span>
-                                    <span class="text-white">Profession Trait</span>
+                                    <span class="text-gray-400">Progress: 1/3</span>
+                                    <span class="text-green-400">Profession Trait</span>
                                 </div>
                             </div>
 
                             <!-- Task 2 -->
-                            <div class="rounded-lg p-4 border-l-4 border-white" style="background: #FFFFFF0D;">
+                            <div class="rounded-lg p-4 border-l-4 border-green-500" style="background: #FFFFFF0D;">
                                 <div class="flex items-center justify-between mb-2">
                                     <div class="flex items-center space-x-3">
                                         <div class="flex items-center space-x-2">
-                                            <span class="text-white text-lg" style="font-weight: 300;">+0.005</span>
-                                            <span class="text-[#888888]" style="font-weight: 300;">$twin3</span>
+                                            <span class="text-white font-bold text-lg">+0.005</span>
+                                            <span class="text-gray-400 font-bold">$twin3</span>
                                         </div>
                                         <div>
-                                            <h4 class="text-white" style="font-weight: 300; font-family: 'Kanit', sans-serif;">Follow Twin3 on X</h4>
-                                            <p class="text-xs text-[#888888]" style="font-weight: 200; font-family: 'Kanit', sans-serif;">Stay updated with latest news</p>
+                                            <h4 class="font-semibold text-white">Follow Twin3 on X</h4>
+                                            <p class="text-xs text-gray-400">Stay updated with latest news</p>
                                         </div>
                                     </div>
-                                    <button class="btn-primary text-sm" style="width: auto; padding: 8px 16px;">
+                                    <button class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm rounded-lg transition-colors">
                                         Complete
                                     </button>
                                 </div>
                                 <div class="flex items-center justify-between text-xs">
-                                    <span class="text-[#888888]">Social Task</span>
-                                    <span class="text-white">Available</span>
+                                    <span class="text-gray-400">Social Task</span>
+                                    <span class="text-green-400">Available</span>
                                 </div>
                             </div>
 
                             <!-- Task 3 -->
-                            <div class="rounded-lg p-4 border-l-4 border-white" style="background: #FFFFFF0D;">
+                            <div class="rounded-lg p-4 border-l-4 border-green-500" style="background: #FFFFFF0D;">
                                 <div class="flex items-center justify-between mb-2">
                                     <div class="flex items-center space-x-3">
                                         <div class="flex items-center space-x-2">
-                                            <span class="text-white text-lg" style="font-weight: 300;">+0.005</span>
-                                            <span class="text-[#888888]" style="font-weight: 300;">$twin3</span>
+                                            <span class="text-white font-bold text-lg">+0.005</span>
+                                            <span class="text-gray-400 font-bold">$twin3</span>
                                         </div>
                                         <div>
-                                            <h4 class="text-white" style="font-weight: 300; font-family: 'Kanit', sans-serif;">Join Twin3 Discord</h4>
-                                            <p class="text-xs text-[#888888]" style="font-weight: 200; font-family: 'Kanit', sans-serif;">Connect with the community</p>
+                                            <h4 class="font-semibold text-white">Join Twin3 Discord</h4>
+                                            <p class="text-xs text-gray-400">Connect with the community</p>
                                         </div>
                                     </div>
-                                    <button class="btn-primary text-sm" style="width: auto; padding: 8px 16px;">
+                                    <button class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm rounded-lg transition-colors">
                                         Start
                                     </button>
                                 </div>
                                 <div class="flex items-center justify-between text-xs">
-                                    <span class="text-[#888888]">Community Task</span>
-                                    <span class="text-white">Available</span>
+                                    <span class="text-gray-400">Community Task</span>
+                                    <span class="text-green-400">Available</span>
                                 </div>
                             </div>
                         </div>
@@ -684,7 +666,7 @@
                 <div id="rewards-content" class="space-y-4 hidden">
                     <!-- Recent Rewards -->
                     <div class="space-y-3">
-                        <div class="flex items-center justify-between p-4 rounded-lg border-l-4 border-white" style="background: #FFFFFF0D;">
+                        <div class="flex items-center justify-between p-4 rounded-lg border-l-4 border-green-500" style="background: #FFFFFF0D;">
                             <div class="flex items-center space-x-3">
                                 <div class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center">
                                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="white">
@@ -692,37 +674,37 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h4 class="text-white text-sm" style="font-weight: 300; font-family: 'Kanit', sans-serif;">GitHub Account Connected</h4>
-                                    <p class="text-xs text-[#888888]" style="font-weight: 200; font-family: 'Kanit', sans-serif;">Aug 1, 2025 · 2:30 PM</p>
-                                    <p class="text-xs text-white" style="font-weight: 200; font-family: 'Kanit', sans-serif;">Triggered 0087 (Cybersecurity Awareness) +50</p>
+                                    <h4 class="font-semibold text-white text-sm">GitHub Account Connected</h4>
+                                    <p class="text-xs text-gray-400">Aug 1, 2025 · 2:30 PM</p>
+                                    <p class="text-xs text-green-400">Triggered 0087 (Cybersecurity Awareness) +50</p>
                                 </div>
                             </div>
                             <div class="text-right">
                                 <div class="flex items-center space-x-2 mb-1">
-                                    <span class="text-white" style="font-weight: 300;">+0.01</span>
-                                    <span class="text-[#888888] text-sm">$twin3</span>
+                                    <span class="text-white font-bold">+0.01</span>
+                                    <span class="text-gray-400 text-sm">$twin3</span>
                                 </div>
-                                <div class="text-xs text-[#888888]">Matrix: +50</div>
+                                <div class="text-xs text-gray-400">Matrix: +50</div>
                             </div>
                         </div>
 
-                        <div class="flex items-center justify-between p-4 rounded-lg border-l-4 border-white" style="background: #FFFFFF0D;">
+                        <div class="flex items-center justify-between p-4 rounded-lg border-l-4 border-green-500" style="background: #FFFFFF0D;">
                             <div class="flex items-center space-x-3">
                                 <div class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center">
                                     <span class="material-icons icon-sm text-white">psychology</span>
                                 </div>
                                 <div>
-                                    <h4 class="text-white text-sm" style="font-weight: 300; font-family: 'Kanit', sans-serif;">Identity Verification Completed</h4>
-                                    <p class="text-xs text-[#888888]" style="font-weight: 200; font-family: 'Kanit', sans-serif;">Jul 28, 2025 · 10:15 AM</p>
-                                    <p class="text-xs text-white" style="font-weight: 200; font-family: 'Kanit', sans-serif;">Humanity Trust Score +20</p>
+                                    <h4 class="font-semibold text-white text-sm">Identity Verification Completed</h4>
+                                    <p class="text-xs text-gray-400">Jul 28, 2025 · 10:15 AM</p>
+                                    <p class="text-xs text-green-400">Humanity Trust Score +20</p>
                                 </div>
                             </div>
                             <div class="text-right">
                                 <div class="flex items-center space-x-2 mb-1">
-                                    <span class="text-white" style="font-weight: 300;">+0.02</span>
-                                    <span class="text-[#888888] text-sm">$twin3</span>
+                                    <span class="text-white font-bold">+0.02</span>
+                                    <span class="text-gray-400 text-sm">$twin3</span>
                                 </div>
-                                <div class="text-xs text-[#888888]">Humanity: +20</div>
+                                <div class="text-xs text-gray-400">Humanity: +20</div>
                             </div>
                         </div>
                     </div>
@@ -738,7 +720,7 @@
             <div class="w-full xl:w-1/5 lg:w-[13%] text-center lg:text-left">
                 <div class="flex flex-col justify-center lg:justify-start items-center pt-6 lg:pt-0" style="gap: 4px;">
                     <div class="flex items-center">
-                        <img src="../assets/img/logo_dark.svg" alt="Logo" style="width: 40px; height: 40px;">
+                        <img src="assets/img/logo_dark.svg" alt="Logo" style="width: 40px; height: 40px;">
                     </div>
                     <span class="text-sm md:text-base" style="font-weight: 300; color: #888888;">twin3.ai</span>
                 </div>
@@ -752,14 +734,14 @@
                     <div class="flex justify-center lg:justify-start space-x-4">
                         <a href="https://x.com/twin3_ai" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
                             <div class="w-6 h-6 flex items-center justify-center" style="padding: 2px;">
-                                <img src="../assets/img/X_logo.svg" alt="X (Twitter)" class="w-full h-full object-contain">
+                                <img src="assets/img/X_logo.svg" alt="X (Twitter)" class="w-full h-full object-contain">
                             </div>
                         </a>
                         <a href="https://opensea.io/collection/twin3" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
-                            <img src="../assets/img/opensea_logo.svg" alt="OpenSea" class="w-6 h-6">
+                            <img src="assets/img/opensea_logo.svg" alt="OpenSea" class="w-6 h-6">
                         </a>
                         <a href="https://warpcast.com/twin3.eth" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
-                            <img src="../assets/img/farcaster_logo.svg" alt="Warpcast" class="w-6 h-6">
+                            <img src="assets/img/farcaster_logo.svg" alt="Warpcast" class="w-6 h-6">
                         </a>
                     </div>
                 </div>
@@ -792,7 +774,7 @@
         </div>
 
         <!-- Copyright -->
-        <div class="mt-10 text-center text-[#888888] text-sm lg:text-base" style="font-weight: 200;">© 2025 Twin3.ai v1.0.6</div>
+        <div class="mt-10 text-center text-gray-500 text-sm lg:text-base" style="font-weight: 200;">© 2025 Twin3.ai v1.0.6</div>
     </footer>
 
     <script>
@@ -803,10 +785,10 @@
         const rewardsContent = document.getElementById('rewards-content');
 
         function switchToTaskTab() {
-            taskTab.classList.add('bg-gray-600', 'text-white');
-            taskTab.classList.remove('text-[#888888]');
-            rewardsTab.classList.remove('bg-gray-600', 'text-white');
-            rewardsTab.classList.add('text-[#888888]');
+            taskTab.classList.add('bg-green-600', 'text-white');
+            taskTab.classList.remove('text-gray-400');
+            rewardsTab.classList.remove('bg-green-600', 'text-white');
+            rewardsTab.classList.add('text-gray-400');
 
             taskContent.classList.remove('hidden');
             rewardsContent.classList.add('hidden');
@@ -815,10 +797,10 @@
         }
 
         function switchToRewardsTab() {
-            rewardsTab.classList.add('bg-gray-600', 'text-white');
-            rewardsTab.classList.remove('text-[#888888]');
-            taskTab.classList.remove('bg-gray-600', 'text-white');
-            taskTab.classList.add('text-[#888888]');
+            rewardsTab.classList.add('bg-green-600', 'text-white');
+            rewardsTab.classList.remove('text-gray-400');
+            taskTab.classList.remove('bg-green-600', 'text-white');
+            taskTab.classList.add('text-gray-400');
 
             rewardsContent.classList.remove('hidden');
             taskContent.classList.add('hidden');

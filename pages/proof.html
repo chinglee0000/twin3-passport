@@ -284,6 +284,9 @@
             flex: 1;
             max-width: 600px;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .page-right-action {
@@ -292,9 +295,9 @@
             max-width: 400px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* 改為 space-between 保持一致 */
+            justify-content: center; /* 垂直置中 */
             align-items: center;
-            min-height: 350px; /* 確保有足夠高度 */
+            gap: 2rem; /* 固定 32px 間距 */
         }
 
         .page-main-title {
@@ -360,7 +363,7 @@
         }
 
         /* Force center left-content around ~1000px */
-        @media (max-width: 1100px) and (min-width: 768px) {
+        @media (max-width: 1023px) and (min-width: 768px) {
             .unified-content-block { align-items: center; justify-content: center; }
             .page-left-content { margin-left: auto; margin-right: auto; text-align: center; align-items: center; }
         }
@@ -369,9 +372,16 @@
         @media (max-width: 768px) {
             .verification-steps { gap: 0.75rem; }
             .verification-step { padding: 1rem; }
-            .step-content { flex-direction: column; align-items: stretch; }
-            .step-info { width: 100%; align-items: flex-start; }
-            .step-content .page-action-button { margin-left: 0; margin-top: 12px; align-self: flex-start; }
+            .step-content { flex-direction: column; align-items: center; }
+            .step-info { width: 100%; align-items: center; }
+            .step-content .page-action-button,
+            .verification-steps .start-btn,
+            .verification-steps #step1-btn {
+                width: 100% !important;
+                margin-left: 0 !important;
+                margin-top: 16px !important;
+                align-self: center;
+            }
         }
 
         /* Slightly earlier wrap on tablets */
@@ -381,50 +391,218 @@
             .step-content .page-action-button { margin-left: 16px; }
         }
 
+        /* Mobile + Tablet layout: vertical stack, centered, full-width button */
+        @media (max-width: 1023px) {
+            .step-content { flex-direction: column; align-items: center; }
+            .step-info { width: 100%; flex-direction: column; align-items: center; gap: 0.5rem; }
+            .step-number { margin-bottom: 8px; }
+            .step-text { text-align: center; margin-right: 0 !important; }
+            .step-content .page-action-button,
+            .verification-steps .start-btn,
+            .verification-steps #step1-btn {
+                width: 100% !important;
+                margin-left: 0 !important;
+                margin-top: 16px !important;
+                align-self: center;
+            }
+
+            /* Make step1 button full-width on mobile/tablet */
+            .step-content #step1-btn { width: 100%; }
+
+            /* Completed state: 16px vertical gap between icon and text on mobile/tablet */
+            .verification-step.completed .step-content { column-gap: 0; row-gap: 16px; }
+            .verification-step.completed .step-info { gap: 16px; }
+        }
+
+        /* Allow long subtext to wrap */
+        .step-subtext { white-space: normal !important; word-break: break-word; overflow-wrap: anywhere; display: inline; }
+
         /* Proof page specific styles */
         .verification-steps {
             display: flex;
             flex-direction: column;
             gap: 1rem;
             width: 100%;
+            max-width: 500px;
+            margin-bottom: 0;
         }
 
         .verification-step {
             background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
             padding: 1.5rem;
             transition: all 0.3s ease;
         }
 
-        .verification-step:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
         .verification-step.completed {
-            background: rgba(34, 197, 94, 0.1);
-            border-color: rgba(34, 197, 94, 0.3);
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .step-content {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
+            align-items: center; /* vertically center step-info and button */
+            justify-content: flex-start; /* keep a fixed spacing (we add margin-left on button) */
         }
 
         .step-info {
             display: flex;
             align-items: center;
             gap: 1rem;
+            flex: 1;        /* allow text to take remaining width */
+            min-width: 0;   /* enable wrapping instead of overflowing */
         }
 
         .step-number {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            font-weight: 500;
+            width: 2rem;
+            height: 2rem;
+            background: transparent;
+            border: 1px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 300; /* requested weight */
+            font-size: 0.875rem;
         }
+
+        /* Keep 16px spacing to button while allowing text wrap */
+        .step-text {
+            margin-right: 0 !important;
+            white-space: normal;
+            word-break: break-word;
+        }
+        .step-content .page-action-button { margin-left: 16px; }
+
+        /* Make verification step buttons hug content */
+        .verification-steps .page-action-button,
+        .verification-steps .start-btn,
+        .verification-steps #step1-btn {
+            width: auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .check-icon {
+            width: 1rem;
+            height: 1rem;
+            color: white;
+            background: transparent;
+            display: inline-block;
+        }
+
+
+
+        .verification-step.completed .step-number {
+            background: #ffffff; /* white bg */
+            color: #000000;      /* black text */
+            border-color: #ffffff;
+        }
+
+        .step-status {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .step-status.completed {
+            background: transparent; /* icon will convey state */
+            color: #000000;      /* ensure text/icon black if any */
+            flex: none;
+        }
+
+        .step-status.completed .check-icon {
+            color: #000000;
+        }
+
+        .check-icon-img {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* reCAPTCHA Popup Modal */
+        .recaptcha-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .recaptcha-modal.show {
+            display: flex;
+        }
+
+        .recaptcha-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .recaptcha-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .recaptcha-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
+
+        .recaptcha-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .recaptcha-close:hover {
+            background-color: #f5f5f5;
+        }
+
+        .recaptcha-body {
+            text-align: center;
+        }
+
+        .recaptcha-description {
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        /* Keep 16px spacing between completed icon and step text */
+        .verification-step.completed .step-content { column-gap: 16px; }
 
         .step-text {
             font-size: 1rem;
@@ -442,12 +620,13 @@
             background: white;
             color: black;
             border: 1px solid #373737;
-            padding: 0.75rem 1.5rem;
+            padding: 8px 16px;
             border-radius: 8px;
             font-weight: 300;
             cursor: pointer;
             transition: all 0.3s ease;
             font-family: 'Kanit', sans-serif;
+            font-size: 14px;
         }
 
         .start-btn:hover:not(:disabled) {
@@ -461,6 +640,21 @@
             color: #666666;
             border-color: rgba(255, 255, 255, 0.2);
             cursor: not-allowed;
+        }
+
+        /* Next button disabled state */
+        #get-started-btn:disabled {
+            background: rgba(255, 255, 255, 0.1) !important;
+            color: #666666 !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
+            cursor: not-allowed !important;
+        }
+
+        #get-started-btn:disabled:hover {
+            background: rgba(255, 255, 255, 0.1) !important;
+            color: #666666 !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
+            transform: none !important;
         }
 
         .step-status {
@@ -541,7 +735,7 @@
                         Humanity
                     </h1>
                     <p class="page-subtitle subtitle text-[#888888] text-xl md:text-2xl lg:text-3xl mb-8">Verify your human identity</p>
-                    <p class="page-description description text-gray-300 text-base md:text-lg mb-6">
+                    <p class="page-description description text-[#888888] text-base md:text-lg mb-6" style="font-weight: 200;">
                         Complete at least one verification method to prove you're human.<br>
                         Choose from reCAPTCHA or biometric authentication.
                     </p>
@@ -574,7 +768,7 @@
                     </div>
 
                     <!-- Get Started Button -->
-                    <button id="get-started-btn" class="page-action-button action-button w-full px-4 py-3 border border-[#373737] text-black bg-white rounded-lg hover:bg-transparent hover:text-white hover:border-white transition duration-300 mt-6" disabled>
+                    <button id="get-started-btn" class="page-action-button action-button w-full px-4 py-3 border border-[#373737] text-black bg-white rounded-lg hover:bg-transparent hover:text-white hover:border-white transition duration-300" disabled>
                         Next
                     </button>
                 </div>
@@ -646,34 +840,46 @@
         </footer>
     </div>
 
+    <!-- reCAPTCHA Popup Modal -->
+    <div id="recaptcha-modal" class="recaptcha-modal">
+        <div class="recaptcha-content">
+            <div class="recaptcha-header">
+                <h3 class="recaptcha-title">Human Verification</h3>
+                <button class="recaptcha-close" onclick="closeRecaptchaModal()">&times;</button>
+            </div>
+            <div class="recaptcha-body">
+                <p class="recaptcha-description">Please complete the reCAPTCHA to verify you're human.</p>
+                <div id="recaptcha-container"></div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script>
-        // Application state
-        let currentStep = 'proof';
+        // App state
         let userData = { username: '', career: '' };
         let step1Completed = false;
         let step2Completed = false;
 
-        // Navigation functions
-        function initializeNavigation() {
+        // Navigation
+        function initNav() {
             console.log('🔧 Initializing navigation...');
 
-            // Mobile menu toggle
-            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const mobileMenuClose = document.getElementById('mobile-menu-close');
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            const menuClose = document.getElementById('mobile-menu-close');
 
             console.log('📱 Mobile menu elements:', {
-                btn: !!mobileMenuBtn,
-                menu: !!mobileMenu,
-                close: !!mobileMenuClose
+                btn: !!menuBtn,
+                menu: !!menu,
+                close: !!menuClose
             });
 
-            if (mobileMenuBtn && mobileMenu) {
-                mobileMenuBtn.addEventListener('click', (e) => {
+            if (menuBtn && menu) {
+                menuBtn.addEventListener('click', (e) => {
                     e.preventDefault();
                     console.log('🔘 Mobile menu button clicked');
-                    mobileMenu.classList.add('show');
+                    menu.classList.add('show');
                     console.log('✅ Added show class to mobile menu');
                 });
                 console.log('✅ Mobile menu button event listener added');
@@ -681,11 +887,11 @@
                 console.error('❌ Mobile menu button or menu element not found');
             }
 
-            if (mobileMenuClose && mobileMenu) {
-                mobileMenuClose.addEventListener('click', (e) => {
+            if (menuClose && menu) {
+                menuClose.addEventListener('click', (e) => {
                     e.preventDefault();
                     console.log('❌ Mobile menu close button clicked');
-                    mobileMenu.classList.remove('show');
+                    menu.classList.remove('show');
                     console.log('✅ Removed show class from mobile menu');
                 });
                 console.log('✅ Mobile menu close event listener added');
@@ -693,18 +899,18 @@
 
             // Add click outside to close mobile menu
             document.addEventListener('click', (e) => {
-                if (!mobileMenu || !mobileMenuBtn) return;
+                if (!menu || !menuBtn) return;
 
-                const isMenuOpen = mobileMenu.classList.contains('show');
+                const isMenuOpen = menu.classList.contains('show');
                 if (!isMenuOpen) return;
 
                 // Check if click is outside menu and menu button
-                const isClickInsideMenu = mobileMenu.contains(e.target);
-                const isClickOnMenuButton = mobileMenuBtn.contains(e.target);
+                const isClickInsideMenu = menu.contains(e.target);
+                const isClickOnMenuButton = menuBtn.contains(e.target);
 
                 if (!isClickInsideMenu && !isClickOnMenuButton) {
                     console.log('🔘 Clicked outside mobile menu, closing...');
-                    mobileMenu.classList.remove('show');
+                    menu.classList.remove('show');
                     console.log('✅ Mobile menu closed');
                 }
             });
@@ -712,8 +918,8 @@
             console.log('🎉 Navigation initialization complete');
         }
 
-        // Proof of humanity functions
-        function updateNextButton() {
+        // Proof functions
+        function updateNextBtn() {
             const nextBtn = document.getElementById('get-started-btn');
             if (nextBtn) {
                 nextBtn.disabled = !(step1Completed || step2Completed);
@@ -726,8 +932,17 @@
 
             if (step && btn) {
                 step.classList.add('completed');
-                btn.innerHTML = '<span class="material-icons">check</span> Completed';
-                btn.disabled = true;
+
+                // Update step content to show completed state
+                const stepContent = step.querySelector('.step-content');
+                stepContent.removeChild(btn);
+
+                const stepStatus = document.createElement('div');
+                stepStatus.className = 'step-status completed';
+                stepStatus.innerHTML = `
+                    <img src="../assets/img/Check icon.svg" alt="Completed" class="check-icon-img" />
+                `;
+                stepContent.appendChild(stepStatus);
 
                 if (stepNumber === 1) {
                     step1Completed = true;
@@ -735,18 +950,23 @@
                     step2Completed = true;
                 }
 
-                updateNextButton();
+                updateNextBtn();
             }
         }
 
         // reCAPTCHA callback
         function onRecaptchaSuccess() {
             console.log('reCAPTCHA completed successfully');
+
+            // Close the modal
+            closeRecaptchaModal();
+
+            // Complete step 1
             completeStep(1);
         }
 
-        // Biometric authentication simulation
-        async function startBiometricAuth() {
+        // Biometric auth
+        async function startBiometric() {
             const btn = document.getElementById('start-mobile-auth');
             if (btn) {
                 btn.textContent = 'Authenticating...';
@@ -782,32 +1002,78 @@
             console.log('Proof page loaded');
 
             // Initialize navigation
-            initializeNavigation();
+            initNav();
 
-            // Step 1: reCAPTCHA
+            // reCAPTCHA Modal Functions
+            window.openRecaptchaModal = function() {
+                const modal = document.getElementById('recaptcha-modal');
+                const container = document.getElementById('recaptcha-container');
+
+                // Clear previous reCAPTCHA
+                container.innerHTML = '';
+
+                // Show modal
+                modal.classList.add('show');
+
+                // Create reCAPTCHA element
+                const recaptchaDiv = document.createElement('div');
+                recaptchaDiv.className = 'g-recaptcha';
+                recaptchaDiv.setAttribute('data-sitekey', '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'); // Test key
+                recaptchaDiv.setAttribute('data-callback', 'onRecaptchaSuccess');
+
+                container.appendChild(recaptchaDiv);
+
+                // Render reCAPTCHA
+                if (window.grecaptcha && window.grecaptcha.render) {
+                    try {
+                        window.grecaptcha.render(recaptchaDiv);
+                    } catch (error) {
+                        console.error('reCAPTCHA render error:', error);
+                    }
+                }
+            };
+
+            window.closeRecaptchaModal = function() {
+                const modal = document.getElementById('recaptcha-modal');
+                const container = document.getElementById('recaptcha-container');
+
+                modal.classList.remove('show');
+                container.innerHTML = '';
+
+                // Reset reCAPTCHA if needed
+                if (window.grecaptcha && window.grecaptcha.reset) {
+                    try {
+                        window.grecaptcha.reset();
+                    } catch (error) {
+                        console.error('reCAPTCHA reset error:', error);
+                    }
+                }
+            };
+
+            // Step 1: reCAPTCHA (簡化版本 - 直接完成)
             const step1Btn = document.getElementById('step1-btn');
             if (step1Btn) {
                 step1Btn.addEventListener('click', () => {
-                    // Create reCAPTCHA element
-                    const recaptchaDiv = document.createElement('div');
-                    recaptchaDiv.className = 'g-recaptcha';
-                    recaptchaDiv.setAttribute('data-sitekey', '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'); // Test key
-                    recaptchaDiv.setAttribute('data-callback', 'onRecaptchaSuccess');
+                    if (step1Btn.disabled) return;
 
-                    // Replace button with reCAPTCHA
-                    step1Btn.parentNode.replaceChild(recaptchaDiv, step1Btn);
+                    // 直接完成 step 1，不需要實際的 reCAPTCHA 驗證
+                    step1Btn.textContent = 'Completing...';
+                    step1Btn.disabled = true;
 
-                    // Render reCAPTCHA
-                    if (window.grecaptcha) {
-                        grecaptcha.render(recaptchaDiv);
-                    }
+                    // 模擬短暫的處理時間
+                    setTimeout(() => {
+                        step1Completed = true;
+                        completeStep(1);
+                        updateNextBtn();
+                        console.log('Step 1 completed (simplified)');
+                    }, 500);
                 });
             }
 
             // Step 2: Biometric authentication
             const step2Btn = document.getElementById('start-mobile-auth');
             if (step2Btn) {
-                step2Btn.addEventListener('click', startBiometricAuth);
+                step2Btn.addEventListener('click', startBiometric);
             }
 
             // Next button
@@ -822,11 +1088,18 @@
             }
 
             // Initialize button state
-            updateNextButton();
+            updateNextBtn();
         });
 
         // Make onRecaptchaSuccess globally available
         window.onRecaptchaSuccess = onRecaptchaSuccess;
+
+        // Close modal when clicking outside
+        document.getElementById('recaptcha-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeRecaptchaModal();
+            }
+        });
     </script>
 </body>
 </html>
