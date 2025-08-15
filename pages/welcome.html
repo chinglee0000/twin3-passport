@@ -1569,44 +1569,7 @@
         async function startWalletLinkingFlow() {
             console.log('🔗 Starting wallet linking flow...');
 
-            // Option 1: Use Web3Modal if initialized
-            if (typeof web3Modal !== 'undefined' && web3Modal) {
-                try {
-                    console.log('🌐 Using Web3Modal for wallet connection');
-
-                    // Connect wallet
-                    const provider = await web3Modal.connect();
-
-                    if (provider) {
-                        console.log('✅ Wallet connected');
-
-                        // Setup provider event listeners
-                        provider.on("accountsChanged", (accounts) => {
-                            console.log('🔄 Accounts changed:', accounts);
-                            if (accounts.length > 0) {
-                                proceedToHumanVerification();
-                            }
-                        });
-
-                        provider.on("chainChanged", (chainId) => {
-                            console.log('⛓️ Chain changed:', chainId);
-                        });
-
-                        provider.on("disconnect", (code, reason) => {
-                            console.log('🔌 Wallet disconnected:', code, reason);
-                        });
-
-                        // Proceed to human verification immediately
-                        proceedToHumanVerification();
-                        return;
-                    }
-                } catch (error) {
-                    console.error('❌ Web3Modal connection failed:', error);
-                    // Fallback to custom modal if Web3Modal fails
-                }
-            }
-
-            // Option 2: Use custom wallet modal as fallback
+            // Use simplified custom wallet modal
             console.log('🎨 Using custom wallet modal');
             openWalletModal();
         }
@@ -1625,41 +1588,33 @@
             openWalletModal();
         }
 
-        // Connect to MetaMask
+        // Connect to MetaMask (Simplified - Mock Connection)
         async function connectMetaMask() {
             console.log('🦊 Connecting to MetaMask...');
 
-            if (typeof window.ethereum !== 'undefined') {
-                try {
-                    const accounts = await window.ethereum.request({
-                        method: 'eth_requestAccounts'
-                    });
+            // Show connecting state
+            showStatusMessage('Connecting...', 'Connecting to MetaMask wallet', '#3b82f6');
 
-                    if (accounts.length > 0) {
-                        console.log('✅ MetaMask connected:', accounts[0]);
+            // Simulate connection delay
+            setTimeout(() => {
+                // Mock successful connection
+                const mockAddress = '0x1234...5678';
+                console.log('✅ MetaMask connected (simulated):', mockAddress);
 
-                        // Update wallet status
-                        updateWalletStatus(accounts[0]);
+                // Update wallet status
+                updateWalletStatus(mockAddress);
 
-                        // Show success message
-                        showWalletConnectedMessage();
+                // Show success message
+                showWalletConnectedMessage();
 
-                        // Close modal
-                        closeWalletModal();
+                // Close modal
+                closeWalletModal();
 
-                        // Proceed to human verification
-                        setTimeout(() => {
-                            proceedToHumanVerification();
-                        }, 1500);
-                    }
-                } catch (error) {
-                    console.error('❌ MetaMask connection failed:', error);
-                    showConnectionError('Connection failed. Please try again.');
-                }
-            } else {
-                console.log('❌ MetaMask not installed');
-                showConnectionError('Please install MetaMask to continue.');
-            }
+                // Proceed to human verification
+                setTimeout(() => {
+                    proceedToHumanVerification();
+                }, 1500);
+            }, 1000); // 1 second delay to simulate connection
         }
 
         // ===== STATUS MESSAGE FUNCTIONS =====
@@ -1887,13 +1842,8 @@
             // Initialize navigation
             initializeNavigation();
 
-            // Initialize Web3Modal
-            const web3ModalInitialized = initWeb3Modal();
-            if (web3ModalInitialized) {
-                console.log('✅ Web3Modal initialized');
-            } else {
-                console.log('🎨 Using custom wallet modal');
-            }
+            // Using simplified wallet connection
+            console.log('🎨 Using simplified wallet modal');
 
             // Get Your Passport button - Complete wallet check flow
             const freeMintBtn = document.getElementById('free-mint-btn');
