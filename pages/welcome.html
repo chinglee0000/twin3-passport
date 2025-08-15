@@ -10,9 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
 
-    <!-- Web3Modal v2 (更穩定的版本) -->
-    <script src="https://unpkg.com/web3modal@1.9.12/dist/index.js"></script>
-    <script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
+    <!-- Simplified wallet connection - no external dependencies needed -->
 
     <style>
         :root {
@@ -1441,30 +1439,8 @@
         let web3Modal = null;
         let provider = null;
 
-        // ===== WEB3 INITIALIZATION =====
-        function initWeb3Modal() {
-            try {
-                const providerOptions = {
-                    walletconnect: {
-                        package: WalletConnectProvider,
-                        options: {
-                            infuraId: "your-infura-id" // Replace with your Infura ID
-                        }
-                    }
-                };
-
-                web3Modal = new Web3Modal({
-                    network: "mainnet",
-                    cacheProvider: true,
-                    providerOptions
-                });
-
-                return true;
-            } catch (error) {
-                console.error('❌ Web3Modal initialization failed:', error);
-                return false;
-            }
-        }
+        // ===== SIMPLIFIED WALLET CONNECTION =====
+        // No Web3Modal initialization needed for simplified flow
 
         // ===== PASSPORT REGISTRATION FLOW =====
         function checkWalletStatus() {
@@ -1591,9 +1567,6 @@
         // Connect to MetaMask (Simplified - Mock Connection)
         async function connectMetaMask() {
             console.log('🦊 Connecting to MetaMask...');
-
-            // Show connecting state
-            showStatusMessage('Connecting...', 'Connecting to MetaMask wallet', '#3b82f6');
 
             // Simulate connection delay
             setTimeout(() => {
