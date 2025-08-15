@@ -692,17 +692,23 @@
                 console.log('✅ Mobile menu close event listener added');
             }
 
-            // Close mobile menu when clicking outside
-            if (mobileMenu) {
-                mobileMenu.addEventListener('click', (e) => {
-                    if (e.target === mobileMenu) {
-                        console.log('🔘 Clicked outside mobile menu content');
-                        mobileMenu.classList.remove('show');
-                        console.log('✅ Removed show class from mobile menu');
-                    }
-                });
-                console.log('✅ Mobile menu background click event listener added');
-            }
+            // Add click outside to close mobile menu
+            document.addEventListener('click', (e) => {
+                if (!mobileMenu || !mobileMenuBtn) return;
+
+                const isMenuOpen = mobileMenu.classList.contains('show');
+                if (!isMenuOpen) return;
+
+                // Check if click is outside menu and menu button
+                const isClickInsideMenu = mobileMenu.contains(e.target);
+                const isClickOnMenuButton = mobileMenuBtn.contains(e.target);
+
+                if (!isClickInsideMenu && !isClickOnMenuButton) {
+                    console.log('🔘 Clicked outside mobile menu, closing...');
+                    mobileMenu.classList.remove('show');
+                    console.log('✅ Mobile menu closed');
+                }
+            });
 
             console.log('🎉 Navigation initialization complete');
         }

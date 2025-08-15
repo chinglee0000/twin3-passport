@@ -1431,14 +1431,14 @@
     </div>
 
     <script>
-        // Application state
+        // ===== APPLICATION STATE =====
         let currentStep = 'welcome';
         let userData = { username: '', career: '' };
         let walletConnected = false;
         let web3Modal = null;
         let provider = null;
 
-        // Initialize Web3Modal
+        // ===== WEB3 INITIALIZATION =====
         function initWeb3Modal() {
             try {
                 const providerOptions = {
@@ -1458,12 +1458,12 @@
 
                 return true;
             } catch (error) {
-                console.log('Web3Modal initialization failed:', error);
+                console.error('❌ Web3Modal initialization failed:', error);
                 return false;
             }
         }
 
-        // Passport Registration Flow Functions - 完整的錢包檢查流程
+        // ===== PASSPORT REGISTRATION FLOW =====
         function checkWalletStatus() {
             console.log('🔍 Checking wallet connection status...');
 
@@ -1497,15 +1497,13 @@
             }, 2000);
         }
 
-        // Simulate wallet check (always returns not connected for testing)
         function simulateWalletCheck() {
-            // 總是返回未連結來測試錢包連接流程
+            // Always returns false for testing wallet connection flow
             return false;
         }
 
-        // Show checking status
         function showWalletCheckingStatus() {
-            // 創建檢查狀態提示
+            // Create checking status UI
             const statusDiv = document.createElement('div');
             statusDiv.id = 'wallet-checking-status';
             statusDiv.innerHTML = `
@@ -1540,7 +1538,7 @@
                 </div>
             `;
 
-            // 添加旋轉動畫
+            // Add spin animation if not exists
             if (!document.querySelector('#spin-animation')) {
                 const style = document.createElement('style');
                 style.id = 'spin-animation';
@@ -1556,7 +1554,6 @@
             document.body.appendChild(statusDiv);
         }
 
-        // Hide checking status
         function hideWalletCheckingStatus() {
             const statusDiv = document.getElementById('wallet-checking-status');
             if (statusDiv) {
@@ -1569,18 +1566,18 @@
         async function startWalletLinkingFlow() {
             console.log('🔗 Starting wallet linking flow...');
 
-            // 選項 1: 使用 Web3Modal (如果已初始化)
+            // Option 1: Use Web3Modal if initialized
             if (typeof web3Modal !== 'undefined' && web3Modal) {
                 try {
                     console.log('🌐 Using Web3Modal for wallet connection');
 
-                    // 連接錢包
+                    // Connect wallet
                     const provider = await web3Modal.connect();
 
                     if (provider) {
                         console.log('✅ Wallet connected');
 
-                        // 設置 provider 事件監聽
+                        // Setup provider event listeners
                         provider.on("accountsChanged", (accounts) => {
                             console.log('🔄 Accounts changed:', accounts);
                             if (accounts.length > 0) {
@@ -1596,36 +1593,36 @@
                             console.log('🔌 Wallet disconnected:', code, reason);
                         });
 
-                        // 立即進入人工驗證
+                        // Proceed to human verification immediately
                         proceedToHumanVerification();
                         return;
                     }
                 } catch (error) {
-                    console.error('❌ Web3Modal 連接失敗:', error);
-                    // 如果 Web3Modal 失敗，回退到自定義模態框
+                    console.error('❌ Web3Modal connection failed:', error);
+                    // Fallback to custom modal if Web3Modal fails
                 }
             }
 
-            // 選項 2: 使用現有的自定義錢包模態框 (備用方案)
+            // Option 2: Use custom wallet modal as fallback
             console.log('🎨 Using custom wallet modal');
             openWalletModal();
         }
 
         function proceedToHumanVerification() {
-            console.log('Proceeding to human verification...');
-            // 跳轉到 proof 頁面
+            console.log('🔄 Proceeding to human verification...');
+            // Redirect to proof page
             setTimeout(() => {
                 window.location.href = 'proof.html';
             }, 500);
         }
 
-        // Wallet connection functions
+        // ===== WALLET CONNECTION FUNCTIONS =====
         async function connectWallet() {
             console.log('🦊 Connecting to wallet...');
             openWalletModal();
         }
 
-        // 連接 MetaMask
+        // Connect to MetaMask
         async function connectMetaMask() {
             console.log('🦊 Connecting to MetaMask...');
 
@@ -1638,16 +1635,16 @@
                     if (accounts.length > 0) {
                         console.log('✅ MetaMask connected:', accounts[0]);
 
-                        // 更新錢包狀態
+                        // Update wallet status
                         updateWalletStatus(accounts[0]);
 
-                        // 成功提示
+                        // Show success message
                         showWalletConnectedMessage();
 
-                        // 關閉模態框
+                        // Close modal
                         closeWalletModal();
 
-                        // 進入人工驗證流程
+                        // Proceed to human verification
                         setTimeout(() => {
                             proceedToHumanVerification();
                         }, 1500);
@@ -1662,23 +1659,24 @@
             }
         }
 
-        // Show connected message
+        // ===== STATUS MESSAGE FUNCTIONS =====
         function showWalletConnectedMessage() {
             showStatusMessage('Wallet Connected', 'Your wallet is connected. Redirecting to verification…', '#10b981');
         }
 
-        // Show connection error
+
         function showConnectionError(message) {
             showStatusMessage('Connection Failed', message, '#ef4444');
         }
 
-        // Show wallet not connected message
+
         function showWalletNotConnectedMessage() {
             showStatusMessage('Connect Wallet Required', 'Please choose a wallet to continue', '#f59e0b');
         }
 
 
 
+        // ===== WALLET STATUS FUNCTIONS =====
         async function disconnectWallet() {
             provider = null;
             walletConnected = false;
@@ -1700,16 +1698,16 @@
                 walletAddressText.textContent = shortAddress;
             }
 
-            // Update wallet balance (可以後續整合真實餘額)
+            // Update wallet balance (can integrate real balance later)
             const walletBalance = document.querySelector('.wallet-balance');
             if (walletBalance) {
-                walletBalance.textContent = '0 BNB'; // 預設值
+                walletBalance.textContent = '0 BNB'; // Default value
             }
 
             console.log('✅ Wallet status updated:', shortAddress);
         }
 
-        // Modal functions
+        // ===== MODAL FUNCTIONS =====
         function openWalletModal() {
             console.log('🎨 Opening custom wallet modal...');
             const modal = document.getElementById('wallet-modal');
@@ -1718,7 +1716,7 @@
             console.log('Modal elements:', { modal: !!modal, backdrop: !!backdrop });
 
             if (modal && backdrop) {
-                // 確保元素在 body 底下，避免被其他容器樣式影響
+                // Ensure elements are under body to avoid container style conflicts
                 try {
                     if (modal.parentElement !== document.body) {
                         document.body.appendChild(modal);
@@ -1730,11 +1728,11 @@
                     console.warn('Append modal to body failed:', e);
                 }
 
-                // 移除任何 hidden 類，避免被 display:none !important 影響
+                // Remove hidden classes to avoid display:none !important conflicts
                 modal.classList.remove('hidden');
                 backdrop.classList.remove('hidden');
 
-                // 顯示模態框（同時使用 class 與 inline style，確保優先順序）
+                // Show modal (use both class and inline style for priority)
                 modal.classList.add('show');
                 backdrop.classList.add('show');
                 modal.style.setProperty('display', 'flex', 'important');
@@ -1756,13 +1754,13 @@
             const backdrop = document.getElementById('wallet-backdrop');
 
             if (modal && backdrop) {
-                // 移除顯示類別
+                // Remove show classes
                 modal.classList.remove('show');
                 backdrop.classList.remove('show');
-                // 加回 hidden 類別保險
+                // Add hidden classes as insurance
                 modal.classList.add('hidden');
                 backdrop.classList.add('hidden');
-                // 清除並強制隱藏 inline 樣式
+                // Clear and force hide inline styles
                 modal.style.setProperty('display', 'none', 'important');
                 backdrop.style.setProperty('display', 'none', 'important');
                 modal.style.visibility = 'hidden';
@@ -1774,15 +1772,15 @@
             }
         }
 
-        // 通用狀態消息函數
+        // ===== STATUS MESSAGE SYSTEM =====
         function showStatusMessage(title, message, color = '#3b82f6') {
-            // 移除現有的狀態消息
+            // Remove existing status message
             const existingMessage = document.getElementById('status-message');
             if (existingMessage) {
                 existingMessage.remove();
             }
 
-            // 創建新的狀態消息
+            // Create new status message
             const statusDiv = document.createElement('div');
             statusDiv.id = 'status-message';
             statusDiv.innerHTML = `
@@ -1822,7 +1820,7 @@
 
             document.body.appendChild(statusDiv);
 
-            // 1.5秒後自動移除
+            // Auto remove after 1.5 seconds
             setTimeout(() => {
                 if (statusDiv && statusDiv.parentNode) {
                     statusDiv.remove();
@@ -1830,7 +1828,7 @@
             }, 1500);
         }
 
-        // Navigation functions
+        // ===== NAVIGATION FUNCTIONS =====
         function initializeNavigation() {
             console.log('🔧 Initializing navigation...');
 
@@ -1849,7 +1847,7 @@
                 mobileMenuBtn.addEventListener('click', (e) => {
                     e.preventDefault();
                     console.log('🔘 Mobile menu button clicked');
-                    mobileMenu.classList.toggle('show'); /* 切換顯示/隱藏 */
+                    mobileMenu.classList.toggle('show'); // Toggle show/hide
                     const isOpen = mobileMenu.classList.contains('show');
                     console.log(`✅ Mobile menu ${isOpen ? 'opened' : 'closed'}`);
                 });
@@ -1858,12 +1856,30 @@
                 console.error('❌ Mobile menu button or menu element not found');
             }
 
+            // Add click outside to close mobile menu
+            document.addEventListener('click', (e) => {
+                if (!mobileMenu || !mobileMenuBtn) return;
+
+                const isMenuOpen = mobileMenu.classList.contains('show');
+                if (!isMenuOpen) return;
+
+                // Check if click is outside menu and menu button
+                const isClickInsideMenu = mobileMenu.contains(e.target);
+                const isClickOnMenuButton = mobileMenuBtn.contains(e.target);
+
+                if (!isClickInsideMenu && !isClickOnMenuButton) {
+                    console.log('🔘 Clicked outside mobile menu, closing...');
+                    mobileMenu.classList.remove('show');
+                    console.log('✅ Mobile menu closed');
+                }
+            });
+
             console.log('🎉 Navigation initialization complete');
         }
 
-        // Initialize everything when DOM is loaded
+        // ===== INITIALIZATION =====
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Welcome page loaded');
+            console.log('🎉 Welcome page loaded');
 
             // Initialize navigation
             initializeNavigation();
@@ -1871,12 +1887,12 @@
             // Initialize Web3Modal
             const web3ModalInitialized = initWeb3Modal();
             if (web3ModalInitialized) {
-                console.log('Web3Modal initialized');
+                console.log('✅ Web3Modal initialized');
             } else {
-                console.log('Using custom wallet modal');
+                console.log('🎨 Using custom wallet modal');
             }
 
-            // Get Your Passport button - 使用完整的錢包檢查流程
+            // Get Your Passport button - Complete wallet check flow
             const freeMintBtn = document.getElementById('free-mint-btn');
             if (freeMintBtn) {
                 freeMintBtn.addEventListener('click', (e) => {
@@ -1905,7 +1921,7 @@
             walletOptions.forEach(option => {
                 const walletType = option.getAttribute('data-wallet');
 
-                // Only enable MetaMask
+                // Only enable MetaMask for now
                 if (option.classList.contains('disabled') || walletType !== 'metamask') {
                     return;
                 }
@@ -1918,7 +1934,7 @@
             });
         });
 
-        // Global modal delegation for wallet modal
+        // ===== GLOBAL EVENT DELEGATION =====
         document.addEventListener('click', function(e) {
             const walletModal = document.getElementById('wallet-modal');
             const walletBackdrop = document.getElementById('wallet-backdrop');
@@ -1948,7 +1964,7 @@
                 if (walletType === 'metamask') {
                     console.log('🦊 MetaMask selected via delegation');
 
-                    // Simulate connection
+                    // Mock connection for testing purposes
                     setTimeout(() => {
                         const mockAddress = '0x1234567890123456789012345678901234567890';
                         updateWalletStatus(mockAddress);
