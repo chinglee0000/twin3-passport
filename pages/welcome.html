@@ -1916,17 +1916,7 @@
                 const walletType = walletOption.getAttribute('data-wallet');
                 if (walletType === 'metamask') {
                     console.log('🦊 MetaMask selected via delegation');
-
-                    // Mock connection for testing purposes
-                    setTimeout(() => {
-                        const mockAddress = '0x1234567890123456789012345678901234567890';
-                        updateWalletStatus(mockAddress);
-                        closeWalletModal();
-
-                        setTimeout(() => {
-                            window.location.href = 'proof.html';
-                        }, 1000);
-                    }, 2000);
+                    connectMetaMask();
                 }
             }
         });
