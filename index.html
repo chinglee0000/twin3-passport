@@ -1,116 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Twin3 Passport Dashboard</title>
-    <meta name="description" content="Your AI-Human Intelligence Fusion Dashboard - Track your Twin Matrix Score, Humanity Trust Score, and Profession Traits" />
-    <meta name="keywords" content="AI, Human Intelligence, Dashboard, Twin3, Passport, Scores, Professional Development" />
-    
-    <!-- Preconnect to improve performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
-    <!-- Custom fonts for better typography -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>twin3 Passport - Redirecting...</title>
     <style>
-      /* Loading screen styles */
-      #loading-screen {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #0f0f0f 100%);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-        transition: opacity 0.5s ease-out;
-      }
-      
-      .loading-logo {
-        width: 80px;
-        height: 80px;
-        border: 4px solid #3b82f6;
-        border-top: 4px solid transparent;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-        margin-bottom: 20px;
-      }
-      
-      .loading-text {
-        color: #ffffff;
-        font-family: 'Inter', sans-serif;
-        font-size: 18px;
-        font-weight: 600;
-        margin-bottom: 10px;
-      }
-      
-      .loading-subtitle {
-        color: #9ca3af;
-        font-family: 'Inter', sans-serif;
-        font-size: 14px;
-        font-weight: 400;
-      }
-      
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-      }
-      
-      /* Hide loading screen when app is ready */
-      .app-loaded #loading-screen {
-        opacity: 0;
-        pointer-events: none;
-      }
-      
-      /* Base styles */
-      body {
-        margin: 0;
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        background-color: #0f0f0f;
-        color: #ffffff;
-        overflow-x: hidden;
-      }
-      
-      #root {
-        min-height: 100vh;
-      }
+        body {
+            font-family: 'Kanit', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0a0a;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .loading {
+            text-align: center;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
-  </head>
-  <body>
-    <!-- Loading Screen -->
-    <div id="loading-screen">
-      <div class="loading-logo"></div>
-      <div class="loading-text">Twin3 Passport</div>
-      <div class="loading-subtitle">Loading your dashboard...</div>
+</head>
+<body>
+    <div class="loading">
+        <div class="spinner"></div>
+        <p>Redirecting to twin3 Passport...</p>
     </div>
-    
-    <!-- Main App Container -->
-    <div id="root"></div>
-    
-    <script type="module" src="/src/main.tsx"></script>
-    
-    <!-- Remove loading screen when app is loaded -->
+
     <script>
-      window.addEventListener('load', function() {
-        setTimeout(function() {
-          document.body.classList.add('app-loaded');
-          setTimeout(function() {
-            const loadingScreen = document.getElementById('loading-screen');
-            if (loadingScreen) {
-              loadingScreen.remove();
-            }
-          }, 500);
-        }, 1000);
-      });
+        // Redirect to welcome page
+        window.location.href = 'pages/welcome.html';
     </script>
-  </body>
+</body>
 </html>

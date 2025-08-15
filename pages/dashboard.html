@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>twin3 Passport - User Information</title>
+    <title>twin3 Passport - Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -313,103 +313,86 @@
             }
         }
 
-        /* Form styles */
-        .input-field {
+        /* Dashboard specific styles */
+        .metric-card {
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 12px 16px;
-            color: var(--text-primary);
-            font-family: 'Kanit', sans-serif;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .metric-value {
+            font-size: 2rem;
             font-weight: 300;
-            transition: all 0.2s ease;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 200;
+        }
+
+        .user-info-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+            font-weight: 300;
+            color: white;
+        }
+
+        .user-name {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .user-career {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 200;
+            text-transform: capitalize;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
             width: 100%;
         }
 
-        .input-field:focus {
-            outline: none;
-            border-color: rgba(255, 255, 255, 0.4);
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .input-field::placeholder {
-            color: var(--text-muted);
-        }
-
-        .input-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .input-clear {
-            position: absolute;
-            right: 12px;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            padding: 4px;
-            border-radius: 50%;
-            display: none;
-            transition: all 0.2s ease;
-        }
-
-        .input-clear:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-primary);
-        }
-
-        .input-wrapper.has-value .input-clear {
-            display: block;
-        }
-
-        .input-wrapper:hover .input-clear,
-        .input-field:focus + .input-clear {
-            display: block;
-        }
-
-        /* Career badge styles */
-        .career-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 0.75rem;
-        }
-
-        @media (max-width: 768px) {
-            .career-grid {
-                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-                gap: 0.5rem;
+        @media (min-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
-        .career-badge {
-            padding: 0.5rem 0.75rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            color: rgba(255, 255, 255, 0.7);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.875rem;
-            font-weight: 300;
-            text-align: center;
-            justify-content: center;
-        }
-
-        .career-badge:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.3);
-            color: white;
-        }
-
-        .career-badge.selected {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: white;
-            color: white;
+        @media (min-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
 
         /* Icon styles */
@@ -425,7 +408,7 @@
     <nav class="nav-container">
         <div class="nav-content">
             <a href="welcome.html" class="nav-logo">
-                <img src="assets/img/logo_dark.svg" alt="twin3" style="width: 32px; height: 32px;">
+                <img src="../assets/img/logo_dark.svg" alt="twin3" style="width: 32px; height: 32px;">
                 <span style="font-weight: 300;">twin3.ai</span>
             </a>
             
@@ -447,7 +430,7 @@
                 <span class="material-icons">menu</span>
             </button>
         </div>
-
+        
         <!-- Mobile Menu -->
         <div class="mobile-menu" id="mobile-menu">
             <button class="mobile-menu-close" id="mobile-menu-close">
@@ -455,49 +438,62 @@
             </button>
             <div class="mobile-menu-links">
                 <a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" rel="noreferrer noopener" class="mobile-menu-link">WHITEPAPER</a>
-                <a href="https://twin3.ai/dashboard" class="mobile-menu-link">MY TWIN</a>
+                <span class="mobile-menu-link mobile-menu-link-focused" aria-current="page">MY TWIN</span>
                 <a href="welcome.html" class="mobile-menu-link">PASSPORT</a>
             </div>
         </div>
     </nav>
 
-    <!-- User Info Page -->
-    <div id="user-info-page" class="relative min-h-screen">
+    <!-- Dashboard Page -->
+    <div id="dashboard-page" class="relative min-h-screen">
         <!-- Video Background -->
         <video class="page-video-background" autoplay loop muted playsinline style="z-index: 1;">
-            <source src="assets/img/v2.mp4" type="video/mp4">
+            <source src="../assets/img/v2.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
 
-        <!-- User Info Content -->
+        <!-- Dashboard Content -->
         <div class="page-content-container">
             <!-- Unified Content Block -->
             <div class="page-unified-content">
                 <!-- Left Content (Title + Description) -->
                 <div class="page-left-content">
                     <h1 class="page-main-title text-white text-4xl md:text-6xl lg:text-7xl leading-tight mb-4">
-                        Your<br>
-                        Details
+                        Welcome<br>
+                        <span id="user-display-name">Friend</span>
                     </h1>
-                    <p class="page-subtitle text-[#888888] text-xl md:text-2xl lg:text-3xl mb-8">Please provide your 暱稱 and careers</p>
-                    <p class="page-description text-gray-300 text-base md:text-lg mb-6">Pick a nickname and select 1–3 careers that describe you. This helps personalize your twin3 experience.</p>
+                    <p class="page-subtitle text-[#888888] text-xl md:text-2xl lg:text-3xl mb-8">Your twin3 Passport is ready!</p>
+                    <p class="page-description text-gray-300 text-base md:text-lg mb-6">
+                        Congratulations! You've successfully completed the verification process.<br>
+                        Your digital identity is now secured and ready for the twin3 ecosystem.
+                    </p>
                 </div>
 
-                <!-- Right Action (Form) -->
+                <!-- Right Action (Dashboard Info) -->
                 <div class="page-right-action">
-                    <div class="w-full space-y-6">
-                        <div>
-                            <label class="text-white text-sm mb-2 block" style="font-weight:300;">Nickname</label>
-                            <div class="input-wrapper" id="username-wrapper">
-                                <input type="text" id="username" class="input-field w-full" placeholder="Your nickname" />
-                                <button type="button" class="input-clear" id="username-clear"><span class="material-icons icon-sm">close</span></button>
-                            </div>
+                    <!-- User Info Card -->
+                    <div class="user-info-card mb-6">
+                        <div class="user-avatar" id="user-avatar">
+                            F
                         </div>
-                        <div>
-                            <label class="text-white text-sm mb-2 block" style="font-weight:300;">Select 1–3 careers</label>
-                            <div id="career-grid" class="career-grid"></div>
+                        <div class="user-name" id="user-name">Friend</div>
+                        <div class="user-career" id="user-career">Developer</div>
+                    </div>
+
+                    <!-- Metrics Grid -->
+                    <div class="dashboard-grid">
+                        <div class="metric-card">
+                            <div class="metric-value">1</div>
+                            <div class="metric-label">Passport Level</div>
                         </div>
-                        <button id="continue-btn" class="page-action-button w-full px-4 py-3 border border-[#373737] text-black bg-white rounded-lg hover:bg-transparent hover:text-white hover:border-white transition duration-300" disabled>Continue</button>
+                        <div class="metric-card">
+                            <div class="metric-value">100%</div>
+                            <div class="metric-label">Verification</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">Active</div>
+                            <div class="metric-label">Status</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -510,7 +506,7 @@
                 <div class="w-full xl:w-1/5 lg:w-[13%] text-center lg:text-left">
                     <div class="flex flex-col justify-center lg:justify-start items-center pt-6 lg:pt-0" style="gap: 4px;">
                         <div class="flex items-center">
-                            <img src="assets/img/logo_dark.svg" alt="Logo" style="width: 40px; height: 40px;">
+                            <img src="../assets/img/logo_dark.svg" alt="Logo" style="width: 40px; height: 40px;">
                         </div>
                         <span class="text-sm md:text-base" style="font-weight: 300; color: #888888;">twin3.ai</span>
                     </div>
@@ -524,14 +520,14 @@
                         <div class="flex justify-center lg:justify-start space-x-4">
                             <a href="https://x.com/twin3_ai" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
                                 <div class="w-6 h-6 flex items-center justify-center" style="padding: 2px;">
-                                    <img src="assets/img/X_logo.svg" alt="X (Twitter)" class="w-full h-full object-contain">
+                                    <img src="../assets/img/X_logo.svg" alt="X (Twitter)" class="w-full h-full object-contain">
                                 </div>
                             </a>
                             <a href="https://opensea.io/collection/twin3" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
-                                <img src="assets/img/opensea_logo.svg" alt="OpenSea" class="w-6 h-6">
+                                <img src="../assets/img/opensea_logo.svg" alt="OpenSea" class="w-6 h-6">
                             </a>
                             <a href="https://warpcast.com/twin3.eth" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
-                                <img src="assets/img/farcaster_logo.svg" alt="Warpcast" class="w-6 h-6">
+                                <img src="../assets/img/farcaster_logo.svg" alt="Warpcast" class="w-6 h-6">
                             </a>
                         </div>
                     </div>
@@ -570,88 +566,149 @@
 
     <script>
         // Application state
-        let currentStep = 'user_info';
-        let userData = { username: '', career: '' };
-        let selectedCareers = new Set();
+        let currentStep = 'dashboard';
+        let userData = { username: 'Friend', career: 'developer' };
 
-        // Career data with icons (完整的 14 個職業)
-        const professionList = [
-            'Artist', 'Athlete', 'Community Builder', 'Creative Content Maker', 'Developer',
-            'Educator', 'Entrepreneur', 'Gamer', 'Healthcare Professional', 'Research & Innovation Expert',
-            'Social Influencer', 'Travel Explorer', 'Web3 Network Pioneer', 'Writer'
-        ];
-
-        const professionIcons = {
-            'Artist': 'brush',
-            'Athlete': 'emoji_events',
-            'Community Builder': 'people',
-            'Creative Content Maker': 'palette',
-            'Developer': 'code',
-            'Educator': 'school',
-            'Entrepreneur': 'business_center',
-            'Gamer': 'sports_esports',
-            'Healthcare Professional': 'local_hospital',
-            'Research & Innovation Expert': 'psychology',
-            'Social Influencer': 'groups',
-            'Travel Explorer': 'explore',
-            'Web3 Network Pioneer': 'language',
-            'Writer': 'edit'
+        // Career data mapping
+        const careerData = {
+            'developer': {
+                title: 'Developer',
+                description: 'Building the future with code',
+                icon: 'code',
+                color: '#3b82f6'
+            },
+            'artist': {
+                title: 'Artist',
+                description: 'Creating beauty through art',
+                icon: 'brush',
+                color: '#8b5cf6'
+            },
+            'gamer': {
+                title: 'Gamer',
+                description: 'Mastering virtual worlds',
+                icon: 'sports_esports',
+                color: '#10b981'
+            },
+            'creative': {
+                title: 'Creative Content Maker',
+                description: 'Crafting engaging content',
+                icon: 'palette',
+                color: '#f59e0b'
+            },
+            'researcher': {
+                title: 'Research & Innovation Expert',
+                description: 'Pushing boundaries of knowledge',
+                icon: 'psychology',
+                color: '#ef4444'
+            },
+            'web3': {
+                title: 'Web3 Network Pioneer',
+                description: 'Building decentralized future',
+                icon: 'language',
+                color: '#06b6d4'
+            },
+            'influencer': {
+                title: 'Social Influencer',
+                description: 'Inspiring communities',
+                icon: 'groups',
+                color: '#ec4899'
+            },
+            'athlete': {
+                title: 'Athlete',
+                description: 'Achieving peak performance',
+                icon: 'emoji_events',
+                color: '#f97316'
+            },
+            'community': {
+                title: 'Community Builder',
+                description: 'Connecting people together',
+                icon: 'people',
+                color: '#84cc16'
+            },
+            'educator': {
+                title: 'Educator',
+                description: 'Sharing knowledge and wisdom',
+                icon: 'school',
+                color: '#6366f1'
+            },
+            'entrepreneur': {
+                title: 'Entrepreneur',
+                description: 'Building innovative businesses',
+                icon: 'business_center',
+                color: '#14b8a6'
+            },
+            'healthcare': {
+                title: 'Healthcare Professional',
+                description: 'Caring for human wellbeing',
+                icon: 'local_hospital',
+                color: '#dc2626'
+            },
+            'explorer': {
+                title: 'Travel Explorer',
+                description: 'Discovering new horizons',
+                icon: 'explore',
+                color: '#059669'
+            },
+            'writer': {
+                title: 'Writer',
+                description: 'Crafting stories and ideas',
+                icon: 'edit',
+                color: '#7c3aed'
+            }
         };
 
-        const MAX_BADGES = 3;
-
-        // DOM elements
-        const username = document.getElementById('username');
-        const usernameWrapper = document.getElementById('username-wrapper');
-        const usernameClear = document.getElementById('username-clear');
-        const careerGrid = document.getElementById('career-grid');
-        const continueBtn = document.getElementById('continue-btn');
-
-        // Initialize career grid
-        function renderBadges() {
-            if (!careerGrid) return;
-            careerGrid.innerHTML = '';
-
-            // Ensure alphabetical order
-            const sorted = [...professionList].sort((a, b) => a.localeCompare(b));
-            sorted.forEach(name => {
-                const div = document.createElement('div');
-                div.className = 'career-badge';
-                div.dataset.value = name;
-                div.innerHTML = `<span class="material-icons icon-sm">${professionIcons[name]}</span><span>${name}</span>`;
-                div.addEventListener('click', () => toggleBadge(div));
-                careerGrid.appendChild(div);
-            });
-        }
-
-        // Toggle career selection
-        function toggleBadge(badge) {
-            const name = badge.dataset.value;
-            if (badge.classList.contains('selected')) {
-                badge.classList.remove('selected');
-                selectedCareers.delete(name);
-            } else {
-                if (selectedCareers.size >= MAX_BADGES) return; // Limit to 3
-                badge.classList.add('selected');
-                selectedCareers.add(name);
-            }
-            validateUserInfo();
-        }
-
-        // Validate form
-        function validateUserInfo() {
-            const name = username ? username.value.trim() : '';
-            continueBtn.disabled = !(name && selectedCareers.size >= 1 && selectedCareers.size <= MAX_BADGES);
-        }
-
-        // Update clear button visibility
-        function updateClearButton() {
-            if (username && usernameWrapper && usernameClear) {
-                if (username.value.trim()) {
-                    usernameWrapper.classList.add('has-value');
-                } else {
-                    usernameWrapper.classList.remove('has-value');
+        // Load user data from localStorage or URL params
+        function loadUserData() {
+            // Try to get from localStorage first
+            const stored = localStorage.getItem('twin3_user_data');
+            if (stored) {
+                try {
+                    userData = JSON.parse(stored);
+                } catch (e) {
+                    console.log('Failed to parse stored user data');
                 }
+            }
+
+            // Override with URL params if present
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('username')) {
+                userData.username = urlParams.get('username');
+            }
+            if (urlParams.get('career')) {
+                userData.career = urlParams.get('career');
+            }
+
+            // Fallback defaults
+            userData.username = userData.username || 'Friend';
+            userData.career = userData.career || 'developer';
+        }
+
+        // Update dashboard with user data
+        function updateDashboard() {
+            const career = careerData[userData.career] || careerData['developer'];
+
+            // Update display name in title
+            const displayName = document.getElementById('user-display-name');
+            if (displayName) {
+                displayName.textContent = userData.username;
+            }
+
+            // Update user info card
+            const userAvatar = document.getElementById('user-avatar');
+            const userName = document.getElementById('user-name');
+            const userCareer = document.getElementById('user-career');
+
+            if (userAvatar) {
+                userAvatar.textContent = userData.username.charAt(0).toUpperCase();
+                userAvatar.style.background = `linear-gradient(135deg, ${career.color}, ${career.color}80)`;
+            }
+
+            if (userName) {
+                userName.textContent = userData.username;
+            }
+
+            if (userCareer) {
+                userCareer.textContent = career.title;
             }
         }
 
@@ -715,13 +772,14 @@
 
         // Initialize everything when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('User Info page loaded');
+            console.log('Dashboard page loaded');
 
             // Initialize navigation
             initializeNavigation();
 
-            // Initialize careers
-            renderBadges();
+            // Load and display user data
+            loadUserData();
+            updateDashboard();
 
             // Show connected wallet status
             const walletStatus = document.getElementById('wallet-status');
@@ -730,63 +788,7 @@
                 walletStatus.innerHTML = '<div class="status-dot"></div><span>0x1234...7890</span>';
             }
 
-            // Username input events
-            if (username && usernameWrapper && usernameClear) {
-                username.addEventListener('input', () => {
-                    updateClearButton();
-                    validateUserInfo();
-                });
-
-                usernameClear.addEventListener('click', () => {
-                    username.value = '';
-                    username.focus();
-                    updateClearButton();
-                    validateUserInfo();
-                });
-
-                updateClearButton();
-            }
-
-            // Continue button
-            continueBtn.addEventListener('click', () => {
-                if (!continueBtn.disabled) {
-                    // Save user data
-                    userData.username = username.value.trim() || 'Friend';
-                    const primary = Array.from(selectedCareers)[0] || 'Developer';
-
-                    // Map back to keys expected by dashboard
-                    const keyByName = {
-                        'Creative Content Maker': 'creative',
-                        'Developer': 'developer',
-                        'Research & Innovation Expert': 'researcher',
-                        'Web3 Network Pioneer': 'web3',
-                        'Social Influencer': 'influencer',
-                        'Gamer': 'gamer',
-                        'Artist': 'artist',
-                        'Entrepreneur': 'entrepreneur',
-                        'Educator': 'educator',
-                        'Healthcare Professional': 'healthcare',
-                        'Athlete': 'athlete',
-                        'Writer': 'writer',
-                        'Travel Explorer': 'explorer',
-                        'Community Builder': 'community'
-                    };
-
-                    userData.career = keyByName[primary] || 'developer';
-
-                    // Store in localStorage for dashboard
-                    localStorage.setItem('twin3_user_data', JSON.stringify(userData));
-
-                    console.log('User data saved:', userData);
-
-                    // Navigate to dashboard with URL params as backup
-                    const params = new URLSearchParams({
-                        username: userData.username,
-                        career: userData.career
-                    });
-                    window.location.href = `dashboard.html?${params.toString()}`;
-                }
-            });
+            console.log('Dashboard initialized with user data:', userData);
         });
     </script>
 </body>

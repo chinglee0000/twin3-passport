@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>twin3 Passport - Proof of Humanity</title>
+    <title>twin3 Passport - User Information</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,57 +29,69 @@
             padding: 0;
         }
 
-        /* Navigation bar styles */
-        .nav-bar {
+        /* Navigation Styles */
+        .nav-container {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(8px);
-            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            padding: 1rem 1rem;
-        }
-
-        /* Responsive padding matching twin3_backup-main */
-        @media (min-width: 768px) {
-            .nav-bar {
-                padding: 1rem 2rem;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .nav-bar {
-                padding: 1rem 4rem;
-            }
+            align-items: center;
         }
 
         .nav-logo {
             display: flex;
             align-items: center;
+            gap: 0.5rem;
+            color: white;
             text-decoration: none;
+            font-weight: 300;
         }
 
-        .nav-logo img {
-            width: 2.5rem;
-            height: 2.5rem;
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-weight: 300;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: white;
+        }
+
+        .nav-actions {
+            display: none;
+            align-items: center;
         }
 
         @media (min-width: 768px) {
-            .nav-logo img {
-                width: 2.5rem;
-                height: 2.5rem;
+            .nav-actions {
+                display: flex;
             }
         }
 
         .mobile-menu-btn {
             display: block;
-            color: white;
             background: none;
             border: none;
+            color: white;
             cursor: pointer;
             padding: 0.5rem;
         }
@@ -110,7 +122,14 @@
         }
 
         .mobile-menu-close {
-            display: none;
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.5rem;
         }
 
         .mobile-menu-links {
@@ -148,96 +167,32 @@
             backdrop-filter: blur(6px);
         }
 
-        .nav-actions {
-            display: none;
-            align-items: center;
-        }
-
-        @media (min-width: 768px) {
-            .nav-actions {
-                display: flex;
-            }
-        }
-
-        .nav-link {
-            display: block;
-            padding: 0.5rem 1rem;
-            color: white;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            font-weight: 200;
-        }
-
-        .nav-link:hover {
-            background: #ffffff;
-            color: #000000;
-        }
-
-        /* Focused/current page state: grey text, not clickable */
-        .nav-link-focused,
-        .nav-link[aria-current="page"] {
-            color: #9CA3AF;
-            pointer-events: none;
-            cursor: default;
-            background: transparent;
-        }
-        .nav-link-focused:hover,
-        .nav-link[aria-current="page"]:hover {
-            background: transparent;
-            color: #9CA3AF;
-        }
-
-        .wallet-button {
-            display: flex;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 0.5rem;
-            padding: 0.5rem 1rem;
-            color: white;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .wallet-button:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .wallet-balance {
-            margin-right: 0.5rem;
-            font-size: 0.875rem;
-            font-weight: 200;
-        }
-
-        .wallet-address {
+        /* Wallet connection styles */
+        .wallet-status {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            padding: 0.25rem 0.5rem;
+            padding: 0.5rem 1rem;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 0.375rem;
-        }
-
-        .wallet-avatar {
-            width: 1.5rem;
-            height: 1.5rem;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-        }
-
-        .wallet-address-text {
+            border-radius: 20px;
             font-size: 0.875rem;
-            font-weight: 200;
         }
 
-        .dropdown-icon {
-            width: 0.875rem;
-            height: 0.4375rem;
-            margin-left: 0.25rem;
+        .wallet-status.connected {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .wallet-status.disconnected {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
         }
 
         /* Page video background */
@@ -257,11 +212,10 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            padding: 1.25rem;
-            padding-top: 6rem; /* Add space for fixed nav bar */
-            padding-bottom: 2rem; /* Add space for footer */
+            align-items: center;
+            padding: 2rem;
+            padding-top: 6rem;
             max-width: 1400px;
             margin: 0 auto;
             gap: 2rem;
@@ -321,7 +275,7 @@
             font-weight: 300;
         }
 
-        /* 響應式設計 */
+        /* Responsive design */
         @media (min-width: 1024px) {
             .page-content-container {
                 flex-direction: row;
@@ -359,154 +313,139 @@
             }
         }
 
-        /* Force center left-content around ~1000px */
-        @media (max-width: 1100px) and (min-width: 768px) {
-            .unified-content-block { align-items: center; justify-content: center; }
-            .page-left-content { margin-left: auto; margin-right: auto; text-align: center; align-items: center; }
-        }
-
-        /* Responsive layout for verification steps to prevent squishing */
-        @media (max-width: 768px) {
-            .verification-steps { gap: 0.75rem; }
-            .verification-step { padding: 1rem; }
-            .step-content { flex-direction: column; align-items: stretch; }
-            .step-info { width: 100%; align-items: flex-start; }
-            .step-content .page-action-button { margin-left: 0; margin-top: 12px; align-self: flex-start; }
-        }
-
-        /* Slightly earlier wrap on tablets */
-        @media (max-width: 920px) and (min-width: 769px) {
-            .step-content { flex-wrap: wrap; row-gap: 10px; }
-            .step-info { min-width: 260px; }
-            .step-content .page-action-button { margin-left: 16px; }
-        }
-
-        /* Proof page specific styles */
-        .verification-steps {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
+        /* Form styles */
+        .input-field {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: var(--text-primary);
+            font-family: 'Kanit', sans-serif;
+            font-weight: 300;
+            transition: all 0.2s ease;
             width: 100%;
         }
 
-        .verification-step {
+        .input-field:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .input-field::placeholder {
+            color: var(--text-muted);
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-clear {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 50%;
+            display: none;
+            transition: all 0.2s ease;
+        }
+
+        .input-clear:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        .input-wrapper.has-value .input-clear {
+            display: block;
+        }
+
+        .input-wrapper:hover .input-clear,
+        .input-field:focus + .input-clear {
+            display: block;
+        }
+
+        /* Career badge styles */
+        .career-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .career-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 0.5rem;
+            }
+        }
+
+        .career-badge {
+            padding: 0.5rem 0.75rem;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .verification-step:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .verification-step.completed {
-            background: rgba(34, 197, 94, 0.1);
-            border-color: rgba(34, 197, 94, 0.3);
-        }
-
-        .step-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-        }
-
-        .step-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .step-number {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            font-weight: 500;
-        }
-
-        .step-text {
-            font-size: 1rem;
-            font-weight: 400;
-        }
-
-        .step-subtext {
-            color: #9CA3AF;
-            font-size: 12px;
-            font-weight: 200;
-            padding-left: 2px;
-        }
-
-        .start-btn {
-            background: white;
-            color: black;
-            border: 1px solid #373737;
-            padding: 0.75rem 1.5rem;
             border-radius: 8px;
-            font-weight: 300;
+            color: rgba(255, 255, 255, 0.7);
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Kanit', sans-serif;
-        }
-
-        .start-btn:hover:not(:disabled) {
-            background: transparent;
-            color: white;
-            border-color: white;
-        }
-
-        .start-btn:disabled {
-            background: rgba(255, 255, 255, 0.1);
-            color: #666666;
-            border-color: rgba(255, 255, 255, 0.2);
-            cursor: not-allowed;
-        }
-
-        .step-status {
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            color: #22c55e;
-            font-weight: 500;
+            font-size: 0.875rem;
+            font-weight: 300;
+            text-align: center;
+            justify-content: center;
         }
 
-        .step-status.completed {
-            color: #22c55e;
+        .career-badge:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        .career-badge.selected {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: white;
+            color: white;
+        }
+
+        /* Icon styles */
+        .icon-sm {
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
         }
     </style>
 </head>
 <body>
-    <!-- Global Navigation Bar - 全域導航 -->
-    <nav id="global-nav" class="nav-bar">
-        <a href="https://twin3.ai" class="nav-logo">
-            <div class="flex items-center">
-                <img src="assets/img/logo_dark.svg" alt="Logo" class="w-10 h-10 md:w-10 md:h-10">
-            </div>
-        </a>
-
-        <button class="mobile-menu-btn" id="mobile-menu-btn">
-            <span class="material-icons">menu</span>
-        </button>
-
-        <!-- Desktop navigation -->
-        <div class="nav-actions">
-            <a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" rel="noreferrer noopener" class="nav-link">WHITEPAPER</a>
-            <a class="nav-link" href="https://twin3.ai/dashboard">MY TWIN</a>
-            <span class="nav-link nav-link-focused" aria-current="page">PASSPORT</span>
-
-            <!-- Wallet button -->
-            <div class="wallet-button">
-                <div class="wallet-balance">0 BNB</div>
-                <div class="wallet-address">
-                    <div class="wallet-avatar">👽</div>
-                    <div class="wallet-address-text">0x1234...7890</div>
-                    <svg class="dropdown-icon" fill="none" height="7" width="14" xmlns="http://www.w3.org/2000/svg">
-                        <title>Dropdown</title>
-                        <path d="M12.75 1.54001L8.51647 5.0038C7.77974 5.60658 6.72026 5.60658 5.98352 5.0038L1.75 1.54001" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
-                    </svg>
+    <!-- Navigation -->
+    <nav class="nav-container">
+        <div class="nav-content">
+            <a href="welcome.html" class="nav-logo">
+                <img src="../assets/img/logo_dark.svg" alt="twin3" style="width: 32px; height: 32px;">
+                <span style="font-weight: 300;">twin3.ai</span>
+            </a>
+            
+            <div class="nav-links">
+                <a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" class="nav-link">WHITEPAPER</a>
+                <a href="dashboard.html" class="nav-link">MY TWIN</a>
+                <a href="welcome.html" class="nav-link">PASSPORT</a>
+                <a href="#" class="nav-link">登錄</a>
+                
+                <div class="nav-actions">
+                    <div class="wallet-status connected" id="wallet-status">
+                        <div class="status-dot"></div>
+                        <span>0x1234...7890</span>
+                    </div>
                 </div>
             </div>
+            
+            <button class="mobile-menu-btn" id="mobile-menu-btn">
+                <span class="material-icons">menu</span>
+            </button>
         </div>
 
         <!-- Mobile Menu -->
@@ -522,61 +461,44 @@
         </div>
     </nav>
 
-    <!-- Proof of Humanity Page -->
-    <div id="proof-page" class="relative min-h-screen">
+    <!-- User Info Page -->
+    <div id="user-info-page" class="relative min-h-screen">
         <!-- Video Background -->
         <video class="page-video-background" autoplay loop muted playsinline style="z-index: 1;">
-            <source src="assets/img/v2.mp4" type="video/mp4">
+            <source src="../assets/img/v2.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
 
-        <!-- Proof Content -->
+        <!-- User Info Content -->
         <div class="page-content-container">
             <!-- Unified Content Block -->
             <div class="page-unified-content">
                 <!-- Left Content (Title + Description) -->
                 <div class="page-left-content">
-                    <h1 class="page-main-title main-title text-white text-4xl md:text-6xl lg:text-7xl leading-tight mb-4">
-                        Proof of<br>
-                        Humanity
+                    <h1 class="page-main-title text-white text-4xl md:text-6xl lg:text-7xl leading-tight mb-4">
+                        Your<br>
+                        Details
                     </h1>
-                    <p class="page-subtitle subtitle text-[#888888] text-xl md:text-2xl lg:text-3xl mb-8">Verify your human identity</p>
-                    <p class="page-description description text-gray-300 text-base md:text-lg mb-6">
-                        Complete at least one verification method to prove you're human.<br>
-                        Choose from reCAPTCHA or biometric authentication.
-                    </p>
+                    <p class="page-subtitle text-[#888888] text-xl md:text-2xl lg:text-3xl mb-8">Please provide your 暱稱 and careers</p>
+                    <p class="page-description text-gray-300 text-base md:text-lg mb-6">Pick a nickname and select 1–3 careers that describe you. This helps personalize your twin3 experience.</p>
                 </div>
 
-                <!-- Right Action (Verification Steps) -->
+                <!-- Right Action (Form) -->
                 <div class="page-right-action">
-                    <div class="verification-steps w-full">
-                        <!-- Step 1: Google reCAPTCHA -->
-                        <div class="verification-step" id="step1">
-                            <div class="step-content flex w-full">
-                                <div class="step-info flex">
-                                    <div class="step-number w-8 h-8 text-white rounded-full flex items-center justify-center text-sm">1</div>
-                                    <span class="step-text text-white">Google reCAPTCHA v2</span>
-                                </div>
-                                <button class="page-action-button start-btn" id="step1-btn">Start</button>
+                    <div class="w-full space-y-6">
+                        <div>
+                            <label class="text-white text-sm mb-2 block" style="font-weight:300;">Nickname</label>
+                            <div class="input-wrapper" id="username-wrapper">
+                                <input type="text" id="username" class="input-field w-full" placeholder="Your nickname" />
+                                <button type="button" class="input-clear" id="username-clear"><span class="material-icons icon-sm">close</span></button>
                             </div>
                         </div>
-
-                        <!-- Step 2: Mobile Authentication -->
-                        <div class="verification-step" id="step2">
-                            <div class="step-content flex w-full">
-                                <div class="step-info flex">
-                                    <div class="step-number w-8 h-8 text-white rounded-full flex items-center justify-center text-sm">2</div>
-                                    <span class="step-text text-white">Apple/Google Biometric <span class="step-subtext" style="color:#9CA3AF; font-size:12px; font-weight:200; padding-left:2px;">(Face/Touch ID)</span></span>
-                                </div>
-                                <button class="page-action-button start-btn" id="start-mobile-auth">Start</button>
-                            </div>
+                        <div>
+                            <label class="text-white text-sm mb-2 block" style="font-weight:300;">Select 1–3 careers</label>
+                            <div id="career-grid" class="career-grid"></div>
                         </div>
+                        <button id="continue-btn" class="page-action-button w-full px-4 py-3 border border-[#373737] text-black bg-white rounded-lg hover:bg-transparent hover:text-white hover:border-white transition duration-300" disabled>Continue</button>
                     </div>
-
-                    <!-- Get Started Button -->
-                    <button id="get-started-btn" class="page-action-button action-button w-full px-4 py-3 border border-[#373737] text-black bg-white rounded-lg hover:bg-transparent hover:text-white hover:border-white transition duration-300 mt-6" disabled>
-                        Next
-                    </button>
                 </div>
             </div>
         </div>
@@ -588,7 +510,7 @@
                 <div class="w-full xl:w-1/5 lg:w-[13%] text-center lg:text-left">
                     <div class="flex flex-col justify-center lg:justify-start items-center pt-6 lg:pt-0" style="gap: 4px;">
                         <div class="flex items-center">
-                            <img src="assets/img/logo_dark.svg" alt="Logo" style="width: 40px; height: 40px;">
+                            <img src="../assets/img/logo_dark.svg" alt="Logo" style="width: 40px; height: 40px;">
                         </div>
                         <span class="text-sm md:text-base" style="font-weight: 300; color: #888888;">twin3.ai</span>
                     </div>
@@ -602,14 +524,14 @@
                         <div class="flex justify-center lg:justify-start space-x-4">
                             <a href="https://x.com/twin3_ai" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
                                 <div class="w-6 h-6 flex items-center justify-center" style="padding: 2px;">
-                                    <img src="assets/img/X_logo.svg" alt="X (Twitter)" class="w-full h-full object-contain">
+                                    <img src="../assets/img/X_logo.svg" alt="X (Twitter)" class="w-full h-full object-contain">
                                 </div>
                             </a>
                             <a href="https://opensea.io/collection/twin3" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
-                                <img src="assets/img/opensea_logo.svg" alt="OpenSea" class="w-6 h-6">
+                                <img src="../assets/img/opensea_logo.svg" alt="OpenSea" class="w-6 h-6">
                             </a>
                             <a href="https://warpcast.com/twin3.eth" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
-                                <img src="assets/img/farcaster_logo.svg" alt="Warpcast" class="w-6 h-6">
+                                <img src="../assets/img/farcaster_logo.svg" alt="Warpcast" class="w-6 h-6">
                             </a>
                         </div>
                     </div>
@@ -619,7 +541,7 @@
                         <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Resource</h5>
                         <ul class="space-y-2">
                             <li><a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" rel="noreferrer noopener" class="text-[#888888] hover:text-white text-sm lg:text-base" style="font-weight: 200;">Whitepaper</a></li>
-                            <li><a class="text-[#888888] hover:text-white text-sm lg:text-base" href="/tasks/1" style="font-weight: 200;">Tasks</a></li>
+                            <li><a class="text-[#888888] hover:text-white text-sm lg:text-base" href="dashboard.html" style="font-weight: 200;">Tasks</a></li>
                         </ul>
                     </div>
 
@@ -627,7 +549,7 @@
                     <div class="w-full md:w-1/3 text-center lg:text-left 2xl:mb-10 pt-4 md:pt-0">
                         <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Features</h5>
                         <ul class="space-y-2">
-                            <li><a class="text-[#888888] hover:text-white text-sm lg:text-base" href="/dashboard" style="font-weight: 200;">My Twin</a></li>
+                            <li><a class="text-[#888888] hover:text-white text-sm lg:text-base" href="dashboard.html" style="font-weight: 200;">My Twin</a></li>
                         </ul>
                     </div>
                 </div>
@@ -646,13 +568,92 @@
         </footer>
     </div>
 
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script>
         // Application state
-        let currentStep = 'proof';
+        let currentStep = 'user_info';
         let userData = { username: '', career: '' };
-        let step1Completed = false;
-        let step2Completed = false;
+        let selectedCareers = new Set();
+
+        // Career data with icons (完整的 14 個職業)
+        const professionList = [
+            'Artist', 'Athlete', 'Community Builder', 'Creative Content Maker', 'Developer',
+            'Educator', 'Entrepreneur', 'Gamer', 'Healthcare Professional', 'Research & Innovation Expert',
+            'Social Influencer', 'Travel Explorer', 'Web3 Network Pioneer', 'Writer'
+        ];
+
+        const professionIcons = {
+            'Artist': 'brush',
+            'Athlete': 'emoji_events',
+            'Community Builder': 'people',
+            'Creative Content Maker': 'palette',
+            'Developer': 'code',
+            'Educator': 'school',
+            'Entrepreneur': 'business_center',
+            'Gamer': 'sports_esports',
+            'Healthcare Professional': 'local_hospital',
+            'Research & Innovation Expert': 'psychology',
+            'Social Influencer': 'groups',
+            'Travel Explorer': 'explore',
+            'Web3 Network Pioneer': 'language',
+            'Writer': 'edit'
+        };
+
+        const MAX_BADGES = 3;
+
+        // DOM elements
+        const username = document.getElementById('username');
+        const usernameWrapper = document.getElementById('username-wrapper');
+        const usernameClear = document.getElementById('username-clear');
+        const careerGrid = document.getElementById('career-grid');
+        const continueBtn = document.getElementById('continue-btn');
+
+        // Initialize career grid
+        function renderBadges() {
+            if (!careerGrid) return;
+            careerGrid.innerHTML = '';
+
+            // Ensure alphabetical order
+            const sorted = [...professionList].sort((a, b) => a.localeCompare(b));
+            sorted.forEach(name => {
+                const div = document.createElement('div');
+                div.className = 'career-badge';
+                div.dataset.value = name;
+                div.innerHTML = `<span class="material-icons icon-sm">${professionIcons[name]}</span><span>${name}</span>`;
+                div.addEventListener('click', () => toggleBadge(div));
+                careerGrid.appendChild(div);
+            });
+        }
+
+        // Toggle career selection
+        function toggleBadge(badge) {
+            const name = badge.dataset.value;
+            if (badge.classList.contains('selected')) {
+                badge.classList.remove('selected');
+                selectedCareers.delete(name);
+            } else {
+                if (selectedCareers.size >= MAX_BADGES) return; // Limit to 3
+                badge.classList.add('selected');
+                selectedCareers.add(name);
+            }
+            validateUserInfo();
+        }
+
+        // Validate form
+        function validateUserInfo() {
+            const name = username ? username.value.trim() : '';
+            continueBtn.disabled = !(name && selectedCareers.size >= 1 && selectedCareers.size <= MAX_BADGES);
+        }
+
+        // Update clear button visibility
+        function updateClearButton() {
+            if (username && usernameWrapper && usernameClear) {
+                if (username.value.trim()) {
+                    usernameWrapper.classList.add('has-value');
+                } else {
+                    usernameWrapper.classList.remove('has-value');
+                }
+            }
+        }
 
         // Navigation functions
         function initializeNavigation() {
@@ -712,121 +713,81 @@
             console.log('🎉 Navigation initialization complete');
         }
 
-        // Proof of humanity functions
-        function updateNextButton() {
-            const nextBtn = document.getElementById('get-started-btn');
-            if (nextBtn) {
-                nextBtn.disabled = !(step1Completed || step2Completed);
-            }
-        }
-
-        function completeStep(stepNumber) {
-            const step = document.getElementById(`step${stepNumber}`);
-            const btn = document.getElementById(stepNumber === 1 ? 'step1-btn' : 'start-mobile-auth');
-
-            if (step && btn) {
-                step.classList.add('completed');
-                btn.innerHTML = '<span class="material-icons">check</span> Completed';
-                btn.disabled = true;
-
-                if (stepNumber === 1) {
-                    step1Completed = true;
-                } else {
-                    step2Completed = true;
-                }
-
-                updateNextButton();
-            }
-        }
-
-        // reCAPTCHA callback
-        function onRecaptchaSuccess() {
-            console.log('reCAPTCHA completed successfully');
-            completeStep(1);
-        }
-
-        // Biometric authentication simulation
-        async function startBiometricAuth() {
-            const btn = document.getElementById('start-mobile-auth');
-            if (btn) {
-                btn.textContent = 'Authenticating...';
-                btn.disabled = true;
-            }
-
-            try {
-                // Check if WebAuthn is supported
-                if (window.PublicKeyCredential) {
-                    // Simulate biometric authentication
-                    setTimeout(() => {
-                        console.log('Biometric authentication completed');
-                        completeStep(2);
-                    }, 2000);
-                } else {
-                    // Fallback for unsupported browsers
-                    setTimeout(() => {
-                        console.log('Biometric authentication simulated (fallback)');
-                        completeStep(2);
-                    }, 2000);
-                }
-            } catch (error) {
-                console.error('Biometric authentication failed:', error);
-                if (btn) {
-                    btn.textContent = 'Try Again';
-                    btn.disabled = false;
-                }
-            }
-        }
-
         // Initialize everything when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Proof page loaded');
+            console.log('User Info page loaded');
 
             // Initialize navigation
             initializeNavigation();
 
-            // Step 1: reCAPTCHA
-            const step1Btn = document.getElementById('step1-btn');
-            if (step1Btn) {
-                step1Btn.addEventListener('click', () => {
-                    // Create reCAPTCHA element
-                    const recaptchaDiv = document.createElement('div');
-                    recaptchaDiv.className = 'g-recaptcha';
-                    recaptchaDiv.setAttribute('data-sitekey', '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'); // Test key
-                    recaptchaDiv.setAttribute('data-callback', 'onRecaptchaSuccess');
+            // Initialize careers
+            renderBadges();
 
-                    // Replace button with reCAPTCHA
-                    step1Btn.parentNode.replaceChild(recaptchaDiv, step1Btn);
+            // Show connected wallet status
+            const walletStatus = document.getElementById('wallet-status');
+            if (walletStatus) {
+                walletStatus.className = 'wallet-status connected';
+                walletStatus.innerHTML = '<div class="status-dot"></div><span>0x1234...7890</span>';
+            }
 
-                    // Render reCAPTCHA
-                    if (window.grecaptcha) {
-                        grecaptcha.render(recaptchaDiv);
-                    }
+            // Username input events
+            if (username && usernameWrapper && usernameClear) {
+                username.addEventListener('input', () => {
+                    updateClearButton();
+                    validateUserInfo();
                 });
-            }
 
-            // Step 2: Biometric authentication
-            const step2Btn = document.getElementById('start-mobile-auth');
-            if (step2Btn) {
-                step2Btn.addEventListener('click', startBiometricAuth);
-            }
-
-            // Next button
-            const nextBtn = document.getElementById('get-started-btn');
-            if (nextBtn) {
-                nextBtn.addEventListener('click', () => {
-                    if (!nextBtn.disabled) {
-                        console.log('Navigating to user info page');
-                        window.location.href = 'user-info.html';
-                    }
+                usernameClear.addEventListener('click', () => {
+                    username.value = '';
+                    username.focus();
+                    updateClearButton();
+                    validateUserInfo();
                 });
+
+                updateClearButton();
             }
 
-            // Initialize button state
-            updateNextButton();
+            // Continue button
+            continueBtn.addEventListener('click', () => {
+                if (!continueBtn.disabled) {
+                    // Save user data
+                    userData.username = username.value.trim() || 'Friend';
+                    const primary = Array.from(selectedCareers)[0] || 'Developer';
+
+                    // Map back to keys expected by dashboard
+                    const keyByName = {
+                        'Creative Content Maker': 'creative',
+                        'Developer': 'developer',
+                        'Research & Innovation Expert': 'researcher',
+                        'Web3 Network Pioneer': 'web3',
+                        'Social Influencer': 'influencer',
+                        'Gamer': 'gamer',
+                        'Artist': 'artist',
+                        'Entrepreneur': 'entrepreneur',
+                        'Educator': 'educator',
+                        'Healthcare Professional': 'healthcare',
+                        'Athlete': 'athlete',
+                        'Writer': 'writer',
+                        'Travel Explorer': 'explorer',
+                        'Community Builder': 'community'
+                    };
+
+                    userData.career = keyByName[primary] || 'developer';
+
+                    // Store in localStorage for dashboard
+                    localStorage.setItem('twin3_user_data', JSON.stringify(userData));
+
+                    console.log('User data saved:', userData);
+
+                    // Navigate to dashboard with URL params as backup
+                    const params = new URLSearchParams({
+                        username: userData.username,
+                        career: userData.career
+                    });
+                    window.location.href = `dashboard.html?${params.toString()}`;
+                }
+            });
         });
-
-        // Make onRecaptchaSuccess globally available
-        window.onRecaptchaSuccess = onRecaptchaSuccess;
     </script>
 </body>
 </html>
