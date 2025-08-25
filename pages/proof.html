@@ -619,6 +619,30 @@
             padding-left: 2px;
         }
 
+        .optional-badge {
+            display: inline-block;
+            background: rgba(156, 163, 175, 0.2);
+            color: #9CA3AF;
+            font-size: 10px;
+            font-weight: 300;
+            padding: 2px 6px;
+            border-radius: 8px;
+            margin-left: 8px;
+            border: 1px solid rgba(156, 163, 175, 0.3);
+        }
+
+        .step-text-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .step-subline {
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+
         .start-btn {
             background: white;
             color: black;
@@ -739,8 +763,7 @@
                     </h1>
                     <p class="page-subtitle subtitle text-[#888888] text-xl md:text-2xl lg:text-3xl mb-8">Verify your human identity</p>
                     <p class="page-description description text-[#888888] text-base md:text-lg mb-6" style="font-weight: 200;">
-                        Complete at least one verification method to prove you're human.<br>
-                        Choose from reCAPTCHA or biometric authentication.
+                        Just a quick human verification with Google reCAPTCHA to welcome you aboard! Feel free to enable biometric authentication for extra security. Your personal data stays private – we don't store anything.
                     </p>
                 </div>
 
@@ -752,7 +775,7 @@
                             <div class="step-content flex w-full">
                                 <div class="step-info flex">
                                     <div class="step-number w-8 h-8 text-white rounded-full flex items-center justify-center text-sm">1</div>
-                                    <span class="step-text text-white">Google reCAPTCHA v2</span>
+                                    <span class="step-text text-white">Google reCAPTCHA</span>
                                 </div>
                                 <button class="page-action-button start-btn" id="step1-btn">Start</button>
                             </div>
@@ -763,7 +786,13 @@
                             <div class="step-content flex w-full">
                                 <div class="step-info flex">
                                     <div class="step-number w-8 h-8 text-white rounded-full flex items-center justify-center text-sm">2</div>
-                                    <span class="step-text text-white">Apple/Google Biometric <span class="step-subtext" style="color:#9CA3AF; font-size:12px; font-weight:200; padding-left:2px;">(Face/Touch ID)</span></span>
+                                    <div class="step-text-container">
+                                        <span class="step-text text-white">Apple/Google Biometric</span>
+                                        <div class="step-subline">
+                                            <span class="step-subtext" style="color:#9CA3AF; font-size:12px; font-weight:200;">(Face/Touch ID)</span>
+                                            <span class="optional-badge">Optional</span>
+                                        </div>
+                                    </div>
                                 </div>
                                 <button class="page-action-button start-btn" id="start-mobile-auth">Start</button>
                             </div>
@@ -925,7 +954,8 @@
         function updateNextBtn() {
             const nextBtn = document.getElementById('get-started-btn');
             if (nextBtn) {
-                nextBtn.disabled = !(step1Completed || step2Completed);
+                // Only require step1 (Google reCAPTCHA) to be completed
+                nextBtn.disabled = !step1Completed;
             }
         }
 
