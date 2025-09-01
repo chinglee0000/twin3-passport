@@ -1,0 +1,15 @@
+{
+  "liveServer.settings.donotShowInfoMsg": true,
+  "liveServer.settings.donotVerifyTags": true,
+  "cSpell.language": "en,en-US",
+  "window.zoomLevel": 1,
+  "files.autoSave": "afterDelay",
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "github.copilot.enable": {
+    "*": false
+  },
+  "chat.mcp.discovery.enabled": true,
+  "git.autofetch": true
+}

@@ -1,0 +1,1898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>twin3 Passport - Welcome</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+
+    <!-- Simplified wallet connection - no external dependencies needed -->
+
+    <style>
+        :root {
+            --primary-bg: #0a0a0a;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --text-muted: #555555;
+            --accent-color: #ffffff;
+
+            /* Tailwind backdrop-filter variables */
+            --tw-backdrop-blur: blur(4px);
+            --tw-backdrop-brightness: ;
+            --tw-backdrop-contrast: ;
+            --tw-backdrop-grayscale: ;
+            --tw-backdrop-hue-rotate: ;
+            --tw-backdrop-invert: ;
+            --tw-backdrop-opacity: ;
+            --tw-backdrop-saturate: ;
+            --tw-backdrop-sepia: ;
+        }
+
+        body {
+            font-family: 'Kanit', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--primary-bg);
+            min-height: 100vh;
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-primary {
+            border: 1px solid #373737;
+            color: black;
+            background: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 300;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: transparent;
+            color: white;
+            border-color: white;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            background: rgba(255, 255, 255, 0.1);
+            color: #666666;
+            border-color: rgba(255, 255, 255, 0.2);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 300;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .btn-secondary:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            color: var(--text-primary);
+        }
+
+        .input-field {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: var(--text-primary);
+            font-family: 'Kanit', sans-serif;
+            font-weight: 300;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .input-field::placeholder {
+            color: var(--text-muted);
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-clear {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 50%;
+            display: none;
+            transition: all 0.2s ease;
+        }
+
+        .input-clear:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        .input-wrapper:hover .input-clear,
+        .input-field:focus + .input-clear {
+            display: block;
+        }
+
+        /* Custom Select Styles */
+        .custom-select {
+            position: relative;
+            width: 100%;
+        }
+
+        .custom-select-trigger {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: var(--text-primary);
+            font-family: 'Kanit', sans-serif;
+            font-weight: 300;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .custom-select-trigger:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .custom-select-trigger.active {
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .custom-select-selected {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+        }
+
+        .custom-select-selected.has-value {
+            color: var(--text-primary);
+        }
+
+        .custom-select-options {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-top: 4px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+            backdrop-filter: blur(8px);
+        }
+
+        .custom-select-options.show {
+            display: block;
+        }
+
+        .custom-select-option {
+            padding: 12px 16px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Kanit', sans-serif;
+            font-weight: 300;
+        }
+
+        .custom-select-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .custom-select-option:first-child {
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        .custom-select-option:last-child {
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+
+        /* Navigation bar styles */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1rem;
+        }
+
+        /* Responsive padding matching twin3_backup-main */
+        @media (min-width: 768px) {
+            .nav-bar {
+                padding: 1rem 2rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .nav-bar {
+                padding: 1rem 4rem;
+            }
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .nav-logo img {
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .nav-logo img {
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+        }
+
+        .mobile-menu-btn {
+            display: block;
+            color: white;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+
+        .nav-actions {
+            display: none;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .nav-actions {
+                display: flex;
+            }
+        }
+
+        .nav-link {
+            display: block;
+            padding: 0.5rem 1rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-weight: 200;
+        }
+
+        .nav-link:hover {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        /* Focused/current page state: grey text, not clickable */
+        .nav-link-focused,
+        .nav-link[aria-current="page"] {
+            color: #9CA3AF;
+            pointer-events: none;
+            cursor: default;
+            background: transparent;
+        }
+        .nav-link-focused:hover,
+        .nav-link[aria-current="page"]:hover {
+            background: transparent;
+            color: #9CA3AF;
+        }
+
+        /* Mobile menu styles */
+        .mobile-menu {
+            position: fixed;
+            top: 80px; /* 在 nav bar 下方 */
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 1rem;
+            z-index: 1000;
+            display: none;
+            max-height: calc(100vh - 80px); /* 不超過螢幕高度 */
+            overflow-y: auto;
+        }
+
+        .mobile-menu.show {
+            display: block;
+        }
+
+        .mobile-menu-close {
+            display: none; /* 不再需要關閉按鈕 */
+        }
+
+        .mobile-menu-links {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0;
+            width: 100%;
+        }
+
+        .mobile-menu-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            font-size: 1rem; /* 根據截圖調整字體大小 */
+            font-weight: 400;
+            padding: 1rem 1rem; /* px-4 py-4 */
+            background: linear-gradient(to right, rgba(0, 0, 0, 1), transparent); /* bg-gradient-to-r from-black to-transparent */
+            backdrop-filter: blur(4px); /* backdrop-blur-sm */
+            margin: 0; /* 移除間距，讓連結緊密排列 */
+            border-radius: 0; /* 移除圓角，保持方形 */
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* 只在底部加邊框分隔 */
+        }
+
+        .mobile-menu-link:hover {
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(6px);
+        }
+
+        .mobile-menu-link-focused {
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            font-weight: 500;
+            backdrop-filter: blur(6px);
+        }
+
+        .wallet-button {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .wallet-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .wallet-balance {
+            margin-right: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 200;
+        }
+
+        .wallet-address {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 0.375rem;
+        }
+
+        .wallet-avatar {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+
+        .wallet-address-text {
+            font-size: 0.875rem;
+            font-weight: 200;
+        }
+
+        .dropdown-icon {
+            width: 0.875rem;
+            height: 0.4375rem;
+            margin-left: 0.25rem;
+        }
+
+
+
+
+
+        /* Icon styles */
+        .icon-sm {
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
+        }
+
+        .icon-md {
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+        }
+
+        /* Page video background */
+        .page-video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .page-content-container {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.25rem;
+            padding-top: 6rem; /* Add space for fixed nav bar */
+            padding-bottom: 2rem; /* Add space for footer */
+            max-width: 1400px;
+            margin: 0 auto;
+            gap: 2rem;
+        }
+
+        .page-unified-content {
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            padding: 2rem;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            min-height: fit-content;
+        }
+
+        .page-left-content {
+            flex: 1;
+            max-width: 600px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .page-right-action {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* 改為 space-between 讓元素根據容器高度自動間距 */
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            width: 100%;
+            max-width: 400px;
+            min-height: 350px; /* 確保有足夠高度讓 space-between 生效 */
+            /* 移除 gap，讓 space-between 控制間距 */
+            padding: 2rem;
+        }
+
+        .page-main-title {
+            font-weight: 300;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .page-subtitle {
+            font-weight: 200;
+            margin-bottom: 2rem;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .page-description {
+            font-weight: 200;
+            margin-bottom: 1.5rem;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        /* Typography tokens within unified content blocks (Welcome/Proof) */
+        .page-unified-content .page-main-title,
+        .unified-content-block .main-title {
+            font-weight: 300;
+            font-family: 'Kanit', sans-serif;
+        }
+        .page-unified-content .page-subtitle,
+        .unified-content-block .subtitle {
+            font-weight: 200;
+            font-family: 'Kanit', sans-serif;
+        }
+        .page-unified-content .page-description,
+        .unified-content-block .description {
+            font-weight: 200;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .page-action-button {
+            font-family: 'Kanit', sans-serif;
+            font-weight: 300;
+        }
+
+        /* 響應式設計 */
+        @media (min-width: 1024px) {
+            .page-content-container {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                padding: 2.5rem 4rem;
+                padding-top: 6rem;
+                gap: 4rem;
+            }
+
+            .page-unified-content {
+                flex-direction: row;
+                align-items: stretch;
+                gap: 2rem;
+            }
+        }
+
+        /* Ensure page-unified-content centers content at 1023px and below */
+        @media (max-width: 1023px) {
+            .page-unified-content {
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+            }
+
+            .page-left-content {
+                text-align: left;
+                justify-content: center;
+            }
+
+            .page-right-action {
+                width: auto;
+                min-width: fit-content;
+            }
+
+            .page-main-title {
+                font-size: 4.5rem;
+                font-weight: 300;
+            }
+
+            .page-subtitle {
+                font-size: 1.875rem;
+            }
+
+            .page-description {
+                font-size: 1.125rem;
+            }
+        }
+
+        @media (min-width: 1280px) {
+            .page-main-title {
+                font-size: 4.5rem; /* 72px - 符合原始規範 */
+            }
+        }
+
+        @media (min-width: 1536px) {
+            .page-main-title {
+                font-size: 4.5rem; /* 72px - 最大字級限制 */
+            }
+        }
+
+        /* Force center left-content around ~1000px */
+        @media (max-width: 1100px) and (min-width: 768px) {
+            .unified-content-block { align-items: center; justify-content: center; }
+            .page-left-content { margin-left: auto; margin-right: auto; text-align: center; align-items: center; }
+        }
+
+        /* Ensure right-action block is vertically centered in viewport on mobile and tablet */
+        @media (max-width: 1023px) {
+            .unified-content-block {
+                align-items: center !important;
+                justify-content: center !important;
+                min-height: calc(100vh - 8rem); /* Account for nav and footer space */
+            }
+
+            .page-right-action,
+            .right-action {
+                justify-content: space-between !important; /* 保持自動間距 */
+                align-items: center !important;
+                text-align: center !important;
+                min-height: 300px !important; /* 確保有足夠高度 */
+            }
+        }
+
+        /* 保持原有的 welcome-container 類以向後兼容（與 page-content-container 一致置中） */
+        .welcome-container {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.25rem;
+            padding-top: 6rem; /* Add space for fixed nav bar */
+            padding-bottom: 2rem; /* Add space for footer */
+            max-width: 1400px;
+            margin: 0 auto;
+            gap: 2rem;
+        }
+
+        @media (min-width: 1024px) {
+            .welcome-container {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                padding: 2.5rem 4rem;
+                padding-top: 6rem;
+                gap: 4rem;
+            }
+        }
+
+        .unified-content-block {
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            padding: 2rem;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            min-height: fit-content;
+        }
+
+        @media (min-width: 1024px) {
+            .unified-content-block {
+                flex-direction: row;
+                align-items: stretch;
+                gap: 2rem;
+            }
+        }
+
+        /* Ensure unified-content-block centers content at 1023px */
+        @media (max-width: 1023px) {
+            .unified-content-block {
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+            }
+        }
+
+        .left-content {
+            flex: 1;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        @media (min-width: 1024px) {
+            .left-content {
+                text-align: left;
+            }
+        }
+
+        .right-action {
+            flex-shrink: 0;
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* 改為 space-between 保持一致 */
+            align-items: center;
+            text-align: center;
+            min-height: 350px; /* 確保有足夠高度 */
+        }
+
+        /* Ensure right-action is always centered on screens smaller than 1024px */
+        @media (max-width: 1023px) {
+            .right-action,
+            .page-right-action {
+                justify-content: space-between !important; /* 保持自動間距 */
+                align-items: center !important;
+                text-align: center !important;
+                align-self: center !important;
+                margin: 0 auto !important;
+                min-height: 280px !important; /* 小螢幕稍微減少高度 */
+            }
+        }
+
+        /* Specific fix for 1023px viewport */
+        @media (width: 1023px) {
+            .page-right-action,
+            .right-action {
+                justify-content: space-between !important; /* 保持自動間距 */
+                align-items: center !important;
+                text-align: center !important;
+                align-self: center !important;
+                margin: 0 auto !important;
+                min-height: 300px !important; /* 確保有足夠高度 */
+            }
+        }
+
+        .main-title {
+            font-weight: 300;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .subtitle {
+            font-weight: 200;
+            margin-bottom: 2rem;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .description {
+            font-weight: 200;
+            margin-bottom: 1.5rem;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .action-button {
+            font-family: 'Kanit', sans-serif;
+            font-weight: 300;
+        }
+
+        /* 錢包選項項目 */
+        .wallet-option-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .wallet-option-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+        .wallet-option-item.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .wallet-option-icon {
+            width: 32px;
+            height: 32px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .wallet-option-icon img {
+            width: 100%;
+            height: 100%;
+            border-radius: 6px;
+        }
+
+        .wallet-option-content {
+            flex: 1;
+        }
+
+        .wallet-option-name {
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .wallet-option-status {
+            color: #888;
+            font-size: 12px;
+        }
+
+        .wallet-section-title {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .wallet-options-section {
+            flex: 1;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding-right: 24px;
+            margin-right: 24px;
+        }
+
+        .wallet-info-section {
+            flex: 1;
+        }
+
+        .wallet-features {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .wallet-feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .wallet-feature-icon {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 20px;
+            margin-top: 2px;
+        }
+
+        .wallet-feature-content {
+            flex: 1;
+        }
+
+        .wallet-feature-title {
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .wallet-feature-desc {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        /* Ensure all page containers are block-level by default */
+        [id$="-page"] { display: block; min-height: 100vh; }
+
+        [id$="-page"].hidden {
+            display: none !important;
+        }
+
+        /* Hide footers only when their parent page container is hidden */
+        [id$="-page"].hidden footer {
+            display: none !important;
+        }
+
+        /* Never hide global modal/backdrop by .hidden rule */
+        #wallet-modal.show, #wallet-backdrop.show {
+            display: flex !important; /* modal */
+        }
+        #wallet-backdrop.show {
+            display: block !important; /* backdrop */
+        }
+
+        .metric-card {
+            background: var(--card-bg);
+        }
+
+        /* 錢包模態框樣式 - 仿照截圖設計 */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            z-index: 3999;
+            backdrop-filter: blur(4px);
+        }
+        .modal-backdrop.show {
+            display: block !important;
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            z-index: 4000;
+            width: 100vw;
+            height: 100vh;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex !important;
+        }
+
+        .wallet-modal-card {
+            background: #1a1a1a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            width: auto;
+            min-width: 520px;
+            max-width: 600px;
+            height: auto;
+            min-height: 450px;
+            overflow: visible;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .wallet-close-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .wallet-close-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .wallet-modal-title {
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+            text-align: center;
+            margin: 0;
+            padding: 32px 32px 24px;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .wallet-modal-content {
+            padding: 0 32px 32px;
+            display: flex;
+            gap: 32px;
+        }
+
+        .wallet-options-section {
+            flex: 1;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding-right: 24px;
+        }
+
+        .wallet-info-section {
+            flex: 1;
+            padding-left: 24px;
+        }
+
+        .wallet-section-title {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .wallet-option-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 8px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .wallet-option-item:hover:not(.disabled) {
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-1px);
+        }
+
+        .wallet-option-item.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .wallet-option-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .wallet-option-icon img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .wallet-option-content {
+            flex: 1;
+        }
+
+        .wallet-option-name {
+            font-weight: 500;
+            margin-bottom: 2px;
+            font-size: 14px;
+        }
+
+        .wallet-option-status {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .wallet-features {
+            margin-bottom: 24px;
+        }
+
+        .wallet-feature {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .wallet-feature-icon {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 20px;
+            margin-top: 2px;
+        }
+
+        .wallet-feature-content {
+            flex: 1;
+        }
+
+        .wallet-feature-title {
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .wallet-feature-desc {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .wallet-modal-card {
+                width: 92vw;
+                min-width: 0;
+                min-height: auto;
+                height: auto;
+                max-height: 80vh;
+                margin: 10px;
+            }
+
+            .wallet-modal-content {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .wallet-options-section {
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                padding-right: 0;
+                padding-bottom: 24px;
+                margin-right: 0;
+                margin-bottom: 24px;
+            }
+        }
+
+        .get-wallet-btn {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: not-allowed;
+            margin-bottom: 16px;
+        }
+
+        .learn-more-link {
+            display: block;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 12px;
+            text-decoration: none;
+        }
+
+        .learn-more-link:hover {
+            color: white;
+        }
+
+        @media (max-width: 640px) {
+            .wallet-modal-card {
+                margin: 10px;
+                max-width: none;
+            }
+
+            .wallet-modal-title {
+                font-size: 20px;
+                padding: 24px 24px 20px;
+            }
+
+            .wallet-modal-content {
+                flex-direction: column;
+                gap: 24px;
+            }
+
+            .wallet-options-section {
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                padding-right: 0;
+                padding-bottom: 20px;
+            }
+
+            .wallet-info-section {
+                padding-left: 0;
+                padding-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Global Navigation Bar - 全域導航 -->
+    <nav id="global-nav" class="nav-bar">
+        <a href="https://twin3.ai" class="nav-logo">
+            <div class="flex items-center">
+                <img src="../assets/img/logo_dark.svg" alt="Logo" class="w-10 h-10 md:w-10 md:h-10">
+            </div>
+        </a>
+
+        <!-- Mobile menu button -->
+        <button class="mobile-menu-btn" id="mobile-menu-btn">
+            <span class="material-icons">menu</span>
+        </button>
+
+        <!-- Desktop navigation -->
+        <div class="nav-actions">
+            <a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" rel="noreferrer noopener" class="nav-link">WHITEPAPER</a>
+            <a class="nav-link" href="https://twin3.ai/dashboard">MY TWIN</a>
+            <span class="nav-link nav-link-focused" aria-current="page">PASSPORT</span>
+
+            <!-- Wallet button -->
+            <div class="wallet-button">
+                <div class="wallet-balance">0 BNB</div>
+                <div class="wallet-address">
+                    <div class="wallet-avatar">👽</div>
+                    <div class="wallet-address-text">0x19…5ACe</div>
+                    <svg class="dropdown-icon" fill="none" height="7" width="14" xmlns="http://www.w3.org/2000/svg">
+                        <title>Dropdown</title>
+                        <path d="M12.75 1.54001L8.51647 5.0038C7.77974 5.60658 6.72026 5.60658 5.98352 5.0038L1.75 1.54001" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobile-menu">
+            <button class="mobile-menu-close" id="mobile-menu-close">
+                <span class="material-icons">close</span>
+            </button>
+            <div class="mobile-menu-links">
+                <a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" rel="noreferrer noopener" class="mobile-menu-link">WHITEPAPER</a>
+                <a href="https://twin3.ai/dashboard" class="mobile-menu-link">MY TWIN</a>
+                <span class="mobile-menu-link mobile-menu-link-focused" aria-current="page">PASSPORT</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Welcome Page -->
+    <div id="welcome-page" class="relative min-h-screen">
+        <!-- Video Background -->
+        <video class="absolute top-0 left-0 w-full h-full object-cover" autoplay loop muted playsinline style="z-index: 1;">
+            <source src="../assets/img/v2.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <!-- Welcome Content -->
+        <div class="welcome-container">
+            <!-- Unified Content Block (Left + Right combined with backdrop blur) -->
+            <div class="unified-content-block page-unified-content">
+                <!-- Left Content (Title + Description) -->
+                <div class="left-content page-left-content">
+                    <h1 class="main-title page-main-title text-white text-4xl md:text-6xl lg:text-7xl leading-tight mb-4" style="font-weight: 300;">
+                        Welcome to<br>
+                        twin3 Passport!
+                    </h1>
+                    <p class="subtitle text-[#888888] text-xl md:text-2xl lg:text-3xl mb-8" style="font-weight: 200;">Your digital identity, supercharged!</p>
+                    <p class="description text-[#888888] text-base md:text-lg mb-6" style="font-weight: 200;">
+                        Start the process to obtain your Passport and begin your mission.<br>
+                        Connect your wallet to unlock your digital identity.
+                    </p>
+                </div>
+
+                <!-- Right Action (Registration Card) -->
+<div class="right-action page-right-action">
+                    <p class="card-description text-[#888888] whitespace-normal lg:whitespace-nowrap text-base md:text-lg" style="font-weight: 200;">Free gas to mint your Twin NFT for AI agents.</p>
+                    <h1 class="card-number text-white text-6xl lg:text-7xl leading-none uppercase" style="font-weight: 300;">1824</h1>
+                    <button id="free-mint-btn" class="page-action-button action-button w-full px-4 py-3 border border-[#373737] text-black bg-white rounded-lg hover:bg-transparent hover:text-white hover:border-white transition duration-300" style="font-weight: 300;">Get Your Passport</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+        <!-- Footer Section -->
+        <footer class="bg-black text-white px-8 py-10 xl:pr-20 lg:px-0 lg:py-12" style="position: relative; z-index: 5;">
+            <div class="flex flex-col-reverse lg:flex-row xl:justify-between items-start space-y-10 lg:space-y-0">
+                <!-- Logo Section -->
+                <div class="w-full xl:w-1/5 lg:w-[13%] text-center lg:text-left">
+                    <div class="flex flex-col justify-center lg:justify-start items-center pt-6 lg:pt-0" style="gap: 4px;">
+                        <div class="flex items-center">
+                            <img src="../assets/img/logo_dark.svg" alt="Logo" style="width: 40px; height: 40px;">
+                        </div>
+                        <span class="text-sm md:text-base" style="font-weight: 300; color: #888888;">twin3.ai</span>
+                    </div>
+                </div>
+
+                <!-- Links Section -->
+                <div class="flex flex-wrap lg:flex-nowrap w-full lg:w-2/4 lg:space-x-10">
+                    <!-- Social Media -->
+                    <div class="w-full md:w-1/3 text-center lg:text-left flex-row">
+                        <h5 class="uppercase text-sm lg:text-base" style="font-weight: 300; color: white; padding-bottom: 12px;">Social Media</h5>
+                        <div class="flex justify-center lg:justify-start space-x-4">
+                            <a href="https://x.com/twin3_ai" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+                                <div class="w-6 h-6 flex items-center justify-center" style="padding: 2px;">
+                                    <img src="../assets/img/X_logo.svg" alt="X (Twitter)" class="w-full h-full object-contain">
+                                </div>
+                            </a>
+                            <a href="https://opensea.io/collection/twin3" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+                                <img src="../assets/img/opensea_logo.svg" alt="OpenSea" class="w-6 h-6">
+                            </a>
+                            <a href="https://warpcast.com/twin3.eth" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+                                <img src="../assets/img/farcaster_logo.svg" alt="Warpcast" class="w-6 h-6">
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Resource -->
+                    <div class="w-full md:w-1/3 text-center lg:text-left 2xl:mb-2 pt-4 md:pt-0">
+                        <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Resource</h5>
+                        <ul class="space-y-2">
+                            <li><a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" rel="noreferrer noopener" class="text-[#888888] hover:text-white text-sm lg:text-base" style="font-weight: 200;">Whitepaper</a></li>
+                            <li><a class="text-[#888888] hover:text-white text-sm lg:text-base" href="dashboard.html" style="font-weight: 200;">Tasks</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Features -->
+                    <div class="w-full md:w-1/3 text-center lg:text-left 2xl:mb-10 pt-4 md:pt-0">
+                        <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Features</h5>
+                        <ul class="space-y-2">
+                            <li><a class="text-[#888888] hover:text-white text-sm lg:text-base" href="dashboard.html" style="font-weight: 200;">My Twin</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Newsletter Section -->
+                <div class="w-full lg:w-1/4 text-center lg:text-left space-y-5">
+                    <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Subscribe to twin3 Newsletter</h5>
+                    <div class="flex flex-col lg:flex-row items-center lg:space-x-2 space-y-4 lg:space-y-0">
+                        <a href="https://www.linkedin.com/company/twin3-ai" target="_blank" rel="noreferrer noopener" class="px-4 py-2 border border-[#373737] text-black bg-white rounded-lg hover:bg-transparent hover:text-white hover:border-white transition duration-300 text-sm lg:text-base" style="font-weight: 300;">Subscribe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="mt-10 text-center text-gray-500 text-sm lg:text-base" style="font-weight: 200;">© 2025 twin3.ai v1.0.6</div>
+        </footer>
+    </div>
+
+    <!-- 錢包連接模態框 - 仿照截圖設計 -->
+    <div id="wallet-backdrop" class="modal-backdrop"></div>
+    <div id="wallet-modal" class="modal">
+        <div class="wallet-modal-card">
+            <!-- 關閉按鈕 -->
+            <button id="close-wallet-modal" class="wallet-close-btn">
+                <span class="material-icons">close</span>
+            </button>
+
+            <!-- Modal title -->
+            <h2 class="wallet-modal-title">Connect Wallet</h2>
+
+            <!-- Main content -->
+            <div class="wallet-modal-content">
+                <!-- Left: wallet options -->
+                <div class="wallet-options-section">
+                    <h3 class="wallet-section-title">Installed</h3>
+
+                    <div class="wallet-option-item" data-wallet="metamask">
+                        <div class="wallet-option-icon">
+                            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTI5LjUgMTZDMjkuNSAyMy40NTU4IDIzLjQ1NTggMjkuNSAxNiAyOS41QzguNTQ0MTYgMjkuNSAyLjUgMjMuNDU1OCAyLjUgMTZDMi41IDguNTQ0MTYgOC41NDQxNiAyLjUgMTYgMi41QzIzLjQ1NTggMi41IDI5LjUgOC41NDQxNiAyOS41IDE2WiIgZmlsbD0iI0Y2ODUxQiIgc3Ryb2tlPSIjRjY4NTFCIi8+CjxwYXRoIGQ9Ik0yMy4yIDEyLjhMMTYgMTguNEw4LjggMTIuOEwxNiA4TDIzLjIgMTIuOFoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0yMy4yIDEyLjhMMTYgMTguNEw4LjggMTIuOEwxNiAyNEwyMy4yIDEyLjhaIiBmaWxsPSIjRTI3NjFCIi8+Cjwvc3ZnPgo=" alt="MetaMask" />
+                        </div>
+                        <div class="wallet-option-content">
+                            <div class="wallet-option-name">MetaMask</div>
+                            <div class="wallet-option-status">Detected</div>
+                        </div>
+                    </div>
+
+                    <div class="wallet-option-item disabled" data-wallet="walletconnect">
+                        <div class="wallet-option-icon">
+                            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTI5LjUgMTZDMjkuNSAyMy40NTU4IDIzLjQ1NTggMjkuNSAxNiAyOS41QzguNTQ0MTYgMjkuNSAyLjUgMjMuNDU1OCAyLjUgMTZDMi41IDguNTQ0MTYgOC41NDQxNiAyLjUgMTYgMi41QzIzLjQ1NTggMi41IDI5LjUgOC41NDQxNiAyOS41IDE2WiIgZmlsbD0iIzNCOTlGQyIgc3Ryb2tlPSIjM0I5OUZDIi8+CjxwYXRoIGQ9Ik0xMCAxMkMxMCAxMCAxMiA4IDE2IDhDMjAgOCAyMiAxMCAyMiAxMkMyMiAxNCAyMCAxNiAxNiAxNkMxMiAxNiAxMCAxNCAxMCAxMloiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0xMCAyMEMxMCAyMiAxMiAyNCAxNiAyNEMyMCAyNCAyMiAyMiAyMiAyMEMyMiAxOCAyMCAxNiAxNiAxNkMxMiAxNiAxMCAxOCAxMCAyMFoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=" alt="WalletConnect" />
+                        </div>
+                        <div class="wallet-option-content">
+                            <div class="wallet-option-name">WalletConnect</div>
+                            <div class="wallet-option-status">Not Detected</div>
+                        </div>
+                    </div>
+
+                    <div class="wallet-option-item disabled" data-wallet="coinbase">
+                        <div class="wallet-option-icon">
+                            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTI5LjUgMTZDMjkuNSAyMy40NTU4IDIzLjQ1NTggMjkuNSAxNiAyOS41QzguNTQ0MTYgMjkuNSAyLjUgMjMuNDU1OCAyLjUgMTZDMi41IDguNTQ0MTYgOC41NDQxNiAyLjUgMTYgMi41QzIzLjQ1NTggMi41IDI5LjUgOC41NDQxNiAyOS41IDE2WiIgZmlsbD0iIzAwNTJGRiIgc3Ryb2tlPSIjMDA1MkZGIi8+CjxyZWN0IHg9IjEwIiB5PSIxMCIgd2lkdGg9IjEyIiBoZWlnaHQ9IjEyIiByeD0iMiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+Cg==" alt="Coinbase" />
+                        </div>
+                        <div class="wallet-option-content">
+                            <div class="wallet-option-name">Coinbase Wallet</div>
+                            <div class="wallet-option-status">Not Detected</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: info section -->
+                <div class="wallet-info-section">
+                    <h3 class="wallet-section-title">What is a Wallet?</h3>
+
+                    <div class="wallet-features">
+                        <div class="wallet-feature">
+                            <span class="material-icons wallet-feature-icon">account_balance_wallet</span>
+                            <div class="wallet-feature-content">
+                                <h4 class="wallet-feature-title">A Home for your Digital Assets</h4>
+                                <p class="wallet-feature-desc">Wallets are used to send, receive, store, and display digital assets like Ethereum and NFTs.</p>
+                            </div>
+                        </div>
+
+                        <div class="wallet-feature">
+                            <span class="material-icons wallet-feature-icon">security</span>
+                            <div class="wallet-feature-content">
+                                <h4 class="wallet-feature-title">A New Way to Log In</h4>
+                                <p class="wallet-feature-desc">Instead of creating new accounts and passwords on every website, just connect your wallet.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Get wallet button (disabled) -->
+                    <button class="get-wallet-btn disabled" disabled aria-disabled="true">
+                        Get a Wallet
+                    </button>
+
+                    <!-- Learn more link -->
+                    <a href="#" class="learn-more-link">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== APPLICATION STATE =====
+        let currentStep = 'welcome';
+        let userData = { username: '', career: '' };
+        let walletConnected = false;
+        let web3Modal = null;
+        let provider = null;
+
+        // ===== SIMPLIFIED WALLET CONNECTION =====
+        // No Web3Modal initialization needed for simplified flow
+
+        // ===== PASSPORT REGISTRATION FLOW =====
+        function checkWalletStatus() {
+            console.log('🔍 Checking wallet connection status...');
+
+            // 顯示檢查狀態的 UI 反饋
+            showWalletCheckingStatus();
+
+            // Simulate system check (2s delay)
+            setTimeout(() => {
+                // 檢查錢包連結狀態
+                const isWalletConnected = simulateWalletCheck();
+
+                if (isWalletConnected) {
+                    console.log('✅ Wallet already connected');
+                    hideWalletCheckingStatus();
+                    showWalletConnectedMessage();
+
+                    // 延遲後進入人工驗證
+                    setTimeout(() => {
+                        proceedToHumanVerification();
+                    }, 1500);
+                } else {
+                    console.log('❌ Wallet not connected');
+                    hideWalletCheckingStatus();
+                    showWalletNotConnectedMessage();
+
+                    // 延遲後開始錢包連結流程
+                    setTimeout(() => {
+                        startWalletLinkingFlow();
+                    }, 1000);
+                }
+            }, 2000);
+        }
+
+        function simulateWalletCheck() {
+            // Always returns false for testing wallet connection flow
+            return false;
+        }
+
+        function showWalletCheckingStatus() {
+            // Create checking status UI
+            const statusDiv = document.createElement('div');
+            statusDiv.id = 'wallet-checking-status';
+            statusDiv.innerHTML = `
+                <div style="
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: rgba(26, 26, 26, 0.95);
+                    border-radius: 12px;
+                    padding: 24px 32px;
+                    z-index: 9999;
+                    text-align: center;
+                    backdrop-filter: blur(8px);
+                    width: 300px;
+                ">
+                    <div style="
+                        width: 32px;
+                        height: 32px;
+                        border: 3px solid rgba(255, 255, 255, 0.3);
+                        border-top: 3px solid #3b82f6;
+                        border-radius: 50%;
+                        animation: spin 1s linear infinite;
+                        margin: 0 auto 16px auto;
+                    "></div>
+                    <div style="color: #fff; font-size: 16px; font-weight: 300; margin-bottom: 8px;">
+                        Checking...
+                    </div>
+                    <div style="color: #888; font-size: 14px;">
+                        Verifying wallet connection
+                    </div>
+                </div>
+            `;
+
+            // Add spin animation if not exists
+            if (!document.querySelector('#spin-animation')) {
+                const style = document.createElement('style');
+                style.id = 'spin-animation';
+                style.textContent = `
+                    @keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            document.body.appendChild(statusDiv);
+        }
+
+        function hideWalletCheckingStatus() {
+            const statusDiv = document.getElementById('wallet-checking-status');
+            if (statusDiv) {
+                statusDiv.remove();
+            }
+        }
+
+
+
+        async function startWalletLinkingFlow() {
+            console.log('🔗 Starting wallet linking flow...');
+
+            // Use simplified custom wallet modal
+            console.log('🎨 Using custom wallet modal');
+            openWalletModal();
+        }
+
+        function proceedToHumanVerification() {
+            console.log('🔄 Proceeding to human verification...');
+            // Redirect to proof page
+            setTimeout(() => {
+                window.location.href = 'proof.html';
+            }, 500);
+        }
+
+        // ===== WALLET CONNECTION FUNCTIONS =====
+        async function connectWallet() {
+            console.log('🦊 Connecting to wallet...');
+            openWalletModal();
+        }
+
+        // Connect to MetaMask (Simplified - Mock Connection)
+        async function connectMetaMask() {
+            console.log('🦊 Connecting to MetaMask...');
+
+            // Simulate connection delay
+            setTimeout(() => {
+                // Mock successful connection
+                const mockAddress = '0x1234...5678';
+                console.log('✅ MetaMask connected (simulated):', mockAddress);
+
+                // Update wallet status
+                updateWalletStatus(mockAddress);
+
+                // Show success message
+                showWalletConnectedMessage();
+
+                // Close modal
+                closeWalletModal();
+
+                // Proceed to human verification
+                setTimeout(() => {
+                    proceedToHumanVerification();
+                }, 1500);
+            }, 1000); // 1 second delay to simulate connection
+        }
+
+        // ===== STATUS MESSAGE FUNCTIONS =====
+        function showWalletConnectedMessage() {
+            showStatusMessage('Wallet Connected', 'Your wallet is connected. Redirecting to verification…', '#10b981');
+        }
+
+
+        function showConnectionError(message) {
+            showStatusMessage('Connection Failed', message, '#ef4444');
+        }
+
+
+        function showWalletNotConnectedMessage() {
+            showStatusMessage('Connect Wallet Required', 'Please choose a wallet to continue', '#f59e0b');
+        }
+
+
+
+        // ===== WALLET STATUS FUNCTIONS =====
+        async function disconnectWallet() {
+            provider = null;
+            walletConnected = false;
+
+            // Update wallet button display
+            const walletAddressText = document.querySelector('.wallet-address-text');
+            if (walletAddressText) {
+                walletAddressText.textContent = '0x19…5ACe';
+            }
+        }
+
+        function updateWalletStatus(address) {
+            walletConnected = true;
+            const shortAddress = `${address.slice(0, 6)}...${address.slice(-4)}`;
+
+            // Update wallet button display
+            const walletAddressText = document.querySelector('.wallet-address-text');
+            if (walletAddressText) {
+                walletAddressText.textContent = shortAddress;
+            }
+
+            // Update wallet balance (can integrate real balance later)
+            const walletBalance = document.querySelector('.wallet-balance');
+            if (walletBalance) {
+                walletBalance.textContent = '0 BNB'; // Default value
+            }
+
+            console.log('✅ Wallet status updated:', shortAddress);
+        }
+
+        // ===== MODAL FUNCTIONS =====
+        function openWalletModal() {
+            console.log('🎨 Opening custom wallet modal...');
+            const modal = document.getElementById('wallet-modal');
+            const backdrop = document.getElementById('wallet-backdrop');
+
+            console.log('Modal elements:', { modal: !!modal, backdrop: !!backdrop });
+
+            if (modal && backdrop) {
+                // Ensure elements are under body to avoid container style conflicts
+                try {
+                    if (modal.parentElement !== document.body) {
+                        document.body.appendChild(modal);
+                    }
+                    if (backdrop.parentElement !== document.body) {
+                        document.body.appendChild(backdrop);
+                    }
+                } catch (e) {
+                    console.warn('Append modal to body failed:', e);
+                }
+
+                // Remove hidden classes to avoid display:none !important conflicts
+                modal.classList.remove('hidden');
+                backdrop.classList.remove('hidden');
+
+                // Show modal (use both class and inline style for priority)
+                modal.classList.add('show');
+                backdrop.classList.add('show');
+                modal.style.setProperty('display', 'flex', 'important');
+                backdrop.style.setProperty('display', 'block', 'important');
+                modal.style.visibility = 'visible';
+                backdrop.style.visibility = 'visible';
+                modal.style.pointerEvents = 'auto';
+                backdrop.style.pointerEvents = 'auto';
+
+                console.log('✅ Wallet modal opened');
+            } else {
+                console.error('❌ Wallet modal elements not found');
+            }
+        }
+
+        function closeWalletModal() {
+            console.log('🔒 Closing wallet modal...');
+            const modal = document.getElementById('wallet-modal');
+            const backdrop = document.getElementById('wallet-backdrop');
+
+            if (modal && backdrop) {
+                // Remove show classes
+                modal.classList.remove('show');
+                backdrop.classList.remove('show');
+                // Add hidden classes as insurance
+                modal.classList.add('hidden');
+                backdrop.classList.add('hidden');
+                // Clear and force hide inline styles
+                modal.style.setProperty('display', 'none', 'important');
+                backdrop.style.setProperty('display', 'none', 'important');
+                modal.style.visibility = 'hidden';
+                backdrop.style.visibility = 'hidden';
+                modal.style.pointerEvents = 'none';
+                backdrop.style.pointerEvents = 'none';
+
+                console.log('✅ Wallet modal closed');
+            }
+        }
+
+        // ===== STATUS MESSAGE SYSTEM =====
+        function showStatusMessage(title, message, color = '#3b82f6') {
+            // Remove existing status message
+            const existingMessage = document.getElementById('status-message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+
+            // Create new status message
+            const statusDiv = document.createElement('div');
+            statusDiv.id = 'status-message';
+            statusDiv.innerHTML = `
+                <div style="
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: rgba(26, 26, 26, 0.95);
+                    border-radius: 12px;
+                    padding: 24px 32px;
+                    z-index: 9999;
+                    text-align: center;
+                    backdrop-filter: blur(8px);
+                    width: 300px;
+                ">
+                    <div style="
+                        width: 24px;
+                        height: 24px;
+                        background: ${color};
+                        border-radius: 50%;
+                        margin: 0 auto 16px auto;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    ">
+                        <span style="color: white; font-size: 14px;">✓</span>
+                    </div>
+                    <div style="color: #fff; font-size: 16px; font-weight: 400; margin-bottom: 8px;">
+                        ${title}
+                    </div>
+                    <div style="color: #888; font-size: 14px;">
+                        ${message}
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(statusDiv);
+
+            // Auto remove after 1.5 seconds
+            setTimeout(() => {
+                if (statusDiv && statusDiv.parentNode) {
+                    statusDiv.remove();
+                }
+            }, 1500);
+        }
+
+        // ===== NAVIGATION FUNCTIONS =====
+        function initializeNavigation() {
+            console.log('🔧 Initializing navigation...');
+
+            // Mobile menu toggle
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuClose = document.getElementById('mobile-menu-close');
+
+            console.log('📱 Mobile menu elements:', {
+                btn: !!mobileMenuBtn,
+                menu: !!mobileMenu,
+                close: !!mobileMenuClose
+            });
+
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('🔘 Mobile menu button clicked');
+                    mobileMenu.classList.toggle('show'); // Toggle show/hide
+                    const isOpen = mobileMenu.classList.contains('show');
+                    console.log(`✅ Mobile menu ${isOpen ? 'opened' : 'closed'}`);
+                });
+                console.log('✅ Mobile menu button event listener added');
+            } else {
+                console.error('❌ Mobile menu button or menu element not found');
+            }
+
+            // Add click outside to close mobile menu
+            document.addEventListener('click', (e) => {
+                if (!mobileMenu || !mobileMenuBtn) return;
+
+                const isMenuOpen = mobileMenu.classList.contains('show');
+                if (!isMenuOpen) return;
+
+                // Check if click is outside menu and menu button
+                const isClickInsideMenu = mobileMenu.contains(e.target);
+                const isClickOnMenuButton = mobileMenuBtn.contains(e.target);
+
+                if (!isClickInsideMenu && !isClickOnMenuButton) {
+                    console.log('🔘 Clicked outside mobile menu, closing...');
+                    mobileMenu.classList.remove('show');
+                    console.log('✅ Mobile menu closed');
+                }
+            });
+
+            console.log('🎉 Navigation initialization complete');
+        }
+
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎉 Welcome page loaded');
+
+            // Initialize navigation
+            initializeNavigation();
+
+            // Using simplified wallet connection
+            console.log('🎨 Using simplified wallet modal');
+
+            // Get Your Passport button - Complete wallet check flow
+            const freeMintBtn = document.getElementById('free-mint-btn');
+            if (freeMintBtn) {
+                freeMintBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('🚀 Get Your Passport button clicked!');
+                    console.log('Starting wallet status check...');
+                    checkWalletStatus();
+                });
+            }
+
+            // Wallet modal close button
+            const closeModalBtn = document.getElementById('close-wallet-modal');
+            if (closeModalBtn) {
+                closeModalBtn.addEventListener('click', closeWalletModal);
+            }
+
+            // Wallet backdrop click to close
+            const walletBackdrop = document.getElementById('wallet-backdrop');
+            if (walletBackdrop) {
+                walletBackdrop.addEventListener('click', closeWalletModal);
+            }
+
+            // Wallet option clicks - only MetaMask is enabled
+            const walletOptions = document.querySelectorAll('.wallet-option-item');
+            walletOptions.forEach(option => {
+                const walletType = option.getAttribute('data-wallet');
+
+                // Only enable MetaMask for now
+                if (option.classList.contains('disabled') || walletType !== 'metamask') {
+                    return;
+                }
+
+                option.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('🦊 Selected wallet:', walletType);
+                    connectMetaMask();
+                });
+            });
+        });
+
+        // ===== GLOBAL EVENT DELEGATION =====
+        document.addEventListener('click', function(e) {
+            const walletModal = document.getElementById('wallet-modal');
+            const walletBackdrop = document.getElementById('wallet-backdrop');
+
+            if (!walletModal || !walletBackdrop) return;
+
+            const isOpen = walletModal.classList.contains('show');
+            if (!isOpen) return;
+
+            // Click backdrop to close
+            if (e.target === walletBackdrop) {
+                closeWalletModal();
+                return;
+            }
+
+            // Close button
+            const closeBtn = e.target.closest('#close-wallet-modal');
+            if (closeBtn) {
+                closeWalletModal();
+                return;
+            }
+
+            // Wallet option clicks (MetaMask only)
+            const walletOption = e.target.closest('.wallet-option-item');
+            if (walletOption && !walletOption.classList.contains('disabled')) {
+                const walletType = walletOption.getAttribute('data-wallet');
+                if (walletType === 'metamask') {
+                    console.log('🦊 MetaMask selected via delegation');
+                    connectMetaMask();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

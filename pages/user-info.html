@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>twin3 Passport - User Information</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-bg: #0a0a0a;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --text-muted: #555555;
+            --accent-color: #ffffff;
+        }
+
+        body {
+            font-family: 'Kanit', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--primary-bg);
+            min-height: 100vh;
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navigation bar styles */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1rem;
+        }
+
+        /* Responsive padding matching twin3_backup-main */
+        @media (min-width: 768px) {
+            .nav-bar {
+                padding: 1rem 2rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .nav-bar {
+                padding: 1rem 4rem;
+            }
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .nav-logo img {
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .nav-logo img {
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+        }
+
+        .mobile-menu-btn {
+            display: block;
+            color: white;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+
+        .nav-actions {
+            display: none;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .nav-actions {
+                display: flex;
+            }
+        }
+
+        .nav-link {
+            display: block;
+            padding: 0.5rem 1rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-weight: 200;
+        }
+
+        .nav-link:hover {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        /* Focused/current page state: grey text, not clickable */
+        .nav-link-focused,
+        .nav-link[aria-current="page"] {
+            color: #9CA3AF;
+            pointer-events: none;
+            cursor: default;
+            background: transparent;
+        }
+        .nav-link-focused:hover,
+        .nav-link[aria-current="page"]:hover {
+            background: transparent;
+            color: #9CA3AF;
+        }
+
+        /* Mobile menu styles */
+        .mobile-menu {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 1rem;
+            z-index: 1000;
+            display: none;
+            max-height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+
+        .mobile-menu.show {
+            display: block;
+        }
+
+        .mobile-menu-close {
+            display: none;
+        }
+
+        .mobile-menu-links {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0;
+            width: 100%;
+        }
+
+        .mobile-menu-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 400;
+            padding: 1rem 1rem;
+            background: linear-gradient(to right, rgba(0, 0, 0, 1), transparent);
+            backdrop-filter: blur(4px);
+            margin: 0;
+            border-radius: 0;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .mobile-menu-link:hover {
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(6px);
+        }
+
+        .mobile-menu-link-focused {
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            font-weight: 500;
+            backdrop-filter: blur(6px);
+        }
+
+        .wallet-button {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .wallet-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .wallet-balance {
+            margin-right: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 200;
+        }
+
+        .wallet-address {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 0.25rem;
+        }
+
+        .wallet-avatar {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+
+        .wallet-address-text {
+            font-size: 0.875rem;
+            font-weight: 200;
+        }
+
+        .dropdown-icon {
+            width: 14px;
+            height: 7px;
+            color: white;
+        }
+
+        /* Continue button disabled state */
+        #continue-btn:disabled {
+            background: rgba(255, 255, 255, 0.1) !important;
+            color: #666666 !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
+            cursor: not-allowed !important;
+        }
+
+        #continue-btn:disabled:hover {
+            background: rgba(255, 255, 255, 0.1) !important;
+            color: #666666 !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
+            transform: none !important;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            font-weight: 300;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-weight: 300;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: white;
+        }
+
+        .nav-actions {
+            display: none;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .nav-actions {
+                display: flex;
+            }
+        }
+
+        .mobile-menu-btn {
+            display: block;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+
+        /* Mobile menu styles */
+        .mobile-menu {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 1rem;
+            z-index: 1000;
+            display: none;
+            max-height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+
+        .mobile-menu.show {
+            display: block;
+        }
+
+        .mobile-menu-close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        .mobile-menu-links {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .mobile-menu-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 400;
+            padding: 1rem 1rem; /* px-4 py-4 */
+            background: linear-gradient(to right, rgba(0, 0, 0, 1), transparent); /* bg-gradient-to-r from-black to-transparent */
+            backdrop-filter: blur(4px); /* backdrop-blur-sm */
+            margin: 0;
+            border-radius: 0;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .mobile-menu-link:hover {
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(6px);
+        }
+
+        .mobile-menu-link-focused {
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            font-weight: 500;
+            backdrop-filter: blur(6px);
+        }
+
+        /* Wallet connection styles */
+        .wallet-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 0.875rem;
+        }
+
+        .wallet-status.connected {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .wallet-status.disconnected {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        /* Page video background */
+        .page-video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .page-content-container {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            padding-top: 6rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            gap: 2rem;
+        }
+
+        .page-unified-content {
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            padding: 2rem;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            min-height: fit-content;
+        }
+
+        .page-left-content {
+            flex: 1;
+            max-width: 600px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem 0;
+        }
+
+        .page-right-action {
+            flex-shrink: 0;
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* 垂直置中 */
+            align-items: center;
+        }
+
+        .page-main-title {
+            font-weight: 300;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .page-subtitle {
+            font-weight: 200;
+            margin-bottom: 2rem;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .page-description {
+            font-weight: 200;
+            margin-bottom: 1.5rem;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .page-action-button {
+            font-family: 'Kanit', sans-serif;
+            font-weight: 300;
+        }
+
+        /* 統一按鈕樣式 */
+        .btn-primary {
+            border: 1px solid #373737;
+            color: black;
+            background: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 300;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: transparent;
+            color: white;
+            border-color: white;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            background: rgba(255, 255, 255, 0.1);
+            color: #666666;
+            border-color: rgba(255, 255, 255, 0.2);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #888888;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 300;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .btn-secondary:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        /* Responsive design */
+        @media (min-width: 1024px) {
+            .page-content-container {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                padding: 2.5rem 4rem;
+                padding-top: 6rem;
+                gap: 4rem;
+            }
+
+            .page-unified-content {
+                flex-direction: row;
+                align-items: stretch;
+                gap: 2rem;
+            }
+
+            .page-left-content {
+                text-align: left;
+            }
+
+            .page-main-title {
+                font-size: 4.5rem; /* 72px - 最大字級限制 */
+            }
+        }
+
+        @media (min-width: 1280px) {
+            .page-main-title {
+                font-size: 4.5rem; /* 72px - 符合原始規範 */
+            }
+        }
+
+        @media (min-width: 1536px) {
+            .page-main-title {
+                font-size: 4.5rem; /* 72px - 最大字級限制 */
+            }
+        }
+
+        /* Force center left-content around ~1000px */
+        @media (max-width: 1023px) and (min-width: 768px) {
+            .unified-content-block { align-items: center; justify-content: center; }
+            .page-left-content { margin-left: auto; margin-right: auto; text-align: center; align-items: center; }
+        }
+
+        /* Form styles */
+        .input-field {
+            background: #2a2a2a;
+            border: 1px solid #444444;
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: white;
+            font-family: 'Kanit', sans-serif;
+            font-weight: 300;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #666666;
+            background: #333333;
+        }
+
+        .input-field::placeholder {
+            color: #888888;
+            font-weight: 200;
+        }
+
+        /* Input filled state */
+        .input-field.filled {
+            background: #333333 !important;
+            border-color: #666666 !important;
+            color: white !important;
+        }
+
+        /* Input filled state when focused */
+        .input-field.filled:focus {
+            background: #3a3a3a !important;
+            border-color: #777777 !important;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-clear {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #888888;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 50%;
+            display: none;
+            transition: all 0.2s ease;
+            width: 24px;
+            height: 24px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .input-clear:hover {
+            background: #444444;
+            color: white;
+        }
+
+        .input-wrapper.has-value .input-clear {
+            display: flex;
+        }
+
+        /* Career badge styles */
+        .career-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        @media (max-width: 768px) {
+            .career-grid {
+                gap: 0.75rem;
+            }
+        }
+
+        .career-badge {
+            padding: 0.5rem 0.75rem;
+            background: #2a2a2a;
+            border: 1px solid #444444;
+            border-radius: 8px;
+            color: #cccccc;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 300;
+            text-align: left;
+            justify-content: flex-start;
+            width: fit-content;
+        }
+
+        .career-badge:hover {
+            background: #333333;
+            border-color: #666666;
+            color: white;
+        }
+
+        .career-badge.selected {
+            background: white;
+            border-color: white;
+            color: black;
+        }
+
+        .career-badge.disabled {
+            background: #222222;
+            border-color: #3a3a3a;
+            color: #777777;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .career-badge.disabled:hover {
+            background: #222222;
+            border-color: #3a3a3a;
+            color: #777777;
+            transform: none;
+        }
+
+        /* Icon styles */
+        .icon-sm {
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Global Navigation Bar - 全域導航 -->
+    <nav id="global-nav" class="nav-bar">
+        <a href="https://twin3.ai" class="nav-logo">
+            <div class="flex items-center">
+                <img src="../assets/img/logo_dark.svg" alt="Logo" class="w-10 h-10 md:w-10 md:h-10">
+            </div>
+        </a>
+
+        <!-- Mobile menu button -->
+        <button class="mobile-menu-btn" id="mobile-menu-btn">
+            <span class="material-icons">menu</span>
+        </button>
+
+        <!-- Desktop navigation -->
+        <div class="nav-actions">
+            <a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" rel="noreferrer noopener" class="nav-link">WHITEPAPER</a>
+            <a class="nav-link" href="https://twin3.ai/dashboard">MY TWIN</a>
+            <span class="nav-link nav-link-focused" aria-current="page">PASSPORT</span>
+
+            <!-- Wallet button -->
+            <div class="wallet-button">
+                <div class="wallet-balance">0 BNB</div>
+                <div class="wallet-address">
+                    <div class="wallet-avatar">👽</div>
+                    <div class="wallet-address-text">0x19…5ACe</div>
+                    <svg class="dropdown-icon" fill="none" height="7" width="14" xmlns="http://www.w3.org/2000/svg">
+                        <title>Dropdown</title>
+                        <path d="M12.75 1.54001L8.51647 5.0038C7.77974 5.60658 6.72026 5.60658 5.98352 5.0038L1.75 1.54001" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobile-menu">
+            <button class="mobile-menu-close" id="mobile-menu-close">
+                <span class="material-icons">close</span>
+            </button>
+            <div class="mobile-menu-links">
+                <a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" rel="noreferrer noopener" class="mobile-menu-link">WHITEPAPER</a>
+                <a href="https://twin3.ai/dashboard" class="mobile-menu-link">MY TWIN</a>
+                <span class="mobile-menu-link mobile-menu-link-focused" aria-current="page">PASSPORT</span>
+            </div>
+        </div>
+    </nav>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobile-menu">
+            <button class="mobile-menu-close" id="mobile-menu-close">
+                <span class="material-icons">close</span>
+            </button>
+            <div class="mobile-menu-links">
+                <a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" rel="noreferrer noopener" class="mobile-menu-link">WHITEPAPER</a>
+                <a href="https://twin3.ai/dashboard" class="mobile-menu-link">MY TWIN</a>
+                <a href="welcome.html" class="mobile-menu-link">PASSPORT</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- User Info Page -->
+    <div id="user-info-page" class="relative min-h-screen">
+        <!-- Video Background -->
+        <video class="page-video-background" autoplay loop muted playsinline style="z-index: 1;">
+            <source src="../assets/img/v2.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <!-- User Info Content -->
+        <div class="page-content-container">
+            <!-- Unified Content Block -->
+            <div class="page-unified-content">
+                <!-- Left Content (Title + Description) -->
+                <div class="page-left-content">
+                    <h1 class="page-main-title text-white text-4xl md:text-6xl lg:text-7xl leading-tight mb-4" style="font-weight: 300; font-family: 'Kanit', sans-serif;">
+                        Your Details
+                    </h1>
+                    <p class="page-subtitle text-[#888888] text-xl md:text-2xl lg:text-3xl mb-8" style="font-weight: 200; font-family: 'Kanit', sans-serif;">Tell us about yourself</p>
+                    <p class="page-description text-[#888888] text-base md:text-lg mb-4" style="font-weight: 200; font-family: 'Kanit', sans-serif;">Tell us your username and choose up to 3 specialization & interests that best describe you.<br>This helps us tailor your personalized twin3 journey.</p>
+                </div>
+
+                <!-- Right Action (Form) -->
+                <div class="page-right-action">
+                    <div class="w-full space-y-6">
+                        <div>
+                            <label class="text-white text-sm mb-2 block" style="font-weight: 300; font-family: 'Kanit', sans-serif;">Username</label>
+                            <div class="input-wrapper" id="username-wrapper">
+                                <input type="text" id="username" class="input-field w-full" placeholder="What should we call you?" />
+                                <button type="button" class="input-clear" id="username-clear"><span class="material-icons icon-sm">close</span></button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-white text-sm mb-2 block" style="font-weight: 300; font-family: 'Kanit', sans-serif;">Choose up to 3 areas of specialization & interests</label>
+                            <div id="career-grid" class="career-grid"></div>
+                        </div>
+                        <button id="continue-btn" class="page-action-button w-full px-4 py-3 border border-[#373737] text-black bg-white rounded-lg hover:bg-transparent hover:text-white hover:border-white transition duration-300" disabled>Let's Begin</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Section -->
+        <footer class="bg-black text-white px-8 py-10 xl:pr-20 lg:px-0 lg:py-12" style="position: relative; z-index: 5;">
+            <div class="flex flex-col-reverse lg:flex-row xl:justify-between items-start space-y-10 lg:space-y-0">
+                <!-- Logo Section -->
+                <div class="w-full xl:w-1/5 lg:w-[13%] text-center lg:text-left">
+                    <div class="flex flex-col justify-center lg:justify-start items-center pt-6 lg:pt-0" style="gap: 4px;">
+                        <div class="flex items-center">
+                            <img src="../assets/img/logo_dark.svg" alt="Logo" style="width: 40px; height: 40px;">
+                        </div>
+                        <span class="text-sm md:text-base" style="font-weight: 300; color: #888888;">twin3.ai</span>
+                    </div>
+                </div>
+
+                <!-- Links Section -->
+                <div class="flex flex-wrap lg:flex-nowrap w-full lg:w-2/4 lg:space-x-10">
+                    <!-- Social Media -->
+                    <div class="w-full md:w-1/3 text-center lg:text-left flex-row">
+                        <h5 class="uppercase text-sm lg:text-base" style="font-weight: 300; color: white; padding-bottom: 12px;">Social Media</h5>
+                        <div class="flex justify-center lg:justify-start space-x-4">
+                            <a href="https://x.com/twin3_ai" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+                                <div class="w-6 h-6 flex items-center justify-center" style="padding: 2px;">
+                                    <img src="../assets/img/X_logo.svg" alt="X (Twitter)" class="w-full h-full object-contain">
+                                </div>
+                            </a>
+                            <a href="https://opensea.io/collection/twin3" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+                                <img src="../assets/img/opensea_logo.svg" alt="OpenSea" class="w-6 h-6">
+                            </a>
+                            <a href="https://warpcast.com/twin3.eth" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+                                <img src="../assets/img/farcaster_logo.svg" alt="Warpcast" class="w-6 h-6">
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Resource -->
+                    <div class="w-full md:w-1/3 text-center lg:text-left 2xl:mb-2 pt-4 md:pt-0">
+                        <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Resource</h5>
+                        <ul class="space-y-2">
+                            <li><a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" rel="noreferrer noopener" class="text-[#888888] hover:text-white text-sm lg:text-base" style="font-weight: 200;">Whitepaper</a></li>
+                            <li><a class="text-[#888888] hover:text-white text-sm lg:text-base" href="dashboard.html" style="font-weight: 200;">Tasks</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Features -->
+                    <div class="w-full md:w-1/3 text-center lg:text-left 2xl:mb-10 pt-4 md:pt-0">
+                        <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Features</h5>
+                        <ul class="space-y-2">
+                            <li><a class="text-[#888888] hover:text-white text-sm lg:text-base" href="dashboard.html" style="font-weight: 200;">My Twin</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Newsletter Section -->
+                <div class="w-full lg:w-1/4 text-center lg:text-left space-y-5">
+                    <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Subscribe to twin3 Newsletter</h5>
+                    <div class="flex flex-col lg:flex-row items-center lg:space-x-2 space-y-4 lg:space-y-0">
+                        <a href="https://www.linkedin.com/company/twin3-ai" target="_blank" rel="noreferrer noopener" class="px-4 py-2 border border-[#373737] text-black bg-white rounded-lg hover:bg-transparent hover:text-white hover:border-white transition duration-300 text-sm lg:text-base" style="font-weight: 300;">Subscribe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="mt-10 text-center text-[#888888] text-sm lg:text-base" style="font-weight: 200;">© 2025 twin3.ai v1.0.6</div>
+        </footer>
+    </div>
+
+    <script>
+        // App state
+        let userData = { username: '', career: '' };
+        let selectedCareers = new Set();
+
+        // Career data
+        const careers = [
+            'Artist', 'Creative Content Maker', 'Gamer', 'Healthcare Professional',
+            'Developer', 'Community Builder', 'Writer', 'Research & Innovation Expert',
+            'Educator', 'Social Influencer', 'Athlete', 'Web3 Network Pioneer',
+            'Entrepreneur', 'Travel Explorer'
+        ];
+
+        const careerIcons = {
+            'Artist': 'brush',
+            'Athlete': 'emoji_events',
+            'Community Builder': 'people',
+            'Creative Content Maker': 'palette',
+            'Developer': 'code',
+            'Educator': 'school',
+            'Entrepreneur': 'business_center',
+            'Gamer': 'sports_esports',
+            'Healthcare Professional': 'local_hospital',
+            'Research & Innovation Expert': 'psychology',
+            'Social Influencer': 'groups',
+            'Travel Explorer': 'explore',
+            'Web3 Network Pioneer': 'language',
+            'Writer': 'edit'
+        };
+
+        const MAX_CAREERS = 3;
+
+        // DOM elements
+        const username = document.getElementById('username');
+        const usernameWrapper = document.getElementById('username-wrapper');
+        const usernameClear = document.getElementById('username-clear');
+        const careerGrid = document.getElementById('career-grid');
+        const continueBtn = document.getElementById('continue-btn');
+
+        // Initialize career grid
+        function renderBadges() {
+            if (!careerGrid) return;
+            careerGrid.innerHTML = '';
+
+            careers.forEach(name => {
+                const badge = document.createElement('div');
+                badge.className = 'career-badge';
+                badge.dataset.value = name;
+                badge.innerHTML = `<span class="material-icons icon-sm">${careerIcons[name]}</span><span>${name}</span>`;
+                badge.addEventListener('click', () => toggleBadge(badge));
+                careerGrid.appendChild(badge);
+            });
+        }
+
+        // Toggle career selection
+        function toggleBadge(badge) {
+            // Don't allow clicking disabled badges
+            if (badge.classList.contains('disabled')) return;
+
+            const name = badge.dataset.value;
+            if (badge.classList.contains('selected')) {
+                badge.classList.remove('selected');
+                selectedCareers.delete(name);
+            } else {
+                if (selectedCareers.size >= MAX_CAREERS) return;
+                badge.classList.add('selected');
+                selectedCareers.add(name);
+            }
+            updateBadgeStates();
+            validateForm();
+        }
+
+        // Update badge states based on selection count
+        function updateBadgeStates() {
+            const allBadges = document.querySelectorAll('.career-badge');
+            const isMaxSelected = selectedCareers.size >= MAX_CAREERS;
+
+            allBadges.forEach(badge => {
+                const isSelected = badge.classList.contains('selected');
+
+                if (isSelected) {
+                    // Selected badges remain normal
+                    badge.classList.remove('disabled');
+                } else if (isMaxSelected) {
+                    // Unselected badges become disabled when max is reached
+                    badge.classList.add('disabled');
+                } else {
+                    // Unselected badges remain normal when under max
+                    badge.classList.remove('disabled');
+                }
+            });
+        }
+
+        // Validate form
+        function validateForm() {
+            const name = username ? username.value.trim() : '';
+            continueBtn.disabled = !(name && selectedCareers.size >= 1 && selectedCareers.size <= MAX_CAREERS);
+        }
+
+        // Update clear button visibility
+        function updateClearButton() {
+            if (username && usernameWrapper && usernameClear) {
+                if (username.value.trim()) {
+                    usernameWrapper.classList.add('has-value');
+                    username.classList.add('filled');
+                } else {
+                    usernameWrapper.classList.remove('has-value');
+                    username.classList.remove('filled');
+                }
+            }
+        }
+
+        // Navigation functions
+        function initializeNavigation() {
+            console.log('🔧 Initializing navigation...');
+
+            // Mobile menu toggle
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuClose = document.getElementById('mobile-menu-close');
+
+            console.log('📱 Mobile menu elements:', {
+                btn: !!mobileMenuBtn,
+                menu: !!mobileMenu,
+                close: !!mobileMenuClose
+            });
+
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('🔘 Mobile menu button clicked');
+                    mobileMenu.classList.add('show');
+                    console.log('✅ Added show class to mobile menu');
+                });
+                console.log('✅ Mobile menu button event listener added');
+            } else {
+                console.error('❌ Mobile menu button or menu element not found');
+            }
+
+            if (mobileMenuClose && mobileMenu) {
+                mobileMenuClose.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('❌ Mobile menu close button clicked');
+                    mobileMenu.classList.remove('show');
+                    console.log('✅ Removed show class from mobile menu');
+                });
+                console.log('✅ Mobile menu close event listener added');
+            }
+
+            // Add click outside to close mobile menu
+            document.addEventListener('click', (e) => {
+                if (!mobileMenu || !mobileMenuBtn) return;
+
+                const isMenuOpen = mobileMenu.classList.contains('show');
+                if (!isMenuOpen) return;
+
+                // Check if click is outside menu and menu button
+                const isClickInsideMenu = mobileMenu.contains(e.target);
+                const isClickOnMenuButton = mobileMenuBtn.contains(e.target);
+
+                if (!isClickInsideMenu && !isClickOnMenuButton) {
+                    console.log('🔘 Clicked outside mobile menu, closing...');
+                    mobileMenu.classList.remove('show');
+                    console.log('✅ Mobile menu closed');
+                }
+            });
+
+            console.log('🎉 Navigation initialization complete');
+        }
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('User Info page loaded');
+
+            // Initialize navigation
+            initializeNavigation();
+
+            // Initialize careers
+            renderBadges();
+
+            // Show connected wallet status
+            const walletStatus = document.getElementById('wallet-status');
+            if (walletStatus) {
+                walletStatus.className = 'wallet-status connected';
+                walletStatus.innerHTML = '<div class="status-dot"></div><span>0x1234...7890</span>';
+            }
+
+            // Username input events
+            if (username && usernameWrapper && usernameClear) {
+                username.addEventListener('input', () => {
+                    updateClearButton();
+                    validateForm();
+                });
+
+                usernameClear.addEventListener('click', () => {
+                    username.value = '';
+                    username.focus();
+                    updateClearButton();
+                    validateForm();
+                });
+
+                updateClearButton();
+            }
+
+            // Continue button
+            continueBtn.addEventListener('click', () => {
+                if (!continueBtn.disabled) {
+                    // Save user data
+                    userData.username = username.value.trim() || 'Friend';
+                    const primary = Array.from(selectedCareers)[0] || 'Developer';
+
+                    // Map back to keys expected by dashboard
+                    const keyByName = {
+                        'Creative Content Maker': 'creative',
+                        'Developer': 'developer',
+                        'Research & Innovation Expert': 'researcher',
+                        'Web3 Network Pioneer': 'web3',
+                        'Social Influencer': 'influencer',
+                        'Gamer': 'gamer',
+                        'Artist': 'artist',
+                        'Entrepreneur': 'entrepreneur',
+                        'Educator': 'educator',
+                        'Healthcare Professional': 'healthcare',
+                        'Athlete': 'athlete',
+                        'Writer': 'writer',
+                        'Travel Explorer': 'explorer',
+                        'Community Builder': 'community'
+                    };
+
+                    userData.career = keyByName[primary] || 'developer';
+
+                    // Store in localStorage for dashboard
+                    localStorage.setItem('twin3_user_data', JSON.stringify(userData));
+
+                    console.log('User data saved:', userData);
+
+                    // Navigate to Figma prototype
+                    window.open('https://www.figma.com/proto/AJ58vJatMPOuKFFdYfo5g3/passport?node-id=60-119&t=9eBWcvztAf845wb2-1', '_blank');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

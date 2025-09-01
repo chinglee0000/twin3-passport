@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Figma Tab Component - Exact Implementation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Kanit', sans-serif;
+      background: #0a0a0a;
+      color: white;
+      padding: 40px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .demo-section {
+      margin-bottom: 60px;
+    }
+
+    .demo-title {
+      font-size: 24px;
+      font-weight: 300;
+      margin-bottom: 16px;
+      color: #ffffff;
+    }
+
+    .demo-description {
+      font-size: 16px;
+      font-weight: 200;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    /* Figma Tab Component - Exact API Implementation */
+    
+    /* Horizontal tabs Container - Based on 151-3559 API */
+    .figma-horizontal-tabs-container {
+      /* Figma: 950×46px container */
+      display: flex;
+      width: 950px;
+      height: 46px;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+
+    /* Tab Bar - Based on 151-3640 MCP 數據 */
+    .figma-tab-bar {
+      /* Figma: 160×46px (hug) or 910×46px (full width) */
+      display: flex;
+      height: 46px;
+      padding: 4px;
+      align-items: center;
+      gap: 4px;
+
+      /* Figma: border-radius: 8px; background: rgba(36, 36, 36, 1); */
+      border-radius: 8px;
+      background: rgba(36, 36, 36, 1);
+
+      width: fit-content;
+      position: relative; /* 為內部 chevron 按鈕定位 */
+    }
+
+    /* Full width variant - 基於 MCP 數據 */
+    .figma-tab-bar.full-width {
+      width: 910px;
+      overflow: hidden; /* 直接 cut 掉超出的部分 */
+    }
+
+    /* Tab Component - Default State (Current=False, State=Default) */
+    .figma-tab-default {
+      /* Figma Exact Dimensions from 151-3559: 48×38px inside 46px container */
+      height: 38px;
+      min-width: 48px;
+      padding: 8px 16px;
+
+      /* Figma Background: Transparent (no background) */
+      background: transparent;
+      border: none;
+      border-radius: 6px;
+
+      /* Figma Typography: Kanit 300 16px, White text */
+      font-family: 'Kanit', sans-serif;
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 16px;
+      color: rgba(255, 255, 255, 1);
+
+      /* Layout */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    /* Tab Component - Active State (Current=True, State=Default) */
+    .figma-tab-active {
+      /* Figma Exact Dimensions from API: 48×38px (sm) */
+      height: 38px;
+      min-width: 48px;
+      padding: 8px 16px;
+
+      /* Figma Background: White (rgba(255, 255, 255, 1)) */
+      background: rgba(255, 255, 255, 1);
+      border: none;
+      border-radius: 6px;
+
+      /* Figma Typography: Kanit 300 16px, Black text */
+      font-family: 'Kanit', sans-serif;
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 16px;
+      color: rgba(0, 0, 0, 1);
+
+      /* Layout */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    /* Tab Component - Hover State (Current=False, State=Hover) */
+    .figma-tab-hover {
+      /* Figma Exact Dimensions from API: 48×38px (sm) */
+      height: 38px;
+      min-width: 48px;
+      padding: 8px 16px;
+
+      /* Figma Background: White (rgba(255, 255, 255, 1)) */
+      background: rgba(255, 255, 255, 1);
+      border: none;
+      border-radius: 6px;
+
+      /* Figma Typography: Kanit 300 16px, Black text */
+      font-family: 'Kanit', sans-serif;
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 16px;
+      color: rgba(0, 0, 0, 1);
+
+      /* Layout */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    /* Tab Component - Disabled State (State=Disable) */
+    .figma-tab-disabled {
+      /* Figma Exact Dimensions from API: 48×38px (sm) */
+      height: 38px;
+      min-width: 48px;
+      padding: 8px 16px;
+
+      /* Figma Background: Transparent (no background) */
+      background: transparent;
+      border: none;
+      border-radius: 6px;
+
+      /* Figma Typography: Kanit 300 16px, Gray text */
+      font-family: 'Kanit', sans-serif;
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 16px;
+      color: rgba(164, 167, 174, 1);
+
+      /* Layout */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      cursor: not-allowed;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+      opacity: 0.6;
+    }
+
+    /* Add Button - Based on 151-3559 API (24×24px) */
+    .figma-add-button {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1px solid #A4A7AE;
+      background: transparent;
+      color: #A4A7AE;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .figma-add-button:hover {
+      background: rgba(164, 167, 174, 0.1);
+      color: #ffffff;
+    }
+
+    /* Chevron Buttons - 基礎樣式 */
+    .figma-chevron-left,
+    .figma-chevron-right {
+      /* Figma: 46×46px */
+      width: 46px;
+      height: 46px;
+      border: none;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+      opacity: 0;
+      visibility: hidden;
+      position: absolute;
+      z-index: 10;
+    }
+
+    /* Left Chevron - 完全切齊 tab bar 左邊緣 */
+    .figma-chevron-left {
+      /* 與 tab bar 左邊緣完全切齊的圓角 */
+      border-radius: 8px 0 0 8px;
+
+      /* 漸變方向: 從左到右 (x=0.609 to x=1.0) */
+      /* gradientHandlePositions: 起點 x=0.609, 終點 x≈1 */
+      background: linear-gradient(90deg, rgba(45, 45, 45, 1) 0%, rgba(45, 45, 45, 0) 100%);
+    }
+
+    /* Right Chevron - 完全切齊 tab bar 右邊緣 */
+    .figma-chevron-right {
+      /* 與 tab bar 右邊緣完全切齊的圓角 */
+      border-radius: 0 8px 8px 0;
+
+      /* 漸變方向: 從右到左 (x=0.402 to x≈0) */
+      /* gradientHandlePositions: 起點 x=0.402, 終點 x≈0 */
+      background: linear-gradient(270deg, rgba(45, 45, 45, 1) 0%, rgba(45, 45, 45, 0) 100%);
+    }
+
+    .figma-chevron-left:hover {
+      /* Hover 狀態保持左到右漸變方向 */
+      background: linear-gradient(90deg, rgba(45, 45, 45, 0.9) 0%, rgba(45, 45, 45, 0.1) 100%);
+    }
+
+    .figma-chevron-right:hover {
+      /* Hover 狀態保持右到左漸變方向 */
+      background: linear-gradient(270deg, rgba(45, 45, 45, 0.9) 0%, rgba(45, 45, 45, 0.1) 100%);
+    }
+
+    .figma-chevron-left.visible,
+    .figma-chevron-right.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Chevron 按鈕定位 - 完全切齊 tab bar 左右邊緣 */
+    .figma-chevron-left {
+      /* 完全切齊 tab bar 左邊緣 */
+      left: 0;
+      top: 0;
+    }
+
+    .figma-chevron-right {
+      /* 完全切齊 tab bar 右邊緣 */
+      right: 0;
+      top: 0;
+    }
+
+    /* 圖標精確定位 - 基於 Figma 位置數據 */
+    .figma-chevron-left svg {
+      /* Left chevron icon: 位置 x=1412, y=1447 相對於容器 x=1399, y=1434 = 偏移 13px, 13px */
+      transform: translateX(0px); /* 居中對齊 */
+    }
+
+    .figma-chevron-right svg {
+      /* Right chevron icon: 位置 x=1492, y=1447 相對於容器 x=1479, y=1434 = 偏移 13px, 13px */
+      transform: translateX(0px); /* 居中對齊 */
+    }
+
+    /* Tabs 滾動容器 - 重新設計 */
+    .figma-tabs-scroll-container {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex: 1;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-behavior: smooth;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE/Edge */
+    }
+
+    /* 隱藏滾動條 */
+    .figma-tabs-scroll-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Medium Size Variants */
+    .figma-tab-md {
+      height: 40px; /* md size is 40px instead of 38px */
+    }
+
+    /* Demo Grid */
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .state-demo {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .state-title {
+      font-size: 18px;
+      font-weight: 300;
+      margin-bottom: 16px;
+      color: #ffffff;
+    }
+
+    .state-description {
+      font-size: 14px;
+      font-weight: 200;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="demo-title" style="font-size: 32px; margin-bottom: 40px;">
+      Figma Tab Component - Exact API Implementation
+    </h1>
+    
+    <!-- Horizontal tabs Demo - Based on 151-3559 -->
+    <div class="demo-section">
+      <h2 class="demo-title">Horizontal tabs - Hug Content (151-3559)</h2>
+      <p class="demo-description">
+        基於 151-3559 API 數據：950×46px 容器，160×46px tab bar，包含 add button (24×24px)。
+      </p>
+
+      <div class="figma-horizontal-tabs-container">
+        <div class="figma-tab-bar" id="hug-tabs">
+          <div class="figma-tab-active" data-index="0">General</div>
+          <div class="figma-tab-default" data-index="1">Technical</div>
+          <div class="figma-tab-default" data-index="2">Creative</div>
+        </div>
+        <div class="figma-add-button">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Full Width Demo -->
+    <div class="demo-section">
+      <h2 class="demo-title">Horizontal tabs - Full Width (151-3559)</h2>
+      <p class="demo-description">
+        Full width=true 變體：910×46px tab bar，包含更多 tabs 和 carousel arrow (46×46px)。
+      </p>
+
+      <div class="figma-horizontal-tabs-container" id="full-width-container">
+        <!-- Tab Bar with Chevron Buttons Inside - 基於 151-3640 MCP 數據 -->
+        <div class="figma-tab-bar full-width" id="full-width-tabs">
+          <!-- Left Chevron Button (在 tab bar 內部) -->
+          <div class="figma-chevron-left" id="chevron-left">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <!-- Tabs 滾動容器 -->
+          <div class="figma-tabs-scroll-container" id="tabs-scroll-container">
+            <div class="figma-tab-active" data-index="0">General</div>
+            <div class="figma-tab-default" data-index="1">Technical</div>
+            <div class="figma-tab-default" data-index="2">Creative</div>
+            <div class="figma-tab-default" data-index="3">Innovation</div>
+            <div class="figma-tab-default" data-index="4">Leadership</div>
+            <div class="figma-tab-default" data-index="5">Communication</div>
+            <div class="figma-tab-default" data-index="6">Strategy</div>
+            <div class="figma-tab-default" data-index="7">Design</div>
+            <div class="figma-tab-default" data-index="8">Development</div>
+            <div class="figma-tab-default" data-index="9">Marketing</div>
+            <div class="figma-tab-default" data-index="10">Analytics</div>
+            <div class="figma-tab-default" data-index="11">Research</div>
+            <div class="figma-tab-default" data-index="12">Testing</div>
+            <div class="figma-tab-default" data-index="13">Operations</div>
+            <div class="figma-tab-default" data-index="14">Support</div>
+            <div class="figma-tab-default" data-index="15">Sales</div>
+            <div class="figma-tab-default" data-index="16">Finance</div>
+            <div class="figma-tab-default" data-index="17">Legal</div>
+          </div>
+
+          <!-- Right Chevron Button (在 tab bar 內部) -->
+          <div class="figma-chevron-right" id="chevron-right">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Add Button (在 container 內，tab bar 外) -->
+        <div class="figma-add-button">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Individual State Demos -->
+    <div class="demo-section">
+      <h2 class="demo-title">Individual Tab States</h2>
+      <p class="demo-description">
+        根據 Figma API 數據的各種 tab 狀態展示。
+      </p>
+      
+      <div class="demo-grid">
+        <div class="state-demo">
+          <h3 class="state-title">Default State</h3>
+          <p class="state-description">Current=False, State=Default<br>透明背景，白色文字</p>
+          <div class="figma-tab-bar">
+            <div class="figma-tab-default">Default</div>
+          </div>
+        </div>
+
+        <div class="state-demo">
+          <h3 class="state-title">Active State</h3>
+          <p class="state-description">Current=True, State=Default<br>白色背景，黑色文字</p>
+          <div class="figma-tab-bar">
+            <div class="figma-tab-active">Active</div>
+          </div>
+        </div>
+
+        <div class="state-demo">
+          <h3 class="state-title">Hover State</h3>
+          <p class="state-description">Current=False, State=Hover<br>白色背景，黑色文字</p>
+          <div class="figma-tab-bar">
+            <div class="figma-tab-hover">Hover</div>
+          </div>
+        </div>
+
+        <div class="state-demo">
+          <h3 class="state-title">Disabled State</h3>
+          <p class="state-description">State=Disable<br>透明背景，灰色文字</p>
+          <div class="figma-tab-bar">
+            <div class="figma-tab-disabled">Disabled</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Tab 切換功能 - 更新為支援新結構
+    function initTabBar(containerId) {
+      const tabBar = document.getElementById(containerId);
+
+      // 事件委託到整個 tab bar
+      tabBar.addEventListener('click', (e) => {
+        if (e.target.dataset.index !== undefined) {
+          const clickedIndex = parseInt(e.target.dataset.index);
+
+          // 更新所有 tabs 的樣式
+          tabBar.querySelectorAll('[data-index]').forEach((tab, index) => {
+            if (tab.classList.contains('figma-tab-disabled')) {
+              return; // 跳過 disabled tabs
+            }
+
+            if (index === clickedIndex) {
+              tab.className = 'figma-tab-active';
+            } else {
+              tab.className = 'figma-tab-default';
+            }
+          });
+        }
+      });
+
+      // 添加 hover 事件處理
+      tabBar.addEventListener('mouseover', (e) => {
+        if (e.target.dataset.index !== undefined &&
+            !e.target.classList.contains('figma-tab-active') &&
+            !e.target.classList.contains('figma-tab-disabled')) {
+          e.target.className = 'figma-tab-hover';
+        }
+      });
+
+      tabBar.addEventListener('mouseout', (e) => {
+        if (e.target.dataset.index !== undefined &&
+            !e.target.classList.contains('figma-tab-active') &&
+            !e.target.classList.contains('figma-tab-disabled')) {
+          e.target.className = 'figma-tab-default';
+        }
+      });
+    }
+
+    // Full width container 滾動功能 - 重新實現
+    function initFullWidthContainer(containerId) {
+      const container = document.getElementById(containerId);
+      const tabBar = container.querySelector('.figma-tab-bar');
+      const leftChevron = container.querySelector('.figma-chevron-left');
+      const rightChevron = container.querySelector('.figma-chevron-right');
+      const scrollContainer = container.querySelector('.figma-tabs-scroll-container');
+
+      const scrollStep = 150; // 每次滾動的像素數
+
+      // 計算最大滾動位置
+      function getMaxScrollLeft() {
+        return scrollContainer.scrollWidth - scrollContainer.clientWidth;
+      }
+
+      // 滾動到最後 - 精確對齊最後一個 tab
+      function scrollToEnd() {
+        const maxScrollLeft = getMaxScrollLeft();
+        scrollContainer.scrollLeft = maxScrollLeft;
+      }
+
+      // 檢查滾動位置並顯示對應的 chevron
+      function updateChevronVisibility() {
+        const currentScroll = scrollContainer.scrollLeft;
+        const maxScroll = getMaxScrollLeft();
+
+        // 隱藏所有 chevron
+        leftChevron.classList.remove('visible');
+        rightChevron.classList.remove('visible');
+
+        // 根據滾動位置決定顯示哪個 chevron
+        if (currentScroll > 5) {
+          // 可以向左滾動，顯示左箭頭
+          leftChevron.classList.add('visible');
+        }
+
+        if (currentScroll < maxScroll - 5) {
+          // 可以向右滾動，顯示右箭頭
+          rightChevron.classList.add('visible');
+        }
+      }
+
+      // 左箭頭點擊事件 - 向左滾動
+      leftChevron.addEventListener('click', (e) => {
+        e.stopPropagation();
+        scrollContainer.scrollLeft = Math.max(0, scrollContainer.scrollLeft - scrollStep);
+      });
+
+      // 右箭頭點擊事件 - 向右滾動
+      rightChevron.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const maxScroll = getMaxScrollLeft();
+        const newPosition = scrollContainer.scrollLeft + scrollStep;
+
+        // 如果接近最大滾動位置，直接精確滾動到最後
+        if (newPosition >= maxScroll - 30) {
+          scrollToEnd();
+        } else {
+          scrollContainer.scrollLeft = newPosition;
+        }
+      });
+
+      // 監聽滾動事件來更新 chevron 顯示
+      scrollContainer.addEventListener('scroll', () => {
+        updateChevronVisibility();
+      });
+
+      // Hover 時顯示 chevron
+      container.addEventListener('mouseenter', () => {
+        updateChevronVisibility();
+      });
+
+      // 離開時隱藏 chevron
+      container.addEventListener('mouseleave', () => {
+        leftChevron.classList.remove('visible');
+        rightChevron.classList.remove('visible');
+      });
+
+      // 初始化時檢查是否需要顯示 chevron
+      setTimeout(() => {
+        updateChevronVisibility();
+
+        // 調試信息
+        console.log('Tab Bar Width:', tabBar.offsetWidth);
+        console.log('Scroll Container Client Width:', scrollContainer.clientWidth);
+        console.log('Scroll Container Scroll Width:', scrollContainer.scrollWidth);
+        console.log('Max Scroll Left:', getMaxScrollLeft());
+      }, 100);
+    }
+
+    // 初始化 tab bars
+    initTabBar('hug-tabs');
+    initTabBar('full-width-tabs');
+    initFullWidthContainer('full-width-container');
+  </script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Section 1 Test - Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            'kanit': ['Kanit', 'sans-serif'],
+          },
+          colors: {
+            primary: {
+              bg: '#0A0A0A',
+            },
+            text: {
+              primary: '#FFFFFF',
+              secondary: '#A4A7AE',
+            },
+            custom: {
+              green: '#32D583',
+              purple: '#D6BBFB',
+              gray: '#414651',
+            },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Kanit', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-[#0A0A0A] min-h-screen flex items-center justify-center">
+  
+  <!-- Section 1: Profile Bar - Exact Figma Match -->
+  <div class="w-[1000px] h-16 bg-white/10 backdrop-blur-lg border border-white/10 rounded-xl flex items-center px-6" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1);">
+
+    <!-- Left Side: Avatar + Name -->
+    <div class="flex items-center gap-6 flex-1">
+      <!-- Avatar Container - 64x64 -->
+      <div class="w-16 h-16 flex-shrink-0">
+        <div class="w-16 h-16 rounded-full overflow-hidden">
+          <img
+            src="assets/img/figma/Avatar.png"
+            alt="Avatar"
+            class="w-16 h-16 object-cover"
+          />
+        </div>
+      </div>
+
+      <!-- User Name -->
+      <h1 class="font-kanit font-normal text-[36px] leading-[50.4px] text-white">
+        Hi, Alex!
+      </h1>
+    </div>
+
+    <!-- Right Side: Reward + Withdraw -->
+    <div class="flex items-center gap-3 flex-shrink-0">
+      <!-- Reward Display Container -->
+      <div class="flex items-center gap-3 px-4 py-2 rounded-lg" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); height: 57px;">
+        <!-- $twin3 Label -->
+        <span class="font-kanit font-light text-[18px] leading-[28px] text-[#A4A7AE]">
+          $twin3
+        </span>
+
+        <!-- Vertical Divider -->
+        <div class="w-px h-[41px] bg-white/10"></div>
+
+        <!-- Reward Values Container -->
+        <div class="flex items-end gap-0.5">
+          <!-- Dollar Sign -->
+          <span class="font-kanit font-normal text-[36px] leading-[40px] text-white">
+            $
+          </span>
+
+          <!-- Amount -->
+          <span class="font-kanit font-normal text-[36px] leading-[40px] text-white">
+            0.274
+          </span>
+
+          <!-- Increase -->
+          <span class="font-kanit font-light text-[16px] leading-[20px] text-[#32D583] ml-1">
+            +0.01
+          </span>
+        </div>
+      </div>
+
+      <!-- Withdraw Button -->
+      <button class="bg-white text-black px-3 py-1.5 rounded-lg text-xs font-light font-kanit hover:bg-gray-100 transition-colors">
+        Withdraw
+      </button>
+    </div>
+  </div>
+
+</body>
+</html>

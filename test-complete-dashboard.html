@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complete Dashboard Test - Pixel Perfect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            'kanit': ['Kanit', 'sans-serif'],
+          },
+          colors: {
+            primary: {
+              bg: '#0A0A0A',
+            },
+            text: {
+              primary: '#FFFFFF',
+              secondary: '#A4A7AE',
+            },
+            custom: {
+              green: '#32D583',
+              purple: '#D6BBFB',
+              gray: '#414651',
+            },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Kanit', sans-serif;
+    }
+
+    /* Unified Button Styles - Consistent with other pages */
+    .btn-primary {
+      border: 1px solid #373737;
+      color: black;
+      background: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 300;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Kanit', sans-serif;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: transparent;
+      color: white;
+      border-color: white;
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:focus:not(:disabled) {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-primary:active:not(:disabled) {
+      transform: translateY(0);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-primary:disabled {
+      background: rgba(255, 255, 255, 0.1);
+      color: #666666;
+      border-color: rgba(255, 255, 255, 0.2);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 300;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Kanit', sans-serif;
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: white;
+      color: black;
+      border-color: white;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary:focus:not(:disabled) {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-secondary:active:not(:disabled) {
+      transform: translateY(0);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-secondary:disabled {
+      background: rgba(255, 255, 255, 0.02);
+      color: #666666;
+      border-color: rgba(255, 255, 255, 0.1);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-small {
+      padding: 8px 16px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body class="bg-[#0A0A0A] min-h-screen">
+  
+  <!-- Main Container - 1000px width, centered -->
+  <div class="w-[1000px] mx-auto pt-24 pb-12 space-y-4">
+    
+    <!-- Section 1: Profile Bar -->
+    <div class="w-full h-16 bg-white/10 backdrop-blur-lg border border-white/10 rounded-xl flex items-center px-6">
+      <!-- Left Side: Avatar + Name -->
+      <div class="flex items-center gap-6 flex-1">
+        <!-- Avatar Container -->
+        <div class="w-16 h-16 flex-shrink-0">
+          <div class="w-16 h-16 rounded-full overflow-hidden">
+            <img
+              src="assets/img/figma/Avatar.png"
+              alt="Avatar"
+              class="w-16 h-16 object-cover"
+            />
+          </div>
+        </div>
+        
+        <!-- User Name -->
+        <h1 class="font-kanit font-normal text-[36px] leading-[50.4px] text-white">
+          Hi, Alex!
+        </h1>
+      </div>
+
+      <!-- Right Side: Reward + Withdraw -->
+      <div class="flex items-center gap-3 flex-shrink-0">
+        <!-- Reward Display -->
+        <div class="flex items-center gap-3 px-4 py-2 rounded-lg bg-white/5 border border-white/10 h-[57px]">
+          <span class="font-kanit font-light text-[18px] leading-[28px] text-[#A4A7AE]">$twin3</span>
+          <div class="w-px h-[41px] bg-white/10"></div>
+          <div class="flex items-end gap-0.5">
+            <span class="font-kanit font-normal text-[36px] leading-[40px] text-white">$</span>
+            <span class="font-kanit font-normal text-[36px] leading-[40px] text-white">0.274</span>
+            <span class="font-kanit font-light text-[16px] leading-[20px] text-[#32D583] ml-1">+0.01</span>
+          </div>
+        </div>
+        
+        <!-- Withdraw Button -->
+        <button class="btn-primary btn-small">
+          Withdraw
+        </button>
+      </div>
+    </div>
+
+    <!-- Section 2: Score Cards -->
+    <div class="grid grid-cols-2 gap-6">
+      <!-- Humanity Index Card -->
+      <div class="bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl p-6">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="font-kanit font-light text-[18px] leading-[28px] text-white">Humanity Index</h2>
+          <svg width="13.33" height="13.33" viewBox="0 0 13.33 13.33" fill="none">
+            <circle cx="6.665" cy="6.665" r="5.665" stroke="#A4A7AE" strokeWidth="1.33"/>
+            <path d="M5.065 5.065a1.6 1.6 0 0 1 3.2 0c0 1.067-1.6 1.6-1.6 1.6" stroke="#A4A7AE" strokeWidth="1.33"/>
+            <path d="M6.665 9.332h.007" stroke="#A4A7AE" strokeWidth="1.33"/>
+          </svg>
+        </div>
+        
+        <!-- Score -->
+        <div class="text-center mb-3">
+          <span class="font-kanit font-normal text-[36px] leading-[40px] text-white">204</span>
+          <span class="font-kanit font-light text-[16px] leading-[20px] text-[#A4A7AE]"> / 265</span>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="mb-4">
+          <div class="w-full h-2 bg-[#414651] rounded">
+            <div class="w-[70%] h-2 bg-[#D6BBFB] rounded"></div>
+          </div>
+        </div>
+        
+        <!-- Button -->
+        <button class="btn-secondary btn-small w-full">
+          Improve your Humanity Index
+        </button>
+      </div>
+
+      <!-- twin3 Airdrop Score Card -->
+      <div class="bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl p-6">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="font-kanit font-light text-[18px] leading-[28px] text-white">twin3 Airdrop Score</h2>
+          <svg width="13.33" height="13.33" viewBox="0 0 13.33 13.33" fill="none">
+            <circle cx="6.665" cy="6.665" r="5.665" stroke="#A4A7AE" strokeWidth="1.33"/>
+            <path d="M5.065 5.065a1.6 1.6 0 0 1 3.2 0c0 1.067-1.6 1.6-1.6 1.6" stroke="#A4A7AE" strokeWidth="1.33"/>
+            <path d="M6.665 9.332h.007" stroke="#A4A7AE" strokeWidth="1.33"/>
+          </svg>
+        </div>
+        
+        <!-- Score -->
+        <div class="text-center mb-3">
+          <span class="font-kanit font-normal text-[36px] leading-[40px] text-white">187</span>
+          <span class="font-kanit font-light text-[16px] leading-[20px] text-[#A4A7AE]"> / 265</span>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="mb-4">
+          <div class="w-full h-2 bg-[#414651] rounded">
+            <div class="w-[73%] h-2 bg-[#D6BBFB] rounded"></div>
+          </div>
+        </div>
+        
+        <!-- Index Grid -->
+        <div class="grid grid-cols-7 gap-1 text-center">
+          <span class="font-kanit font-normal text-[14px] leading-[16px] text-[#A4A7AE]">Bi: 00</span>
+          <span class="font-kanit font-normal text-[14px] leading-[16px] text-[#A4A7AE]">Di: 00</span>
+          <span class="font-kanit font-normal text-[14px] leading-[16px] text-[#A4A7AE]">Si: 00</span>
+          <span class="font-kanit font-normal text-[14px] leading-[16px] text-[#A4A7AE]">H: 00</span>
+          <span class="font-kanit font-normal text-[14px] leading-[16px] text-[#A4A7AE]">H: 00</span>
+          <span class="font-kanit font-normal text-[14px] leading-[16px] text-[#A4A7AE]">H: 00</span>
+          <span class="font-kanit font-normal text-[14px] leading-[16px] text-[#A4A7AE]">H: 00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Account Connected -->
+    <div class="space-y-4">
+      <!-- Header -->
+      <div class="flex items-start justify-between">
+        <div class="flex-1">
+          <div class="flex items-center gap-1.5 mb-2">
+            <h2 class="font-kanit font-light text-[24px] leading-[32px] text-white">Account Connected</h2>
+            <span class="font-kanit font-light text-[24px] leading-[32px] text-[#A4A7AE]">(3/13)</span>
+          </div>
+          <p class="font-kanit font-normal text-[14px] leading-[20px] text-[#A4A7AE] max-w-[807px]">
+            Connect accounts that match your expertise and interests. Required Accounts adapt to your profession tabs, helping you find relevant connections. Boost your Airdrop Score and unlock Matrix Traits insights to understand your account's value across different specializations.
+          </p>
+        </div>
+        
+        <!-- Refresh Button -->
+        <button class="btn-secondary btn-small flex items-center gap-2">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M1.33337 2.66667V6.66667H5.33337" stroke="currentColor" strokeWidth="1.33"/>
+            <path d="M14.6666 13.3333V9.33333H10.6666" stroke="currentColor" strokeWidth="1.33"/>
+            <path d="M13.1133 6C12.7733 4.94 12.1133 4.02 11.2266 3.38C10.34 2.74 9.27331 2.41333 8.19331 2.44667C7.11331 2.48 6.06664 2.87333 5.22664 3.56667C4.38664 4.26 3.79997 5.21333 3.55997 6.28L1.33331 6.66667M14.6666 9.33333L12.44 9.72C12.2 10.7867 11.6133 11.74 10.7733 12.4333C9.93331 13.1267 8.88664 13.52 7.80664 13.5533C6.72664 13.5867 5.65997 13.26 4.77331 12.62C3.88664 11.98 3.22664 11.06 2.88664 10" stroke="currentColor" strokeWidth="1.33"/>
+          </svg>
+          <span>Refresh All Accounts</span>
+        </button>
+      </div>
+
+      <!-- Content Card -->
+      <div class="bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl p-6">
+        <div class="text-center text-[#A4A7AE] font-kanit font-light">
+          [Account Connection Interface - Complex layout to be implemented]
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: Social Contribution -->
+    <div class="space-y-4">
+      <!-- Header -->
+      <div class="text-center">
+        <h2 class="font-kanit font-light text-[24px] leading-[32px] text-white">twin3 Social Contribution</h2>
+        <span class="font-kanit font-light text-[24px] leading-[32px] text-[#A4A7AE]">(1/6)</span>
+        <p class="font-kanit font-normal text-[14px] leading-[20px] text-[#A4A7AE] mt-2">
+          Contribute to the twin3 ecosystem by participating in social activities, sharing content, and engaging with the community to earn rewards and build your reputation.
+        </p>
+      </div>
+
+      <!-- Task List -->
+      <div class="bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl p-6">
+        <div class="text-center text-[#A4A7AE] font-kanit font-light">
+          [Social Contribution Tasks - To be implemented]
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

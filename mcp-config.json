@@ -1,0 +1,22 @@
+{
+  "liveServer.settings.donotShowInfoMsg": true,
+  "liveServer.settings.donotVerifyTags": true,
+  "cSpell.language": "en,en-US",
+  "window.zoomLevel": 1,
+  "files.autoSave": "afterDelay",
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "github.copilot.enable": {
+    "*": false
+  },
+  "chat.mcp.discovery.enabled": true,
+  "chat.mcp.serverSampling": {},
+  "chat.mcp.servers": {
+    "figma": {
+      "command": "npx",
+      "args": ["-y", "figma-developer-mcp", "--stdio", "--env", ".env"]
+    }
+  },
+  "git.autofetch": true
+}

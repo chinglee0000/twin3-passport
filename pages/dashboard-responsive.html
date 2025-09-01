@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Twin3 Dashboard - Responsive</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-bg: #0A0A0A;
+      --text-primary: #FFFFFF;
+      --text-secondary: #A4A7AE;
+      --border-color: rgba(255, 255, 255, 0.1);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --progress-green: #32D583;
+      --progress-purple: #D6BBFB;
+      --progress-light-green: #A6F4C5;
+    }
+
+    body { 
+      font-family: 'Kanit', sans-serif; 
+      background: var(--primary-bg); 
+      color: var(--text-primary); 
+      margin: 0; 
+    }
+
+    .figma-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 96px 220px 0;
+    }
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+    }
+
+    .progress-bar {
+      background: #414651;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill-green {
+      background: var(--progress-green);
+    }
+
+    .progress-fill-purple {
+      background: var(--progress-purple);
+    }
+
+    .progress-fill-light-green {
+      background: var(--progress-light-green);
+    }
+
+    @media (max-width: 1440px) {
+      .figma-container {
+        padding: 96px 40px 0;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .figma-container {
+        padding: 80px 20px 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .figma-container {
+        padding: 60px 16px 0;
+      }
+    }
+
+    /* Navigation bar styles */
+    .nav-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .nav-bar {
+        padding: 1rem 2rem;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .nav-bar {
+        padding: 1rem 4rem;
+      }
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    .nav-actions {
+      display: none;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    @media (min-width: 1024px) {
+      .nav-actions {
+        display: inline-flex;
+      }
+    }
+
+    .nav-link {
+      color: var(--text-secondary);
+      font-weight: 300;
+      font-size: 0.875rem;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+    }
+
+    .nav-link:hover {
+      color: #fff;
+    }
+
+    .nav-link-focused {
+      color: #fff;
+      font-weight: 300;
+    }
+
+    .mobile-menu-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      border: 1px solid #333;
+      border-radius: 0.5rem;
+      color: #fff;
+      background: transparent;
+    }
+
+    @media (min-width: 1024px) {
+      .mobile-menu-btn {
+        display: none;
+      }
+    }
+
+    .mobile-menu {
+      position: fixed;
+      inset: 0;
+      z-index: 1100;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(8px);
+      display: none;
+      flex-direction: column;
+      padding: 1.25rem;
+    }
+
+    .mobile-menu.open {
+      display: flex;
+    }
+
+    .mobile-menu-link {
+      color: var(--text-secondary);
+      font-weight: 300;
+    }
+
+    .mobile-menu-link-focused {
+      color: #fff;
+    }
+
+    .wallet-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid #373737;
+      padding: 0.4rem 0.6rem;
+      border-radius: 0.5rem;
+    }
+
+    .wallet-balance {
+      color: #9ca3af;
+      font-weight: 300;
+      font-size: 0.75rem;
+    }
+
+    .wallet-address {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #fff;
+      font-weight: 300;
+      font-size: 0.875rem;
+    }
+
+    .wallet-avatar {
+      width: 22px;
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #1f2937;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+    }
+
+    /* Unified Button Styles - Consistent with other pages */
+    .btn-primary {
+      border: 1px solid #373737;
+      color: black;
+      background: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 300;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Kanit', sans-serif;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: transparent;
+      color: white;
+      border-color: white;
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:focus:not(:disabled) {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-primary:active:not(:disabled) {
+      transform: translateY(0);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-primary:disabled {
+      background: rgba(255, 255, 255, 0.1);
+      color: #666666;
+      border-color: rgba(255, 255, 255, 0.2);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 300;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Kanit', sans-serif;
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: white;
+      color: black;
+      border-color: white;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary:focus:not(:disabled) {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-secondary:active:not(:disabled) {
+      transform: translateY(0);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-secondary:disabled {
+      background: rgba(255, 255, 255, 0.02);
+      color: #666666;
+      border-color: rgba(255, 255, 255, 0.1);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-small {
+      padding: 8px 16px;
+      font-size: 14px;
+    }
+
+    .btn-connect {
+      width: 100%;
+      justify-content: center;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Global Navigation Bar - 全域導航 -->
+  <nav id="global-nav" class="nav-bar">
+    <a href="https://twin3.ai" class="nav-logo">
+      <div class="flex items-center">
+        <img src="../assets/img/logo_dark.svg" alt="Logo" class="w-10 h-10 md:w-10 md:h-10">
+      </div>
+    </a>
+
+    <!-- Mobile menu button -->
+    <button class="mobile-menu-btn" id="mobile-menu-btn">
+      <span class="material-icons">menu</span>
+    </button>
+
+    <!-- Desktop navigation -->
+    <div class="nav-actions">
+      <a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" rel="noreferrer noopener" class="nav-link">WHITEPAPER</a>
+      <a class="nav-link" href="https://twin3.ai/dashboard">MY TWIN</a>
+      <span class="nav-link nav-link-focused" aria-current="page">PASSPORT</span>
+
+      <!-- Wallet button -->
+      <div class="wallet-button">
+        <div class="wallet-balance">0 BNB</div>
+        <div class="wallet-address">
+          <div class="wallet-avatar">👽</div>
+          <div class="wallet-address-text">0x19…5ACe</div>
+          <svg class="dropdown-icon" fill="none" height="7" width="14" xmlns="http://www.w3.org/2000/svg">
+            <title>Dropdown</title>
+            <path d="M12.75 1.54001L8.51647 5.0038C7.77974 5.60658 6.72026 5.60658 5.98352 5.0038L1.75 1.54001" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div class="mobile-menu" id="mobile-menu">
+      <button class="mobile-menu-btn" id="mobile-menu-close">
+        <span class="material-icons">close</span>
+      </button>
+      <div class="flex flex-col gap-3 mt-3">
+        <a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" rel="noreferrer noopener" class="mobile-menu-link">WHITEPAPER</a>
+        <a href="https://twin3.ai/dashboard" class="mobile-menu-link">MY TWIN</a>
+        <span class="mobile-menu-link mobile-menu-link-focused" aria-current="page">PASSPORT</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="figma-container">
+    <!-- Section 1: Profile - Exact Figma Implementation -->
+    <section class="mb-4" style="height: 64px;">
+      <div class="flex items-center justify-between h-full">
+        <!-- Profile Section (Left) -->
+        <div class="flex items-center gap-6">
+          <!-- Avatar (64x64) -->
+          <div class="w-16 h-16 rounded-full overflow-hidden">
+            <img src="../assets/img/figma/Avatar.png" alt="Avatar" class="w-16 h-16 object-cover">
+          </div>
+
+          <!-- User Name -->
+          <h1 class="text-[36px] font-normal text-white leading-[1.4] font-['Kanit']">Hi, Alex!</h1>
+        </div>
+
+        <!-- Balance Section (Right) -->
+        <div class="flex items-center gap-3 bg-white/5 border border-white/10 rounded-lg px-4 py-2">
+          <!-- $twin3 Label -->
+          <span class="text-[#A4A7AE] text-lg font-light font-['Kanit']">$twin3</span>
+
+          <!-- Vertical Divider -->
+          <div class="w-px h-10 bg-white/10"></div>
+
+          <!-- Reward Values -->
+          <div class="flex items-end gap-0.5 pb-px">
+            <span class="text-[36px] font-normal text-white leading-[1.111] font-['Kanit']">$</span>
+            <span class="text-[36px] font-normal text-white leading-[1.111] font-['Kanit']">0.274</span>
+            <span class="text-[#32D583] text-base font-light leading-[1.25] ml-0.5 font-['Kanit']"> +0.01</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Score Cards - Exact Figma Implementation -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4">
+      <!-- Humanity Index Card (488x197) -->
+      <div class="glass-card p-6 flex flex-col items-center gap-3">
+        <!-- Title Section -->
+        <div class="w-full flex items-center justify-between">
+          <h2 class="text-lg font-light text-white font-['Kanit']">Humanity Index</h2>
+          <!-- Help Icon -->
+          <img src="../assets/img/icons/help-circle.svg" alt="Help" width="16" height="16" class="opacity-100 hover:opacity-80 transition-opacity duration-200">
+        </div>
+
+        <!-- Score Section -->
+        <div class="w-full flex flex-col gap-2">
+          <!-- Main Score -->
+          <div class="text-center">
+            <span class="text-[36px] font-normal text-white font-['Kanit'] leading-[1.111]">204</span>
+            <span class="text-[#A4A7AE] text-base font-light font-['Kanit'] leading-[1.25]"> / 265</span>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="flex items-center gap-3">
+            <div class="progress-bar flex-1 h-2">
+              <div class="bg-[#D6BBFB] h-2 rounded" style="width: 70%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Button -->
+        <button class="btn-secondary btn-small w-full max-w-[230px]">
+          Improve your Humanity Index
+        </button>
+      </div>
+
+      <!-- twin3 Airdrop Score Card (488x197) -->
+      <div class="glass-card p-6 flex flex-col items-center gap-3">
+        <!-- Title Section -->
+        <div class="w-full flex items-center justify-between">
+          <h2 class="text-lg font-light text-white font-['Kanit']">twin3 Airdrop Score</h2>
+          <!-- Help Icon -->
+          <img src="../assets/img/icons/help-circle.svg" alt="Help" width="16" height="16" class="opacity-100 hover:opacity-80 transition-opacity duration-200">
+        </div>
+
+        <!-- Score Section -->
+        <div class="w-full flex flex-col gap-2">
+          <!-- Main Score -->
+          <div class="text-center">
+            <span class="text-[36px] font-normal text-white font-['Kanit'] leading-[1.111]">187</span>
+            <span class="text-[#A4A7AE] text-base font-light font-['Kanit'] leading-[1.25]"> / 265</span>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="flex items-center gap-3">
+            <div class="progress-bar flex-1 h-2">
+              <div class="bg-[#D6BBFB] h-2 rounded" style="width: 73%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Index Score Grid -->
+        <div class="w-full grid grid-cols-7 gap-0 text-center">
+          <span class="text-[#A4A7AE] text-sm font-normal font-['Kanit']">Bi: 00</span>
+          <span class="text-[#A4A7AE] text-sm font-normal font-['Kanit']">Di: 00</span>
+          <span class="text-[#A4A7AE] text-sm font-normal font-['Kanit']">Si: 00</span>
+          <span class="text-[#A4A7AE] text-sm font-normal font-['Kanit']">H: 00</span>
+          <span class="text-[#A4A7AE] text-sm font-normal font-['Kanit']">H: 00</span>
+          <span class="text-[#A4A7AE] text-sm font-normal font-['Kanit']">H: 00</span>
+          <span class="text-[#A4A7AE] text-sm font-normal font-['Kanit']">H: 00</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Account Connected - Exact Figma Implementation -->
+    <section class="mb-4">
+      <!-- Header Section (1000x102) -->
+      <div class="flex items-start justify-between mb-4">
+        <div class="flex-1 max-w-[807px]">
+          <!-- Title Section -->
+          <div class="flex items-center gap-1.5 mb-2">
+            <h2 class="text-2xl font-light text-white font-['Kanit']">Account Connected</h2>
+            <span class="text-[#A4A7AE] text-2xl font-light font-['Kanit']">(3/13)</span>
+          </div>
+          <!-- Description Text -->
+          <p class="text-[#A4A7AE] text-sm font-normal font-['Kanit'] leading-[1.43]">
+            Connect accounts that match your expertise and interests. Required Accounts adapt to your profession tabs, helping you find relevant connections. Boost your Airdrop Score and unlock Matrix Traits insights to understand your account's value across different specializations.
+          </p>
+        </div>
+
+        <!-- Refresh Button (177x32) -->
+        <button class="btn-secondary btn-small flex items-center gap-2 h-8">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1.33337 2.66667V6.66667H5.33337" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14.6666 13.3333V9.33333H10.6666" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M13.1133 6C12.7733 4.94 12.1133 4.02 11.2266 3.38C10.34 2.74 9.27331 2.41333 8.19331 2.44667C7.11331 2.48 6.06664 2.87333 5.22664 3.56667C4.38664 4.26 3.79997 5.21333 3.55997 6.28L1.33331 6.66667M14.6666 9.33333L12.44 9.72C12.2 10.7867 11.6133 11.74 10.7733 12.4333C9.93331 13.1267 8.88664 13.52 7.80664 13.5533C6.72664 13.5867 5.65997 13.26 4.77331 12.62C3.88664 11.98 3.22664 11.06 2.88664 10" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Refresh All Accounts</span>
+        </button>
+      </div>
+
+      <!-- Content Card -->
+      <div class="glass-card p-6">
+        <!-- Tabs -->
+        <div class="bg-[#242424] rounded-lg p-1 mb-6">
+          <div class="flex space-x-1">
+            <button class="btn-primary btn-small">Developer</button>
+            <button class="btn-secondary btn-small">Creative Content Maker</button>
+            <button class="btn-secondary btn-small">Researcher</button>
+          </div>
+        </div>
+
+        <!-- Matrix Traits -->
+        <div class="mb-6">
+          <div class="flex items-center space-x-2 mb-4">
+            <div class="w-6 h-6 bg-gray-300 rounded flex items-center justify-center">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 1L10.58 6.88L16 7.73L12.17 11.78L13.15 17.52L8 14.81L2.85 17.52L3.83 11.78L0 7.73L5.42 6.88L8 1Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-light text-white">Matrix Traits</h3>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <circle cx="8" cy="8" r="6.67" stroke="#A4A7AE" stroke-width="1.33"/>
+              <path d="M6.4 6.4a2.4 2.4 0 0 1 4.8 0c0 1.6-2.4 2.4-2.4 2.4" stroke="#A4A7AE" stroke-width="1.33" stroke-linecap="round"/>
+              <path d="M8 12h.01" stroke="#A4A7AE" stroke-width="1.33" stroke-linecap="round"/>
+            </svg>
+          </div>
+
+          <div class="glass-card p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Programming Skills -->
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <h4 class="text-secondary text-sm">Programming Skills</h4>
+                  <div class="bg-white/20 border border-white/20 rounded-2xl px-2 py-1 text-xs">
+                    <span class="text-white">Rank: 12 / 1781</span>
+                  </div>
+                </div>
+                <div class="text-secondary text-sm mb-2">125/255</div>
+                <div class="progress-bar h-2 mb-4">
+                  <div class="bg-white h-2 rounded" style="width: 60%"></div>
+                </div>
+              </div>
+
+              <!-- Cybersecurity Awareness -->
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <h4 class="text-secondary text-sm">Cybersecurity Awareness</h4>
+                  <div class="bg-white/20 border border-white/20 rounded-2xl px-2 py-1 text-xs">
+                    <span class="text-white">Rank: 5 / 300</span>
+                  </div>
+                </div>
+                <div class="text-secondary text-sm mb-2">185/255</div>
+                <div class="progress-bar h-2 mb-4">
+                  <div class="bg-white h-2 rounded" style="width: 70%"></div>
+                </div>
+              </div>
+
+              <!-- Technical Innovation -->
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <h4 class="text-secondary text-sm">Technical Innovation</h4>
+                  <div class="bg-white/20 border border-white/20 rounded-2xl px-2 py-1 text-xs">
+                    <span class="text-white">Rank: 6 / 86</span>
+                  </div>
+                </div>
+                <div class="text-secondary text-sm mb-2">85/255</div>
+                <div class="progress-bar h-2 mb-4">
+                  <div class="bg-white h-2 rounded" style="width: 30%"></div>
+                </div>
+              </div>
+
+              <!-- Code Quality -->
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <h4 class="text-secondary text-sm">Code Quality</h4>
+                  <div class="bg-white/20 border border-white/20 rounded-2xl px-2 py-1 text-xs">
+                    <span class="text-white">Rank: 4 / 628</span>
+                  </div>
+                </div>
+                <div class="text-secondary text-sm mb-2">60/255</div>
+                <div class="progress-bar h-2 mb-4">
+                  <div class="bg-white h-2 rounded" style="width: 40%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Required Accounts -->
+        <div class="mb-6">
+          <div class="flex items-center space-x-2 mb-4">
+            <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+            <h3 class="text-lg font-light text-white">Required Accounts</h3>
+            <span class="text-secondary text-lg">(2/3)</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- GitHub -->
+            <div class="glass-card p-4">
+              <div class="flex items-center space-x-3 mb-4">
+                <img src="../assets/img/figma/github_black.svg" alt="GitHub" class="w-8 h-8">
+                <span class="text-white font-light">GitHub</span>
+              </div>
+              <button class="w-full bg-white/10 border border-gray-600 text-secondary px-4 py-2 rounded-lg text-sm font-normal flex items-center justify-center space-x-2" disabled>
+                <span>Connected</span>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path d="M10 3L4.5 8.5L2 6" stroke="#32D583" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Stack Overflow -->
+            <div class="glass-card p-4">
+              <div class="flex items-center space-x-3 mb-4">
+                <img src="../assets/img/figma/stackoverflow_black.svg" alt="Stack Overflow" class="w-8 h-8">
+                <span class="text-white font-light">Stack Overflow</span>
+              </div>
+              <button class="w-full bg-white/10 border border-gray-600 text-secondary px-4 py-2 rounded-lg text-sm font-normal flex items-center justify-center space-x-2" disabled>
+                <span>Connected</span>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path d="M10 3L4.5 8.5L2 6" stroke="#32D583" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Dev.to -->
+            <div class="glass-card p-4">
+              <div class="flex items-center space-x-3 mb-4">
+                <img src="../assets/img/figma/devto_black.svg" alt="Dev.to" class="w-8 h-8">
+                <span class="text-white font-light">Dev.to</span>
+              </div>
+              <button class="btn-primary btn-connect btn-small">
+                Connect
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Extra Accounts -->
+        <div>
+          <div class="flex items-center space-x-2 mb-4">
+            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+            <h3 class="text-lg font-light text-white">Extra Accounts</h3>
+            <span class="text-secondary text-lg">(1/4)</span>
+          </div>
+
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <!-- X -->
+            <div class="glass-card p-4">
+              <div class="flex items-center space-x-3 mb-4">
+                <img src="../assets/img/figma/x_black.svg" alt="X" class="w-8 h-8">
+                <span class="text-white font-light">X</span>
+              </div>
+              <button class="w-full bg-white/10 border border-gray-600 text-secondary px-4 py-2 rounded-lg text-sm font-normal flex items-center justify-center space-x-2" disabled>
+                <span>Connected</span>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path d="M10 3L4.5 8.5L2 6" stroke="#32D583" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Google -->
+            <div class="glass-card p-4">
+              <div class="flex items-center space-x-3 mb-4">
+                <img src="../assets/img/figma/google_black.svg" alt="Google" class="w-8 h-8">
+                <span class="text-white font-light">Google</span>
+              </div>
+              <button class="w-full bg-white/10 border border-gray-600 text-secondary px-4 py-2 rounded-lg text-sm font-normal flex items-center justify-center space-x-2" disabled>
+                <span>Connected</span>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path d="M10 3L4.5 8.5L2 6" stroke="#32D583" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- LinkedIn -->
+            <div class="glass-card p-4">
+              <div class="flex items-center space-x-3 mb-4">
+                <img src="../assets/img/figma/linkedin_black.svg" alt="LinkedIn" class="w-8 h-8">
+                <span class="text-white font-light">LinkedIn</span>
+              </div>
+              <button class="btn-primary btn-connect btn-small">
+                Connect
+              </button>
+            </div>
+
+            <!-- Discord -->
+            <div class="glass-card p-4">
+              <div class="flex items-center space-x-3 mb-4">
+                <img src="../assets/img/figma/discord_black.svg" alt="Discord" class="w-8 h-8">
+                <span class="text-white font-light">Discord</span>
+              </div>
+              <button class="btn-primary btn-connect btn-small">
+                Connect
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: twin3 Social Contribution - Exact Figma Implementation -->
+    <section class="mb-4">
+      <!-- Header Section (1000x80) -->
+      <div class="text-center mb-4">
+        <div class="flex flex-col items-center gap-1">
+          <div class="flex items-center gap-0">
+            <h2 class="text-2xl font-light text-white font-['Kanit']">twin3 Social Contribution</h2>
+          </div>
+          <span class="text-[#A4A7AE] text-2xl font-light font-['Kanit']">(1/6)</span>
+        </div>
+        <p class="text-[#A4A7AE] text-sm font-normal font-['Kanit'] leading-[1.43] max-w-full mx-auto mt-2">
+          Contribute to the twin3 ecosystem by participating in social activities, sharing content, and engaging with the community to earn rewards and build your reputation.
+        </p>
+      </div>
+
+      <div class="glass-card p-6">
+        <div class="space-y-4">
+          <!-- Task Item 1 -->
+          <div class="glass-card p-4 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+              <div class="w-10 h-10 bg-[#414651] rounded-lg flex items-center justify-center">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M10 1.67L12.58 6.88L18.33 7.73L14.17 11.78L15.15 17.52L10 14.81L4.85 17.52L5.83 11.78L1.67 7.73L7.42 6.88L10 1.67Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-white font-normal">Share twin3 on Social Media</h3>
+                <p class="text-secondary text-xs">Share twin3 content on your social media platforms</p>
+              </div>
+            </div>
+            <div class="bg-green-500/10 border border-green-500/30 text-green-400 px-3 py-1.5 rounded-md text-xs">
+              Complete
+            </div>
+          </div>
+
+          <!-- Task Item 2 -->
+          <div class="glass-card p-4 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+              <div class="w-10 h-10 bg-[#414651] rounded-lg flex items-center justify-center">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M18.33 9.23V10C18.33 11.8 17.75 13.55 16.67 14.98C15.6 16.42 14.09 17.48 12.36 17.99C10.64 18.5 8.8 18.43 7.11 17.81C5.43 17.19 3.99 16.04 3.01 14.53C2.03 13.02 1.57 11.24 1.68 9.45C1.8 7.65 2.5 5.95 3.66 4.58C4.83 3.21 6.41 2.26 8.16 1.87C9.92 1.47 11.75 1.65 13.39 2.38" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M18.33 3.33L10 11.68L7.5 9.18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-white font-normal">Join Community Discord</h3>
+                <p class="text-secondary text-xs">Join the official twin3 Discord server</p>
+              </div>
+            </div>
+            <div class="bg-white/5 border border-white/10 text-secondary px-3 py-1.5 rounded-md text-xs">
+              Pending
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer Section -->
+  <footer class="bg-black text-white px-8 py-10 xl:pr-20 lg:px-0 lg:py-12" style="position: relative; z-index: 5;">
+    <div class="flex flex-col-reverse lg:flex-row xl:justify-between items-start space-y-10 lg:space-y-0">
+      <!-- Logo Section -->
+      <div class="w-full xl:w-1/5 lg:w-[13%] text-center lg:text-left">
+        <div class="flex flex-col justify-center lg:justify-start items-center pt-6 lg:pt-0" style="gap: 4px;">
+          <div class="flex items-center">
+            <img src="../assets/img/logo_dark.svg" alt="Logo" style="width: 40px; height: 40px;">
+          </div>
+          <span class="text-sm md:text-base" style="font-weight: 300; color: #888888;">twin3.ai</span>
+        </div>
+      </div>
+
+      <!-- Links Section -->
+      <div class="flex flex-wrap lg:flex-nowrap w-full lg:w-2/4 lg:space-x-10">
+        <!-- Social Media -->
+        <div class="w-full md:w-1/3 text-center lg:text-left flex-row">
+          <h5 class="uppercase text-sm lg:text-base" style="font-weight: 300; color: white; padding-bottom: 12px;">Social Media</h5>
+          <div class="flex justify-center lg:justify-start space-x-4">
+            <a href="https://x.com/twin3_ai" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+              <div class="w-6 h-6 flex items-center justify-center" style="padding: 2px;">
+                <img src="../assets/img/X_logo.svg" alt="X (Twitter)" class="w-full h-full object-contain">
+              </div>
+            </a>
+            <a href="https://opensea.io/collection/twin3" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+              <img src="../assets/img/opensea_logo.svg" alt="OpenSea" class="w-6 h-6">
+            </a>
+            <a href="https://warpcast.com/twin3.eth" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+              <img src="../assets/img/farcaster_logo.svg" alt="Warpcast" class="w-6 h-6">
+            </a>
+          </div>
+        </div>
+
+        <!-- Resource -->
+        <div class="w-full md:w-1/3 text-center lg:text-left 2xl:mb-2 pt-4 md:pt-0">
+          <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Resource</h5>
+          <ul class="space-y-2">
+            <li><a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" rel="noreferrer noopener" class="text-[#888888] hover:text-white text-sm lg:text-base" style="font-weight: 200;">Whitepaper</a></li>
+            <li><a class="text-[#888888] hover:text-white text-sm lg:text-base" href="dashboard.html" style="font-weight: 200;">Tasks</a></li>
+          </ul>
+        </div>
+
+        <!-- Features -->
+        <div class="w-full md:w-1/3 text-center lg:text-left 2xl:mb-10 pt-4 md:pt-0">
+          <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Features</h5>
+          <ul class="space-y-2">
+            <li><a class="text-[#888888] hover:text-white text-sm lg:text-base" href="dashboard.html" style="font-weight: 200;">My Twin</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Newsletter Section -->
+      <div class="w-full xl:w-1/5 lg:w-[27%] text-center lg:text-left space-y-4">
+        <div class="text-[#888888]" style="font-weight: 300;">Stay updated</div>
+        <div class="flex items-center justify-center lg:justify-start gap-2">
+          <input type="email" placeholder="Email address" class="w-full max-w-xs bg-[#111] border border-[#373737] text-white rounded-lg px-3 py-2 placeholder-[#666]" style="font-weight: 300;" />
+          <button class="btn-primary btn-small">Subscribe</button>
+        </div>
+      </div>
+    </div>
+    <div class="mt-10 text-center text-[#888888] text-sm lg:text-base" style="font-weight: 200;">© 2025 twin3.ai v1.0.6</div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileMenuClose = document.getElementById('mobile-menu-close');
+
+    mobileMenuBtn?.addEventListener('click', () => {
+      mobileMenu?.classList.add('open');
+    });
+
+    mobileMenuClose?.addEventListener('click', () => {
+      mobileMenu?.classList.remove('open');
+    });
+
+    // Close mobile menu when clicking outside
+    mobileMenu?.addEventListener('click', (e) => {
+      if (e.target === mobileMenu) {
+        mobileMenu.classList.remove('open');
+      }
+    });
+  </script>
+</body>
+</html>

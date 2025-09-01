@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Twin3 Dashboard - Figma Design V2</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;275;300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            'kanit': ['Kanit', 'sans-serif'],
+            'inter': ['Inter', 'sans-serif'],
+          },
+          colors: {
+            // Figma Design System Colors
+            primary: {
+              bg: '#0A0A0A',
+              surface: 'rgba(255, 255, 255, 0.05)',
+              border: 'rgba(255, 255, 255, 0.1)',
+            },
+            text: {
+              primary: '#FFFFFF',
+              secondary: '#A4A7AE',
+              muted: '#888888',
+            },
+            accent: {
+              green: '#32D583',
+              purple: '#D6BBFB',
+              gray: '#414651',
+            },
+            glass: {
+              bg: 'rgba(255, 255, 255, 0.1)',
+              border: 'rgba(255, 255, 255, 0.2)',
+            }
+          },
+          spacing: {
+            '18': '4.5rem',
+            '88': '22rem',
+          },
+          borderRadius: {
+            'xl': '12px',
+            '2xl': '16px',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Kanit', sans-serif;
+      background: #0A0A0A;
+      color: #FFFFFF;
+    }
+
+    /* Figma Button System - Based on MCP API Data */
+
+    /* Base Button Styles - Figma Exact Specs */
+    .figma-btn {
+      /* Figma Layout */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      /* Figma Dimensions - Size=s */
+      height: 28px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      gap: 6px;
+
+      /* Figma Typography */
+      font-family: 'Kanit', sans-serif;
+      font-weight: 300;
+      font-size: 12px;
+      line-height: 16px;
+      text-align: center;
+
+      /* Figma Interaction */
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+
+      /* Layout Sizing */
+      width: fit-content;
+      min-width: fit-content;
+    }
+
+    /* White Button - Type=White, status=Default */
+    .figma-btn-white {
+      background: #FFFFFF;
+      color: #000000;
+      border: 1px solid transparent;
+    }
+
+    /* White Button Hover - Type=White, status=Hover */
+    .figma-btn-white:hover:not(:disabled) {
+      background: transparent;
+      color: #FFFFFF;
+      border: 1px solid #FFFFFF;
+    }
+
+    /* Stroke Button - Type=Stroke, status=Default */
+    .figma-btn-stroke {
+      background: transparent;
+      color: #FFFFFF;
+      border: 1px solid #FFFFFF;
+    }
+
+    /* Stroke Button Hover - Type=Stroke, status=Hover */
+    .figma-btn-stroke:hover:not(:disabled) {
+      background: #FFFFFF;
+      color: #000000;
+      border: 1px solid #FFFFFF;
+    }
+
+    /* Grey Button - Type=Grey, status=Default */
+    .figma-btn-grey {
+      background: #535862;
+      color: #A4A7AE;
+      border: 1px solid #535862;
+    }
+
+    /* Disabled States - All Types */
+    .figma-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .figma-btn-white:disabled {
+      background: transparent;
+      color: #A4A7AE;
+      border: 1px solid #535862;
+    }
+
+    .figma-btn-stroke:disabled {
+      background: transparent;
+      color: #A4A7AE;
+      border: 1px solid #535862;
+    }
+
+    .figma-btn-grey:disabled {
+      background: #535862;
+      color: #A4A7AE;
+      border: 1px solid #535862;
+    }
+
+    /* Figma Account Connection Card - Based on MCP API Data */
+    .figma-account-card {
+      /* Figma Card Dimensions: 172px × 112px */
+      width: 172px;
+      height: 112px;
+
+      /* Figma Background: White 5% opacity */
+      background: rgba(255, 255, 255, 0.05);
+
+      /* Figma Border: White 10% opacity */
+      border: 1px solid rgba(255, 255, 255, 0.1);
+
+      /* Figma Corner Radius: 12px */
+      border-radius: 12px;
+
+      /* Figma Padding: 16px all sides */
+      padding: 16px;
+
+      /* Figma Layout: Vertical */
+      display: flex;
+      flex-direction: column;
+
+      /* Figma Background Blur: 8px */
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+
+      /* Responsive adjustments */
+      width: 100%;
+      min-height: 112px;
+    }
+
+    /* Figma Account Button - Size=s */
+    .figma-account-btn {
+      /* Figma Button Dimensions: Size=s (28px height, full width) */
+      width: 100%;
+      height: 28px;
+
+      /* Figma White Button Background */
+      background: #FFFFFF;
+      color: #000000;
+      border: 1px solid transparent;
+
+      /* Figma Padding: Size=s (12px horizontal, 6px vertical) */
+      padding: 6px 12px;
+
+      /* Figma Corner Radius: 8px */
+      border-radius: 8px;
+
+      /* Figma Typography: Size=s (Kanit Light 12px/16px) */
+      font-family: 'Kanit', sans-serif;
+      font-weight: 300;
+      font-size: 12px;
+      line-height: 16px;
+      text-align: center;
+
+      /* Figma Layout */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      /* Interaction */
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    /* Figma Account Button Hover */
+    .figma-account-btn:hover:not(:disabled) {
+      background: transparent;
+      color: #FFFFFF;
+      border: 1px solid #FFFFFF;
+    }
+
+    /* Figma Rewards Container - Based on MCP API Data */
+    .figma-rewards-container {
+      /* Figma Container: 346px × 57px */
+      width: 346px;
+      height: 57px;
+
+      /* Figma Background: White 5% opacity */
+      background: rgba(255, 255, 255, 0.05);
+
+      /* Figma Border: White 10% opacity */
+      border: 1px solid rgba(255, 255, 255, 0.1);
+
+      /* Figma Corner Radius: 8px */
+      border-radius: 8px;
+
+      /* Figma Padding: 16px horizontal, 8px vertical */
+      padding: 8px 16px;
+
+      /* Figma Layout: Horizontal, Center aligned */
+      display: flex;
+      align-items: center;
+
+      /* Figma Item Spacing: 12px */
+      gap: 12px;
+    }
+
+    /* $twin3 Label - Figma API Exact */
+    .figma-rewards-label {
+      /* Figma Text: Kanit Light 18px/28px, Gray/400 */
+      font-family: 'Kanit', sans-serif;
+      font-weight: 300;
+      font-size: 18px;
+      line-height: 28px;
+      color: #A4A7AE;
+
+      /* Figma Size: 54px × 28px */
+      width: 54px;
+      height: 28px;
+
+      /* Layout */
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    /* Separator Line - Figma API Exact */
+    .figma-rewards-separator {
+      /* Figma Line: 1px width, 41px height, White 10% opacity */
+      width: 1px;
+      height: 41px;
+      background: rgba(255, 255, 255, 0.1);
+      flex-shrink: 0;
+    }
+
+    /* Reward Amount Area - Figma API Exact */
+    .figma-rewards-amount {
+      /* Figma Container: 150px × 41px */
+      width: 150px;
+      height: 41px;
+
+      /* Figma Layout: Horizontal, 2px spacing */
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    /* Currency Symbol - Figma API Exact */
+    .figma-rewards-currency {
+      /* Figma Text: Kanit Regular 36px/40px, White */
+      font-family: 'Kanit', sans-serif;
+      font-weight: 400;
+      font-size: 36px;
+      line-height: 40px;
+      color: #FFFFFF;
+
+      /* Figma Size: 20px × 40px */
+      width: 20px;
+      height: 40px;
+
+      /* Layout */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* Amount Value - Figma API Exact */
+    .figma-rewards-value {
+      /* Figma Text: Kanit Regular 36px/40px, White */
+      font-family: 'Kanit', sans-serif;
+      font-weight: 400;
+      font-size: 36px;
+      line-height: 40px;
+      color: #FFFFFF;
+
+      /* Figma Size: 86px × 40px */
+      width: 86px;
+      height: 40px;
+
+      /* Layout */
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    /* Growth Indicator - Figma API Exact */
+    .figma-rewards-growth {
+      /* Figma Text: Kanit Light 14px/20px, Green #32D583 */
+      font-family: 'Kanit', sans-serif;
+      font-weight: 300;
+      font-size: 14px;
+      line-height: 20px;
+      color: #32D583;
+
+      /* Figma Size: 40px × 20px */
+      width: 40px;
+      height: 20px;
+
+      /* Layout */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* Small Button Size - Figma API Size=s */
+    .figma-btn-small {
+      /* Override height for Size=s */
+      height: 28px !important;
+      padding: 6px 12px !important;
+      font-size: 12px !important;
+      line-height: 16px !important;
+
+      /* Prevent text wrapping for all Size=s buttons */
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+
+      /* Ensure minimum width for text */
+      min-width: fit-content !important;
+      width: auto !important;
+    }
+
+    /* Figma Global Identity Score Card - Based on MCP API Data */
+    .figma-identity-score-card {
+      /* Figma Container: 488px × 197px */
+      width: 100%;
+      min-height: 197px;
+
+      /* Figma Background: White 5% opacity */
+      background: rgba(255, 255, 255, 0.05);
+
+      /* Figma Border: White 10% opacity */
+      border: 1px solid rgba(255, 255, 255, 0.1);
+
+      /* Figma Corner Radius: 12px */
+      border-radius: 12px;
+
+      /* Figma Padding: 24px all sides */
+      padding: 24px;
+
+      /* Figma Layout: Vertical, 12px spacing */
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      /* Figma Background Blur: 8px */
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    /* Title Section - Figma API Exact */
+    .figma-score-title {
+      /* Figma Layout: Horizontal, 6px spacing */
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .figma-score-title-text {
+      /* Figma Text: Kanit Light 18px/28px, White */
+      font-family: 'Kanit', sans-serif;
+      font-weight: 300;
+      font-size: 18px;
+      line-height: 28px;
+      color: #FFFFFF;
+
+      /* Figma Size: 125px × 28px */
+      width: 125px;
+      height: 28px;
+
+      /* Layout */
+      display: flex;
+      align-items: center;
+    }
+
+    .figma-help-icon-container {
+      /* Figma Help Icon Container: 16px × 16px */
+      width: 16px;
+      height: 16px;
+      position: relative;
+      cursor: help;
+      flex-shrink: 0;
+    }
+
+    .figma-help-icon {
+      /* Original Help Icon: 16px × 16px display size */
+      width: 16px;
+      height: 16px;
+      opacity: 0.7;
+      transition: opacity 0.2s ease;
+
+      /* Filter to change color from dark to Gray/400 */
+      filter: brightness(0) saturate(100%) invert(69%) sepia(8%) saturate(1018%) hue-rotate(202deg) brightness(95%) contrast(89%);
+    }
+
+    .figma-help-icon-container:hover .figma-help-icon {
+      opacity: 0.8;
+    }
+
+    /* Score Section - Figma API Exact */
+    .figma-score-section {
+      /* Figma Layout: Horizontal, 8px spacing, bottom aligned */
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .figma-score-main {
+      /* Figma Text: Kanit Regular 36px/40px, White */
+      font-family: 'Kanit', sans-serif;
+      font-weight: 400;
+      font-size: 36px;
+      line-height: 40px;
+      color: #FFFFFF;
+
+      /* Figma Size: 62px × 40px */
+      width: 62px;
+      height: 40px;
+
+      /* Layout */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .figma-score-total {
+      /* Figma Text: Kanit Light 16px/20px, Gray/400 */
+      font-family: 'Kanit', sans-serif;
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 20px;
+      color: #A4A7AE;
+
+      /* Figma Size: 39px × 20px */
+      width: 39px;
+      height: 20px;
+
+      /* Layout */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Progress Bar Section - Figma API Exact */
+    .figma-progress-container {
+      /* Figma Layout: Horizontal, progress bar fills, percentage on right */
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .figma-progress-bar {
+      /* Figma Progress Bar: 399px × 8px, relative positioning */
+      flex: 1;
+      height: 8px;
+      position: relative;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .figma-progress-background {
+      /* Figma Background: Gray/600 #414651 */
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #414651;
+      border-radius: 4px;
+    }
+
+    .figma-progress-fill {
+      /* Figma Progress: Green #A6F4C5 */
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: #A6F4C5;
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    .figma-progress-percentage {
+      /* Figma Text: Inter Medium 14px/20px, Gray/400 */
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 20px;
+      color: #A4A7AE;
+
+      /* Figma Size: 29px × 20px */
+      width: 29px;
+      height: 20px;
+
+      /* Layout */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* Figma Tooltip Component - Based on MCP API Data */
+    .figma-tooltip {
+      /* Figma Tooltip Container: 296px × 71px */
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+
+      /* Figma Background: Black 80% opacity */
+      background: rgba(0, 0, 0, 0.8);
+
+      /* Figma Border: Gray/700 #252B36 */
+      border: 1px solid #252B36;
+
+      /* Figma Corner Radius: 8px */
+      border-radius: 8px;
+
+      /* Figma Padding: 12px all sides */
+      padding: 12px;
+
+      /* Figma Size Constraints */
+      width: 296px;
+      max-width: 296px;
+
+      /* Figma Layout: Vertical, 4px spacing */
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      /* Figma Shadow Effects */
+      box-shadow:
+        0 2px 4px -2px rgba(10, 13, 18, 0.06),
+        0 4px 8px -2px rgba(10, 13, 18, 0.1);
+
+      /* Visibility */
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+
+      /* Z-index */
+      z-index: 1000;
+    }
+
+    /* Tooltip Arrow */
+    .figma-tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 6px solid rgba(0, 0, 0, 0.8);
+    }
+
+    /* Tooltip Title */
+    .figma-tooltip-title {
+      /* Figma Text: Kanit Light 12px/16px, White */
+      font-family: 'Kanit', sans-serif;
+      font-weight: 300;
+      font-size: 12px;
+      line-height: 16px;
+      color: #FFFFFF;
+      margin: 0;
+    }
+
+    /* Tooltip Text */
+    .figma-tooltip-text {
+      /* Figma Text: Kanit Light 12px/16.8px, White */
+      font-family: 'Kanit', sans-serif;
+      font-weight: 300;
+      font-size: 12px;
+      line-height: 16.8px;
+      color: #FFFFFF;
+      margin: 0;
+    }
+
+    /* Show tooltip on hover */
+    .figma-help-icon-container:hover .figma-tooltip {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Responsive tooltip positioning */
+    @media (max-width: 768px) {
+      .figma-tooltip {
+        width: 250px;
+        max-width: 250px;
+        left: auto;
+        right: 0;
+        transform: none;
+      }
+
+      .figma-tooltip::after {
+        left: auto;
+        right: 20px;
+        transform: none;
+      }
+    }
+
+    /* Legacy Button Support */
+    .btn-primary {
+      background: white;
+      color: black;
+      border: 1px solid #373737;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-weight: 300;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'Kanit', sans-serif;
+      font-size: 12px;
+      line-height: 16px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: transparent;
+      color: white;
+      border-color: white;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: white;
+      border: 1px solid #FFFFFF;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-weight: 300;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'Kanit', sans-serif;
+      font-size: 12px;
+      line-height: 16px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: white;
+      color: black;
+      border-color: white;
+    }
+
+    .btn-small {
+      /* Already sized correctly for Figma specs */
+    }
+
+    /* Glass Morphism Effects */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+    }
+
+    .glass-surface {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Progress Bars */
+    .progress-bar {
+      background: #414651;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill-purple {
+      background: #D6BBFB;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .progress-fill-green {
+      background: #32D583;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    /* Custom Scrollbar */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 3px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Connected Button Styles - Figma Account Card Size=s */
+    .btn-connected {
+      /* Figma Account Card Connected Button: Size=s (28px height) */
+      width: 100% !important;
+      height: 28px !important;
+
+      /* Figma background: transparent */
+      background: transparent !important;
+
+      /* Figma text color: Gray/400 RGB(164, 167, 174) */
+      color: #A4A7AE !important;
+
+      /* Figma border: Gray/600 RGB(83, 88, 98) */
+      border: 1px solid #535862 !important;
+
+      /* Figma corner radius: 8px */
+      border-radius: 8px !important;
+
+      /* Figma padding: Size=s (12px horizontal, 6px vertical) */
+      padding: 6px 12px !important;
+
+      /* Figma typography: Size=s (Kanit Light 12px/16px) */
+      font-family: 'Kanit', sans-serif !important;
+      font-weight: 300 !important;
+      font-size: 12px !important;
+      line-height: 16px !important;
+      text-align: center !important;
+
+      /* Figma layout: horizontal center */
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+
+      /* Figma item spacing: 6px */
+      gap: 6px !important;
+
+      /* Disabled state */
+      cursor: default !important;
+      pointer-events: none !important;
+      transition: none !important;
+    }
+
+    .btn-connected:hover {
+      background: transparent !important;
+      color: #A4A7AE !important;
+      border: 1px solid #535862 !important;
+      transform: none !important;
+    }
+
+    /* Check icon - Size=s: 12px container, 10px radius, Gray/400 background */
+    .btn-connected .check-icon-container {
+      width: 12px !important;
+      height: 12px !important;
+      background: #A4A7AE !important;
+      border-radius: 10px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      flex-shrink: 0 !important;
+    }
+
+    /* Check icon vector - Size=s: ~6px × 5px, black color */
+    .btn-connected .check-icon-container svg {
+      width: 6px !important;
+      height: 5px !important;
+      color: #000000 !important;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .dashboard-container {
+        padding: 24px 32px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-container {
+        padding: 16px;
+      }
+      
+      .section-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Main Dashboard Container -->
+  <div class="min-h-screen bg-primary-bg">
+    <!-- Dashboard Content -->
+    <div class="dashboard-container max-w-[1000px] mx-auto pt-24 pb-12 px-8">
+      
+      <!-- Section 1: Profile Header -->
+      <section class="mb-6">
+        <div class="h-16 flex items-center justify-between">
+          <!-- Left: Profile Info -->
+          <div class="flex items-center gap-6">
+            <!-- Avatar -->
+            <div class="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
+              <img 
+                src="assets/img/figma/Avatar.png" 
+                alt="Avatar" 
+                class="w-16 h-16 object-cover"
+              />
+            </div>
+            
+            <!-- User Name -->
+            <h1 class="font-kanit font-normal text-[36px] leading-[50.4px] text-white">
+              Hi, Alex!
+            </h1>
+          </div>
+
+          <!-- Right: Rewards - Figma API Exact -->
+          <div class="figma-rewards-container">
+            <!-- $twin3 Label -->
+            <div class="figma-rewards-label">$twin3</div>
+
+            <!-- Separator Line -->
+            <div class="figma-rewards-separator"></div>
+
+            <!-- Reward Amount Area -->
+            <div class="figma-rewards-amount">
+              <!-- $ Symbol -->
+              <span class="figma-rewards-currency">$</span>
+              <!-- Amount Number -->
+              <span class="figma-rewards-value">0.274</span>
+              <!-- Growth Indicator -->
+              <span class="figma-rewards-growth">+0.01</span>
+            </div>
+
+            <!-- Withdraw Button -->
+            <button class="figma-btn figma-btn-white figma-btn-small">
+              Withdraw
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Score Cards Grid -->
+      <section class="section-grid grid grid-cols-2 gap-6 mb-6">
+        <!-- Global Identity Score Card - Figma API Exact -->
+        <div class="figma-identity-score-card">
+          <!-- Title Section -->
+          <div class="figma-score-title">
+            <span class="figma-score-title-text">Humanity Index</span>
+            <div class="figma-help-icon-container" data-tooltip="Tooltips are used to describe or identify an element. In most scenarios, tooltips help the user understand the meaning, function or alt-text of an element.">
+              <img src="assets/img/icons/help-circle.svg" alt="Help" class="figma-help-icon">
+            </div>
+          </div>
+
+          <!-- Score Section -->
+          <div class="figma-score-section">
+            <span class="figma-score-main">204</span>
+            <span class="figma-score-total"> / 255</span>
+          </div>
+
+          <!-- Progress Bar Section -->
+          <div class="figma-progress-container">
+            <div class="figma-progress-bar">
+              <div class="figma-progress-background"></div>
+              <div class="figma-progress-fill" style="width: 70.5%"></div>
+            </div>
+            <span class="figma-progress-percentage">70%</span>
+          </div>
+
+          <!-- Action Button -->
+          <button class="figma-btn figma-btn-stroke figma-btn-small w-full">
+            Improve Score with Human Checks (1/2)
+          </button>
+        </div>
+
+        <!-- twin3 Airdrop Score Card -->
+        <div class="glass-card p-6">
+          <!-- Header -->
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="font-kanit font-light text-[18px] text-white">twin3 Airdrop Score</h2>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <circle cx="7" cy="7" r="6" stroke="#A4A7AE" stroke-width="1.33"/>
+              <path d="M5.25 5.25a1.75 1.75 0 0 1 3.5 0c0 1.167-1.75 1.75-1.75 1.75" stroke="#A4A7AE" stroke-width="1.33"/>
+              <path d="M7 10.5h.007" stroke="#A4A7AE" stroke-width="1.33"/>
+            </svg>
+          </div>
+          
+          <!-- Score -->
+          <div class="text-center mb-4">
+            <span class="font-kanit font-normal text-[36px] text-white">187</span>
+            <span class="font-kanit font-light text-[16px] text-text-secondary"> / 265</span>
+          </div>
+          
+          <!-- Progress Bar -->
+          <div class="progress-bar h-2 mb-4">
+            <div class="progress-fill-purple" style="width: 71%"></div>
+          </div>
+          
+          <!-- Index Grid -->
+          <div class="grid grid-cols-4 gap-2 text-center text-xs text-text-secondary">
+            <span>Bi: 00</span>
+            <span>Di: 00</span>
+            <span>Si: 00</span>
+            <span>Hi: 00</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Account Connected -->
+      <section class="mb-6">
+        <!-- Header -->
+        <div class="flex items-start justify-between mb-4">
+          <div>
+            <div class="flex items-center gap-2 mb-2">
+              <h2 class="font-kanit font-light text-[24px] text-white">Account Connected</h2>
+              <span class="font-kanit font-light text-[24px] text-text-secondary">(3/13)</span>
+            </div>
+            <p class="font-kanit font-normal text-[14px] text-text-secondary max-w-[800px] leading-relaxed">
+              Connect accounts that match your expertise and interests. Required Accounts adapt to your profession tabs, helping you find relevant connections. Boost your Airdrop Score and unlock Matrix Traits insights to understand your account's value across different specializations.
+            </p>
+          </div>
+          
+          <!-- Refresh Button -->
+          <button class="figma-btn figma-btn-stroke figma-btn-small">
+            <span>Refresh All Accounts</span>
+          </button>
+        </div>
+
+        <!-- Content Card -->
+        <div class="glass-card p-6">
+          <!-- Tabs -->
+          <div class="bg-[#242424] rounded-lg p-1 mb-6">
+            <div class="flex space-x-1">
+              <button class="figma-btn figma-btn-white">Developer</button>
+              <button class="figma-btn figma-btn-stroke">Creative Content Maker</button>
+              <button class="figma-btn figma-btn-stroke">Researcher</button>
+            </div>
+          </div>
+
+          <!-- Required Accounts Section -->
+          <div class="mb-8">
+            <h3 class="font-kanit font-normal text-[16px] text-white mb-4">Required Accounts</h3>
+            <div class="grid grid-cols-3 gap-4">
+              <!-- GitHub - Figma Account Card -->
+              <div class="figma-account-card">
+                <!-- Container -->
+                <div class="flex items-center gap-3 mb-4">
+                  <!-- Logo Container -->
+                  <div class="w-8 h-8 bg-white rounded flex items-center justify-center flex-shrink-0">
+                    <img src="assets/img/figma/github_black.svg" alt="GitHub" class="w-6 h-6">
+                  </div>
+                  <!-- Text -->
+                  <span class="font-kanit font-light text-[16px] leading-[24px] text-white">GitHub</span>
+                </div>
+                <!-- Button -->
+                <button class="account-connect-btn figma-account-btn" onclick="toggleConnection(this)">
+                  Connect
+                </button>
+              </div>
+
+              <!-- Stack Overflow - Figma Account Card -->
+              <div class="figma-account-card">
+                <!-- Container -->
+                <div class="flex items-center gap-3 mb-4">
+                  <!-- Logo Container -->
+                  <div class="w-8 h-8 bg-white rounded flex items-center justify-center flex-shrink-0">
+                    <img src="assets/img/figma/stackoverflow_black.svg" alt="Stack Overflow" class="w-6 h-6">
+                  </div>
+                  <!-- Text -->
+                  <span class="font-kanit font-light text-[16px] leading-[24px] text-white">Stack Overflow</span>
+                </div>
+                <!-- Button -->
+                <button class="account-connect-btn figma-account-btn" onclick="toggleConnection(this)">
+                  Connect
+                </button>
+              </div>
+
+              <!-- Dev.to - Figma Account Card -->
+              <div class="figma-account-card">
+                <!-- Container -->
+                <div class="flex items-center gap-3 mb-4">
+                  <!-- Logo Container -->
+                  <div class="w-8 h-8 bg-white rounded flex items-center justify-center flex-shrink-0">
+                    <img src="assets/img/figma/devto_black.svg" alt="Dev.to" class="w-6 h-6">
+                  </div>
+                  <!-- Text -->
+                  <span class="font-kanit font-light text-[16px] leading-[24px] text-white">Dev.to</span>
+                </div>
+                <!-- Button -->
+                <button class="account-connect-btn figma-account-btn" onclick="toggleConnection(this)">
+                  Connect
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- General Accounts Section -->
+          <div>
+            <h3 class="font-kanit font-normal text-[16px] text-white mb-4">General Accounts</h3>
+            <div class="grid grid-cols-3 gap-4">
+              <!-- X (Twitter) - Figma Account Card -->
+              <div class="figma-account-card">
+                <!-- Container -->
+                <div class="flex items-center gap-3 mb-4">
+                  <!-- Logo Container -->
+                  <div class="w-8 h-8 bg-white rounded flex items-center justify-center flex-shrink-0">
+                    <img src="assets/img/figma/x_black.svg" alt="X" class="w-6 h-6">
+                  </div>
+                  <!-- Text -->
+                  <span class="font-kanit font-light text-[16px] leading-[24px] text-white">X</span>
+                </div>
+                <!-- Button -->
+                <button class="account-connect-btn figma-account-btn" onclick="toggleConnection(this)">
+                  Connect
+                </button>
+              </div>
+
+              <!-- LinkedIn - Figma Account Card -->
+              <div class="figma-account-card">
+                <!-- Container -->
+                <div class="flex items-center gap-3 mb-4">
+                  <!-- Logo Container -->
+                  <div class="w-8 h-8 bg-white rounded flex items-center justify-center flex-shrink-0">
+                    <img src="assets/img/figma/linkedin_black.svg" alt="LinkedIn" class="w-6 h-6">
+                  </div>
+                  <!-- Text -->
+                  <span class="font-kanit font-light text-[16px] leading-[24px] text-white">LinkedIn</span>
+                </div>
+                <!-- Button -->
+                <button class="account-connect-btn figma-account-btn" onclick="toggleConnection(this)">
+                  Connect
+                </button>
+              </div>
+
+              <!-- Discord - Figma Account Card -->
+              <div class="figma-account-card">
+                <!-- Container -->
+                <div class="flex items-center gap-3 mb-4">
+                  <!-- Logo Container -->
+                  <div class="w-8 h-8 bg-white rounded flex items-center justify-center flex-shrink-0">
+                    <img src="assets/img/figma/discord_black.svg" alt="Discord" class="w-6 h-6">
+                  </div>
+                  <!-- Text -->
+                  <span class="font-kanit font-light text-[16px] leading-[24px] text-white">Discord</span>
+                </div>
+                <!-- Button -->
+                <button class="account-connect-btn figma-account-btn" onclick="toggleConnection(this)">
+                  Connect
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Social Contribution -->
+      <section class="mb-6">
+        <!-- Header -->
+        <div class="text-center mb-6">
+          <div class="flex items-center justify-center gap-2 mb-2">
+            <h2 class="font-kanit font-light text-[24px] text-white">twin3 Social Contribution</h2>
+            <span class="font-kanit font-light text-[24px] text-text-secondary">(1/6)</span>
+          </div>
+          <p class="font-kanit font-normal text-[14px] text-text-secondary max-w-[600px] mx-auto leading-relaxed">
+            Contribute to the twin3 ecosystem by participating in social activities, sharing content, and engaging with the community to earn rewards and build your reputation.
+          </p>
+        </div>
+
+        <!-- Task List Card -->
+        <div class="glass-card p-6">
+          <div class="space-y-4">
+            <!-- Task 1: Follow on Social -->
+            <div class="flex items-center justify-between p-4 glass-surface rounded-lg">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-full bg-accent-green flex items-center justify-center">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M13.5 4.5L6 12L2.5 8.5" stroke="white" stroke-width="2"/>
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="font-kanit font-normal text-white">Follow @twin3_official</h4>
+                  <p class="font-kanit font-light text-sm text-text-secondary">Follow our official account on social media</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="font-kanit font-light text-sm text-accent-green">+50 Points</span>
+                <span class="px-3 py-1 bg-accent-green/20 text-accent-green rounded-full text-xs font-medium">Done</span>
+              </div>
+            </div>
+
+            <!-- Task 2: Share Content -->
+            <div class="flex items-center justify-between p-4 glass-surface rounded-lg">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M8 1v14M1 8h14" stroke="#A4A7AE" stroke-width="2"/>
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="font-kanit font-normal text-white">Share twin3 Content</h4>
+                  <p class="font-kanit font-light text-sm text-text-secondary">Share our latest post on your social media</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="font-kanit font-light text-sm text-text-secondary">+100 Points</span>
+                <button class="figma-btn figma-btn-white">Start</button>
+              </div>
+            </div>
+
+            <!-- Task 3: Join Community -->
+            <div class="flex items-center justify-between p-4 glass-surface rounded-lg">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M8 1v14M1 8h14" stroke="#A4A7AE" stroke-width="2"/>
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="font-kanit font-normal text-white">Join Discord Community</h4>
+                  <p class="font-kanit font-light text-sm text-text-secondary">Join our Discord server and introduce yourself</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="font-kanit font-light text-sm text-text-secondary">+75 Points</span>
+                <button class="figma-btn figma-btn-white">Start</button>
+              </div>
+            </div>
+
+            <!-- Task 4: Write Review -->
+            <div class="flex items-center justify-between p-4 glass-surface rounded-lg">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M8 1v14M1 8h14" stroke="#A4A7AE" stroke-width="2"/>
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="font-kanit font-normal text-white">Write a Review</h4>
+                  <p class="font-kanit font-light text-sm text-text-secondary">Write a review about your twin3 experience</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="font-kanit font-light text-sm text-text-secondary">+200 Points</span>
+                <button class="figma-btn figma-btn-white">Start</button>
+              </div>
+            </div>
+
+            <!-- Task 5: Refer Friends -->
+            <div class="flex items-center justify-between p-4 glass-surface rounded-lg">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M8 1v14M1 8h14" stroke="#A4A7AE" stroke-width="2"/>
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="font-kanit font-normal text-white">Refer 3 Friends</h4>
+                  <p class="font-kanit font-light text-sm text-text-secondary">Invite friends to join twin3 platform</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="font-kanit font-light text-sm text-text-secondary">+500 Points</span>
+                <button class="figma-btn figma-btn-white">Start</button>
+              </div>
+            </div>
+
+            <!-- Task 6: Create Content -->
+            <div class="flex items-center justify-between p-4 glass-surface rounded-lg">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M8 1v14M1 8h14" stroke="#A4A7AE" stroke-width="2"/>
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="font-kanit font-normal text-white">Create Original Content</h4>
+                  <p class="font-kanit font-light text-sm text-text-secondary">Create and share original content about twin3</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="font-kanit font-light text-sm text-text-secondary">+1000 Points</span>
+                <button class="figma-btn figma-btn-white">Start</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script>
+    function toggleConnection(button) {
+      // Check if already connected
+      if (button.classList.contains('btn-connected')) {
+        return; // Do nothing if already connected
+      }
+
+      // Change button to connected state - remove all previous classes
+      button.classList.remove('figma-btn', 'figma-btn-white', 'figma-account-btn', 'btn-primary', 'btn-small', 'w-full');
+      button.classList.add('btn-connected');
+
+      // Update button content with Size=s Check icon structure
+      button.innerHTML = `
+        <span>Connected</span>
+        <div class="check-icon-container">
+          <svg width="6" height="5" viewBox="0 0 6 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 1L2.5 3.5L1 2" stroke="currentColor" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      `;
+
+      // Remove onclick to prevent further clicks
+      button.removeAttribute('onclick');
+
+      // Add a subtle success animation
+      button.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        button.style.transform = 'scale(1)';
+        setTimeout(() => {
+          button.style.transform = 'none'; // Reset transform after animation
+        }, 100);
+      }, 150);
+    }
+
+    // Figma Tooltip System
+    function initializeTooltips() {
+      const tooltipContainers = document.querySelectorAll('[data-tooltip]');
+
+      tooltipContainers.forEach(container => {
+        const tooltipText = container.getAttribute('data-tooltip');
+
+        // Create tooltip element
+        const tooltip = document.createElement('div');
+        tooltip.className = 'figma-tooltip';
+
+        // Add tooltip content
+        tooltip.innerHTML = `
+          <p class="figma-tooltip-text">${tooltipText}</p>
+        `;
+
+        // Append tooltip to container
+        container.appendChild(tooltip);
+      });
+    }
+
+    // Initialize tooltips when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeTooltips();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>twin3 Passport - Proof of Humanity</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-bg: #0a0a0a;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --text-muted: #555555;
+            --accent-color: #ffffff;
+        }
+
+        body {
+            font-family: 'Kanit', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--primary-bg);
+            min-height: 100vh;
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navigation bar styles */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1rem;
+        }
+
+        /* Responsive padding matching twin3_backup-main */
+        @media (min-width: 768px) {
+            .nav-bar {
+                padding: 1rem 2rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .nav-bar {
+                padding: 1rem 4rem;
+            }
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .nav-logo img {
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .nav-logo img {
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+        }
+
+        .mobile-menu-btn {
+            display: block;
+            color: white;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+
+        /* Mobile menu styles */
+        .mobile-menu {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 1rem;
+            z-index: 1000;
+            display: none;
+            max-height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+
+        .mobile-menu.show {
+            display: block;
+        }
+
+        .mobile-menu-close {
+            display: none;
+        }
+
+        .mobile-menu-links {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .mobile-menu-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 400;
+            padding: 1rem 1rem; /* px-4 py-4 */
+            background: linear-gradient(to right, rgba(0, 0, 0, 1), transparent); /* bg-gradient-to-r from-black to-transparent */
+            backdrop-filter: blur(4px); /* backdrop-blur-sm */
+            margin: 0;
+            border-radius: 0;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .mobile-menu-link:hover {
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(6px);
+        }
+
+        .mobile-menu-link-focused {
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            font-weight: 500;
+            backdrop-filter: blur(6px);
+        }
+
+        .nav-actions {
+            display: none;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .nav-actions {
+                display: flex;
+            }
+        }
+
+        .nav-link {
+            display: block;
+            padding: 0.5rem 1rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-weight: 200;
+        }
+
+        .nav-link:hover {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        /* Focused/current page state: grey text, not clickable */
+        .nav-link-focused,
+        .nav-link[aria-current="page"] {
+            color: #9CA3AF;
+            pointer-events: none;
+            cursor: default;
+            background: transparent;
+        }
+        .nav-link-focused:hover,
+        .nav-link[aria-current="page"]:hover {
+            background: transparent;
+            color: #9CA3AF;
+        }
+
+        .wallet-button {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .wallet-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .wallet-balance {
+            margin-right: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 200;
+        }
+
+        .wallet-address {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 0.375rem;
+        }
+
+        .wallet-avatar {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+
+        .wallet-address-text {
+            font-size: 0.875rem;
+            font-weight: 200;
+        }
+
+        .dropdown-icon {
+            width: 0.875rem;
+            height: 0.4375rem;
+            margin-left: 0.25rem;
+        }
+
+        /* Page video background */
+        .page-video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .page-content-container {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.25rem;
+            padding-top: 6rem; /* Add space for fixed nav bar */
+            padding-bottom: 2rem; /* Add space for footer */
+            max-width: 1400px;
+            margin: 0 auto;
+            gap: 2rem;
+        }
+
+        .page-unified-content {
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            padding: 2rem;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            min-height: fit-content;
+        }
+
+        .page-left-content {
+            flex: 1;
+            max-width: 600px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .page-right-action {
+            flex-shrink: 0;
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* 垂直置中 */
+            align-items: center;
+            gap: 2rem; /* 固定 32px 間距 */
+        }
+
+        .page-main-title {
+            font-weight: 300;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .page-subtitle {
+            font-weight: 200;
+            margin-bottom: 2rem;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .page-description {
+            font-weight: 200;
+            margin-bottom: 1.5rem;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .page-action-button {
+            font-family: 'Kanit', sans-serif;
+            font-weight: 300;
+        }
+
+        /* 響應式設計 */
+        @media (min-width: 1024px) {
+            .page-content-container {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                padding: 2.5rem 4rem;
+                padding-top: 6rem;
+                gap: 4rem;
+            }
+
+            .page-unified-content {
+                flex-direction: row;
+                align-items: stretch;
+                gap: 2rem;
+            }
+
+            .page-left-content {
+                text-align: left;
+            }
+
+            .page-main-title {
+                font-size: 4.5rem; /* 72px - 最大字級限制 */
+            }
+        }
+
+        @media (min-width: 1280px) {
+            .page-main-title {
+                font-size: 4.5rem; /* 72px - 符合原始規範 */
+            }
+        }
+
+        @media (min-width: 1536px) {
+            .page-main-title {
+                font-size: 4.5rem; /* 72px - 最大字級限制 */
+            }
+        }
+
+        /* Force center left-content around ~1000px */
+        @media (max-width: 1023px) and (min-width: 768px) {
+            .unified-content-block { align-items: center; justify-content: center; }
+            .page-left-content { margin-left: auto; margin-right: auto; text-align: center; align-items: center; }
+        }
+
+        /* Responsive layout for verification steps to prevent squishing */
+        @media (max-width: 768px) {
+            .verification-steps { gap: 0.75rem; }
+            .verification-step { padding: 1rem; }
+            .step-content { flex-direction: column; align-items: center; }
+            .step-info { width: 100%; align-items: center; }
+            .step-content .page-action-button,
+            .verification-steps .start-btn,
+            .verification-steps #step1-btn {
+                width: 100% !important;
+                margin-left: 0 !important;
+                margin-top: 16px !important;
+                align-self: center;
+            }
+        }
+
+        /* Slightly earlier wrap on tablets */
+        @media (max-width: 920px) and (min-width: 769px) {
+            .step-content { flex-wrap: wrap; row-gap: 10px; }
+            .step-info { min-width: 260px; }
+            .step-content .page-action-button { margin-left: 16px; }
+        }
+
+        /* Mobile + Tablet layout: vertical stack, centered, full-width button */
+        @media (max-width: 1023px) {
+            .step-content { flex-direction: column; align-items: center; }
+            .step-info { width: 100%; flex-direction: column; align-items: center; gap: 0.5rem; }
+            .step-number { margin-bottom: 8px; }
+            .step-text { text-align: center; margin-right: 0 !important; }
+            .step-content .page-action-button,
+            .verification-steps .start-btn,
+            .verification-steps #step1-btn {
+                width: 100% !important;
+                margin-left: 0 !important;
+                margin-top: 16px !important;
+                align-self: center;
+            }
+
+            /* Make step1 button full-width on mobile/tablet */
+            .step-content #step1-btn { width: 100%; }
+
+            /* Completed state: 16px vertical gap between icon and text on mobile/tablet */
+            .verification-step.completed .step-content { column-gap: 0; row-gap: 16px; }
+            .verification-step.completed .step-info { gap: 16px; }
+        }
+
+        /* Allow long subtext to wrap */
+        .step-subtext { white-space: normal !important; word-break: break-word; overflow-wrap: anywhere; display: inline; }
+
+        /* Proof page specific styles */
+        .verification-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 0;
+        }
+
+        .verification-step {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .verification-step.completed {
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .step-content {
+            display: flex;
+            align-items: center; /* vertically center step-info and button */
+            justify-content: flex-start; /* keep a fixed spacing (we add margin-left on button) */
+        }
+
+        .step-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;        /* allow text to take remaining width */
+            min-width: 0;   /* enable wrapping instead of overflowing */
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+            min-height: 32px;
+            flex-shrink: 0;
+            background: transparent;
+            border: 1px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 300; /* requested weight */
+            font-size: 0.875rem;
+        }
+
+        /* Keep 16px spacing to button while allowing text wrap */
+        .step-text {
+            margin-right: 0 !important;
+            white-space: normal;
+            word-break: break-word;
+        }
+        .step-content .page-action-button { margin-left: 16px; }
+
+        /* Make verification step buttons hug content */
+        .verification-steps .page-action-button,
+        .verification-steps .start-btn,
+        .verification-steps #step1-btn {
+            width: auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .check-icon {
+            width: 1rem;
+            height: 1rem;
+            color: white;
+            background: transparent;
+            display: inline-block;
+        }
+
+
+
+        .verification-step.completed .step-number {
+            background: #ffffff; /* white bg */
+            color: #000000;      /* black text */
+            border-color: #ffffff;
+        }
+
+        .step-status {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .step-status.completed {
+            background: transparent; /* icon will convey state */
+            color: #000000;      /* ensure text/icon black if any */
+            flex: none;
+        }
+
+        .step-status.completed .check-icon {
+            color: #000000;
+        }
+
+        .check-icon-img {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* reCAPTCHA Popup Modal */
+        .recaptcha-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .recaptcha-modal.show {
+            display: flex;
+        }
+
+        .recaptcha-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .recaptcha-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .recaptcha-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
+
+        .recaptcha-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .recaptcha-close:hover {
+            background-color: #f5f5f5;
+        }
+
+        .recaptcha-body {
+            text-align: center;
+        }
+
+        .recaptcha-description {
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        /* Keep 16px spacing between completed icon and step text */
+        .verification-step.completed .step-content { column-gap: 16px; }
+
+        .step-text {
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        .step-subtext {
+            color: #9CA3AF;
+            font-size: 12px;
+            font-weight: 200;
+            padding-left: 2px;
+        }
+
+        .optional-badge {
+            display: inline-block;
+            background: rgba(156, 163, 175, 0.2);
+            color: #9CA3AF;
+            font-size: 10px;
+            font-weight: 300;
+            padding: 2px 6px;
+            border-radius: 8px;
+            margin-left: 8px;
+            border: 1px solid rgba(156, 163, 175, 0.3);
+        }
+
+        .step-text-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .step-subline {
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+
+        .start-btn {
+            background: white;
+            color: black;
+            border: 1px solid #373737;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 300;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Kanit', sans-serif;
+            font-size: 14px;
+        }
+
+        .start-btn:hover:not(:disabled) {
+            background: transparent;
+            color: white;
+            border-color: white;
+        }
+
+        .start-btn:disabled {
+            background: rgba(255, 255, 255, 0.1);
+            color: #666666;
+            border-color: rgba(255, 255, 255, 0.2);
+            cursor: not-allowed;
+        }
+
+        /* Next button disabled state */
+        #get-started-btn:disabled {
+            background: rgba(255, 255, 255, 0.1) !important;
+            color: #666666 !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
+            cursor: not-allowed !important;
+        }
+
+        #get-started-btn:disabled:hover {
+            background: rgba(255, 255, 255, 0.1) !important;
+            color: #666666 !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
+            transform: none !important;
+        }
+
+        .step-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #22c55e;
+            font-weight: 500;
+        }
+
+        .step-status.completed {
+            color: #22c55e;
+        }
+    </style>
+</head>
+<body>
+    <!-- Global Navigation Bar - 全域導航 -->
+    <nav id="global-nav" class="nav-bar">
+        <a href="https://twin3.ai" class="nav-logo">
+            <div class="flex items-center">
+                <img src="../assets/img/logo_dark.svg" alt="Logo" class="w-10 h-10 md:w-10 md:h-10">
+            </div>
+        </a>
+
+        <button class="mobile-menu-btn" id="mobile-menu-btn">
+            <span class="material-icons">menu</span>
+        </button>
+
+        <!-- Desktop navigation -->
+        <div class="nav-actions">
+            <a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" rel="noreferrer noopener" class="nav-link">WHITEPAPER</a>
+            <a class="nav-link" href="https://twin3.ai/dashboard">MY TWIN</a>
+            <span class="nav-link nav-link-focused" aria-current="page">PASSPORT</span>
+
+            <!-- Wallet button -->
+            <div class="wallet-button">
+                <div class="wallet-balance">0 BNB</div>
+                <div class="wallet-address">
+                    <div class="wallet-avatar">👽</div>
+                    <div class="wallet-address-text">0x1234...7890</div>
+                    <svg class="dropdown-icon" fill="none" height="7" width="14" xmlns="http://www.w3.org/2000/svg">
+                        <title>Dropdown</title>
+                        <path d="M12.75 1.54001L8.51647 5.0038C7.77974 5.60658 6.72026 5.60658 5.98352 5.0038L1.75 1.54001" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobile-menu">
+            <button class="mobile-menu-close" id="mobile-menu-close">
+                <span class="material-icons">close</span>
+            </button>
+            <div class="mobile-menu-links">
+                <a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" rel="noreferrer noopener" class="mobile-menu-link">WHITEPAPER</a>
+                <a href="https://twin3.ai/dashboard" class="mobile-menu-link">MY TWIN</a>
+                <a href="welcome.html" class="mobile-menu-link">PASSPORT</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Proof of Humanity Page -->
+    <div id="proof-page" class="relative min-h-screen">
+        <!-- Video Background -->
+        <video class="page-video-background" autoplay loop muted playsinline style="z-index: 1;">
+            <source src="../assets/img/v2.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <!-- Proof Content -->
+        <div class="page-content-container">
+            <!-- Unified Content Block -->
+            <div class="page-unified-content">
+                <!-- Left Content (Title + Description) -->
+                <div class="page-left-content">
+                    <h1 class="page-main-title main-title text-white text-4xl md:text-6xl lg:text-7xl leading-tight mb-4">
+                        Proof of<br>
+                        Humanity
+                    </h1>
+                    <p class="page-subtitle subtitle text-[#888888] text-xl md:text-2xl lg:text-3xl mb-8">Verify your human identity</p>
+                    <p class="page-description description text-[#888888] text-base md:text-lg mb-6" style="font-weight: 200;">
+                        Just a quick human verification with Google reCAPTCHA to welcome you aboard! Feel free to enable biometric authentication for extra security. Your personal data stays private – we don't store anything.
+                    </p>
+                </div>
+
+                <!-- Right Action (Verification Steps) -->
+                <div class="page-right-action">
+                    <div class="verification-steps w-full">
+                        <!-- Step 1: Google reCAPTCHA -->
+                        <div class="verification-step" id="step1">
+                            <div class="step-content flex w-full">
+                                <div class="step-info flex">
+                                    <div class="step-number w-8 h-8 text-white rounded-full flex items-center justify-center text-sm">1</div>
+                                    <span class="step-text text-white">Google reCAPTCHA</span>
+                                </div>
+                                <button class="page-action-button start-btn" id="step1-btn">Start</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Mobile Authentication -->
+                        <div class="verification-step" id="step2">
+                            <div class="step-content flex w-full">
+                                <div class="step-info flex">
+                                    <div class="step-number w-8 h-8 text-white rounded-full flex items-center justify-center text-sm">2</div>
+                                    <div class="step-text-container">
+                                        <span class="step-text text-white">Apple/Google Biometric</span>
+                                        <div class="step-subline">
+                                            <span class="step-subtext" style="color:#9CA3AF; font-size:12px; font-weight:200;">(Face/Touch ID)</span>
+                                            <span class="optional-badge">Optional</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="page-action-button start-btn" id="start-mobile-auth">Start</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Get Started Button -->
+                    <button id="get-started-btn" class="page-action-button action-button w-full px-4 py-3 border border-[#373737] text-black bg-white rounded-lg hover:bg-transparent hover:text-white hover:border-white transition duration-300" disabled>
+                        Next
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Section -->
+        <footer class="bg-black text-white px-8 py-10 xl:pr-20 lg:px-0 lg:py-12" style="position: relative; z-index: 5;">
+            <div class="flex flex-col-reverse lg:flex-row xl:justify-between items-start space-y-10 lg:space-y-0">
+                <!-- Logo Section -->
+                <div class="w-full xl:w-1/5 lg:w-[13%] text-center lg:text-left">
+                    <div class="flex flex-col justify-center lg:justify-start items-center pt-6 lg:pt-0" style="gap: 4px;">
+                        <div class="flex items-center">
+                            <img src="../assets/img/logo_dark.svg" alt="Logo" style="width: 40px; height: 40px;">
+                        </div>
+                        <span class="text-sm md:text-base" style="font-weight: 300; color: #888888;">twin3.ai</span>
+                    </div>
+                </div>
+
+                <!-- Links Section -->
+                <div class="flex flex-wrap lg:flex-nowrap w-full lg:w-2/4 lg:space-x-10">
+                    <!-- Social Media -->
+                    <div class="w-full md:w-1/3 text-center lg:text-left flex-row">
+                        <h5 class="uppercase text-sm lg:text-base" style="font-weight: 300; color: white; padding-bottom: 12px;">Social Media</h5>
+                        <div class="flex justify-center lg:justify-start space-x-4">
+                            <a href="https://x.com/twin3_ai" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+                                <div class="w-6 h-6 flex items-center justify-center" style="padding: 2px;">
+                                    <img src="../assets/img/X_logo.svg" alt="X (Twitter)" class="w-full h-full object-contain">
+                                </div>
+                            </a>
+                            <a href="https://opensea.io/collection/twin3" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+                                <img src="../assets/img/opensea_logo.svg" alt="OpenSea" class="w-6 h-6">
+                            </a>
+                            <a href="https://warpcast.com/twin3.eth" target="_blank" rel="noreferrer noopener" class="hover:opacity-80 transition-opacity">
+                                <img src="../assets/img/farcaster_logo.svg" alt="Warpcast" class="w-6 h-6">
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Resource -->
+                    <div class="w-full md:w-1/3 text-center lg:text-left 2xl:mb-2 pt-4 md:pt-0">
+                        <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Resource</h5>
+                        <ul class="space-y-2">
+                            <li><a href="https://ieeexplore.ieee.org/document/10734204" target="_blank" rel="noreferrer noopener" class="text-[#888888] hover:text-white text-sm lg:text-base" style="font-weight: 200;">Whitepaper</a></li>
+                            <li><a class="text-[#888888] hover:text-white text-sm lg:text-base" href="/tasks/1" style="font-weight: 200;">Tasks</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Features -->
+                    <div class="w-full md:w-1/3 text-center lg:text-left 2xl:mb-10 pt-4 md:pt-0">
+                        <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Features</h5>
+                        <ul class="space-y-2">
+                            <li><a class="text-[#888888] hover:text-white text-sm lg:text-base" href="/dashboard" style="font-weight: 200;">My Twin</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Newsletter Section -->
+                <div class="w-full lg:w-1/4 text-center lg:text-left space-y-5">
+                    <h5 class="uppercase mb-3 text-sm lg:text-base" style="font-weight: 300; color: white;">Subscribe to twin3 Newsletter</h5>
+                    <div class="flex flex-col lg:flex-row items-center lg:space-x-2 space-y-4 lg:space-y-0">
+                        <a href="https://www.linkedin.com/company/twin3-ai" target="_blank" rel="noreferrer noopener" class="px-4 py-2 border border-[#373737] text-black bg-white rounded-lg hover:bg-transparent hover:text-white hover:border-white transition duration-300 text-sm lg:text-base" style="font-weight: 300;">Subscribe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="mt-10 text-center text-gray-500 text-sm lg:text-base" style="font-weight: 200;">© 2025 twin3.ai v1.0.6</div>
+        </footer>
+    </div>
+
+    <!-- reCAPTCHA Popup Modal -->
+    <div id="recaptcha-modal" class="recaptcha-modal">
+        <div class="recaptcha-content">
+            <div class="recaptcha-header">
+                <h3 class="recaptcha-title">Human Verification</h3>
+                <button class="recaptcha-close" onclick="closeRecaptchaModal()">&times;</button>
+            </div>
+            <div class="recaptcha-body">
+                <p class="recaptcha-description">Please complete the reCAPTCHA to verify you're human.</p>
+                <div id="recaptcha-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script>
+        // App state
+        let userData = { username: '', career: '' };
+        let step1Completed = false;
+        let step2Completed = false;
+
+        // Navigation
+        function initNav() {
+            console.log('🔧 Initializing navigation...');
+
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            const menuClose = document.getElementById('mobile-menu-close');
+
+            console.log('📱 Mobile menu elements:', {
+                btn: !!menuBtn,
+                menu: !!menu,
+                close: !!menuClose
+            });
+
+            if (menuBtn && menu) {
+                menuBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('🔘 Mobile menu button clicked');
+                    menu.classList.add('show');
+                    console.log('✅ Added show class to mobile menu');
+                });
+                console.log('✅ Mobile menu button event listener added');
+            } else {
+                console.error('❌ Mobile menu button or menu element not found');
+            }
+
+            if (menuClose && menu) {
+                menuClose.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('❌ Mobile menu close button clicked');
+                    menu.classList.remove('show');
+                    console.log('✅ Removed show class from mobile menu');
+                });
+                console.log('✅ Mobile menu close event listener added');
+            }
+
+            // Add click outside to close mobile menu
+            document.addEventListener('click', (e) => {
+                if (!menu || !menuBtn) return;
+
+                const isMenuOpen = menu.classList.contains('show');
+                if (!isMenuOpen) return;
+
+                // Check if click is outside menu and menu button
+                const isClickInsideMenu = menu.contains(e.target);
+                const isClickOnMenuButton = menuBtn.contains(e.target);
+
+                if (!isClickInsideMenu && !isClickOnMenuButton) {
+                    console.log('🔘 Clicked outside mobile menu, closing...');
+                    menu.classList.remove('show');
+                    console.log('✅ Mobile menu closed');
+                }
+            });
+
+            console.log('🎉 Navigation initialization complete');
+        }
+
+        // Proof functions
+        function updateNextBtn() {
+            const nextBtn = document.getElementById('get-started-btn');
+            if (nextBtn) {
+                // Only require step1 (Google reCAPTCHA) to be completed
+                nextBtn.disabled = !step1Completed;
+            }
+        }
+
+        function completeStep(stepNumber) {
+            const step = document.getElementById(`step${stepNumber}`);
+            const btn = document.getElementById(stepNumber === 1 ? 'step1-btn' : 'start-mobile-auth');
+
+            if (step && btn) {
+                step.classList.add('completed');
+
+                // Update step content to show completed state
+                const stepContent = step.querySelector('.step-content');
+                stepContent.removeChild(btn);
+
+                const stepStatus = document.createElement('div');
+                stepStatus.className = 'step-status completed';
+                stepStatus.innerHTML = `
+                    <img src="../assets/img/Check icon.svg" alt="Completed" class="check-icon-img" />
+                `;
+                stepContent.appendChild(stepStatus);
+
+                if (stepNumber === 1) {
+                    step1Completed = true;
+                } else {
+                    step2Completed = true;
+                }
+
+                updateNextBtn();
+            }
+        }
+
+        // reCAPTCHA callback
+        function onRecaptchaSuccess() {
+            console.log('reCAPTCHA completed successfully');
+
+            // Close the modal
+            closeRecaptchaModal();
+
+            // Complete step 1
+            completeStep(1);
+        }
+
+        // Biometric auth
+        async function startBiometric() {
+            const btn = document.getElementById('start-mobile-auth');
+            if (btn) {
+                btn.textContent = 'Authenticating...';
+                btn.disabled = true;
+            }
+
+            try {
+                // Check if WebAuthn is supported
+                if (window.PublicKeyCredential) {
+                    // Simulate biometric authentication
+                    setTimeout(() => {
+                        console.log('Biometric authentication completed');
+                        completeStep(2);
+                    }, 2000);
+                } else {
+                    // Fallback for unsupported browsers
+                    setTimeout(() => {
+                        console.log('Biometric authentication simulated (fallback)');
+                        completeStep(2);
+                    }, 2000);
+                }
+            } catch (error) {
+                console.error('Biometric authentication failed:', error);
+                if (btn) {
+                    btn.textContent = 'Try Again';
+                    btn.disabled = false;
+                }
+            }
+        }
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Proof page loaded');
+
+            // Initialize navigation
+            initNav();
+
+            // reCAPTCHA Modal Functions
+            window.openRecaptchaModal = function() {
+                const modal = document.getElementById('recaptcha-modal');
+                const container = document.getElementById('recaptcha-container');
+
+                // Clear previous reCAPTCHA
+                container.innerHTML = '';
+
+                // Show modal
+                modal.classList.add('show');
+
+                // Create reCAPTCHA element
+                const recaptchaDiv = document.createElement('div');
+                recaptchaDiv.className = 'g-recaptcha';
+                recaptchaDiv.setAttribute('data-sitekey', '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'); // Test key
+                recaptchaDiv.setAttribute('data-callback', 'onRecaptchaSuccess');
+
+                container.appendChild(recaptchaDiv);
+
+                // Render reCAPTCHA
+                if (window.grecaptcha && window.grecaptcha.render) {
+                    try {
+                        window.grecaptcha.render(recaptchaDiv);
+                    } catch (error) {
+                        console.error('reCAPTCHA render error:', error);
+                    }
+                }
+            };
+
+            window.closeRecaptchaModal = function() {
+                const modal = document.getElementById('recaptcha-modal');
+                const container = document.getElementById('recaptcha-container');
+
+                modal.classList.remove('show');
+                container.innerHTML = '';
+
+                // Reset reCAPTCHA if needed
+                if (window.grecaptcha && window.grecaptcha.reset) {
+                    try {
+                        window.grecaptcha.reset();
+                    } catch (error) {
+                        console.error('reCAPTCHA reset error:', error);
+                    }
+                }
+            };
+
+            // Step 1: reCAPTCHA (簡化版本 - 直接完成)
+            const step1Btn = document.getElementById('step1-btn');
+            if (step1Btn) {
+                step1Btn.addEventListener('click', () => {
+                    if (step1Btn.disabled) return;
+
+                    // 直接完成 step 1，不需要實際的 reCAPTCHA 驗證
+                    step1Btn.textContent = 'Completing...';
+                    step1Btn.disabled = true;
+
+                    // 模擬短暫的處理時間
+                    setTimeout(() => {
+                        step1Completed = true;
+                        completeStep(1);
+                        updateNextBtn();
+                        console.log('Step 1 completed (simplified)');
+                    }, 500);
+                });
+            }
+
+            // Step 2: Biometric authentication
+            const step2Btn = document.getElementById('start-mobile-auth');
+            if (step2Btn) {
+                step2Btn.addEventListener('click', startBiometric);
+            }
+
+            // Next button
+            const nextBtn = document.getElementById('get-started-btn');
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => {
+                    if (!nextBtn.disabled) {
+                        console.log('Navigating to user info page');
+                        window.location.href = 'user-info.html';
+                    }
+                });
+            }
+
+            // Initialize button state
+            updateNextBtn();
+        });
+
+        // Make onRecaptchaSuccess globally available
+        window.onRecaptchaSuccess = onRecaptchaSuccess;
+
+        // Close modal when clicking outside
+        document.getElementById('recaptcha-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeRecaptchaModal();
+            }
+        });
+    </script>
+</body>
+</html>

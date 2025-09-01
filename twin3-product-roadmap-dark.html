@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>twin3 Product Roadmap</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', 'PingFang TC', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .roadmap-container {
+            width: 95vw;
+            max-width: 1600px;
+            min-height: fit-content;
+            background: #1a1a1a;
+            border-radius: 20px;
+            border: 1px solid #333;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 頂部標題區 */
+        .header {
+            min-height: 80px;
+            background: #2a2a2a;
+            border-bottom: 1px solid #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            position: relative;
+            padding: 20px 0;
+            z-index: 1000;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        /* 語言切換器 */
+        .language-switcher {
+            position: absolute;
+            right: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 99999;
+        }
+
+        .language-dropdown {
+            position: relative;
+            display: inline-block;
+            z-index: 99999;
+        }
+
+        .language-toggle {
+            background: #333;
+            border: 1px solid #555;
+            color: #ccc;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            z-index: 99999;
+        }
+
+        .language-toggle:hover {
+            background: #444;
+            color: #fff;
+        }
+
+        .language-menu {
+            position: fixed;
+            top: 80px;
+            right: 30px;
+            background: #333;
+            border: 1px solid #555;
+            border-radius: 6px;
+            min-width: 120px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            display: none;
+            z-index: 999999;
+        }
+
+        .language-menu.show {
+            display: block;
+        }
+
+        .language-option {
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #ccc;
+            user-select: none;
+            position: relative;
+            z-index: 999999;
+            background: #333;
+        }
+
+        .language-option:hover {
+            background: #444 !important;
+            color: #fff !important;
+        }
+
+        .language-option.active {
+            background: #00d4ff !important;
+            color: #000 !important;
+        }
+
+        .language-option:first-child {
+            border-radius: 6px 6px 0 0;
+        }
+
+        .language-option:last-child {
+            border-radius: 0 0 6px 6px;
+        }
+
+        /* 主要內容區 */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .timeline-header {
+            display: flex;
+            height: 60px;
+            margin-bottom: 20px;
+        }
+
+        .timeline-label {
+            width: 200px;
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #ccc;
+        }
+
+        .phase {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            margin: 0 5px;
+            border-radius: 10px;
+            font-weight: bold;
+            color: white;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .phase-1 { background: #7F56D9; }
+        .phase-2 { background: #DC6803; }
+        .phase-3 { background: #039855; }
+
+        .phase::after {
+            content: '';
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+        }
+
+        .phase-1::after { border-left-color: #7F56D9; }
+        .phase-2::after { border-left-color: #DC6803; }
+        .phase-3::after { border-left-color: transparent; }
+
+        /* 三層並行設計 */
+        .layers {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .layer {
+            flex: 1;
+            display: flex;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border: 1px solid #333;
+        }
+
+        .layer-label {
+            width: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .user-layer { background: #7F56D9; }
+        .market-layer { background: #DC6803; }
+        .b2b-layer { background: #039855; }
+
+        .layer-content {
+            flex: 1;
+            display: flex;
+        }
+
+        .phase-content {
+            flex: 1;
+            padding: 15px;
+            background: #2a2a2a;
+            border-right: 1px solid #444;
+            position: relative;
+        }
+
+        .phase-content:last-child {
+            border-right: none;
+        }
+
+        .feature-item {
+            margin-bottom: 12px;
+            padding: 8px 12px;
+            background: #333;
+            border-radius: 8px;
+            border-left: 4px solid;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .user-layer .feature-item { border-left-color: #7F56D9; }
+        .market-layer .feature-item { border-left-color: #DC6803; }
+        .b2b-layer .feature-item { border-left-color: #039855; }
+
+
+
+        /* 底部圖例區 */
+        .footer {
+            min-height: 60px;
+            background: #2a2a2a;
+            border-top: 1px solid #444;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 15px 30px;
+            flex-shrink: 0;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        .legend-text {
+            line-height: 1.4;
+        }
+
+        .legend-text[data-en*=":"] {
+            white-space: pre-line;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        .user-color { background: #7F56D9; }
+        .market-color { background: #DC6803; }
+        .b2b-color { background: #039855; }
+
+        /* 動畫效果 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .animate-slide-in {
+            animation: slideInRight 0.6s ease-out forwards;
+        }
+
+        .phase:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+        }
+
+        /* 進度指示器 */
+        .progress-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 0.8rem;
+            background: rgba(0,0,0,0.3);
+        }
+
+
+
+        /* 移除所有Material Icons的margin並垂直對齊 */
+        .material-icons {
+            margin-right: 4px !important;
+            vertical-align: middle;
+            font-size: 18px !important;
+        }
+
+        .feature-title {
+            font-weight: bold;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #fff;
+        }
+
+        .layer-label > div > div {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .metrics {
+            background: #1a1a1a;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            margin-top: 8px;
+            color: #ccc;
+            display: flex;
+            align-items: flex-start;
+            gap: 4px;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 1200px) {
+            .header h1 { font-size: 2rem; }
+            .feature-item { font-size: 0.8rem; }
+            .phase-content { padding: 10px; }
+        }
+
+        @media (max-width: 900px) {
+            .roadmap-container { 
+                width: 98vw; 
+                height: 95vh; 
+            }
+            .header h1 { font-size: 1.5rem; }
+            .layer-label { width: 150px; font-size: 1rem; }
+            .timeline-label { width: 150px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="roadmap-container">
+        <!-- 頂部標題區 -->
+        <div class="header">
+            <h1 data-zh="twin3 產品路線圖" data-en="twin3 Product Roadmap">twin3 Product Roadmap</h1>
+            <div class="language-switcher">
+                <div class="language-dropdown">
+                    <div class="language-toggle" onclick="toggleLanguageMenu(event)">
+                        <span class="material-icons">language</span>
+                        <span id="currentLang">English</span>
+                        <span class="material-icons">expand_more</span>
+                    </div>
+                    <div class="language-menu" id="languageMenu">
+                        <div class="language-option active" onclick="switchLanguage('en', event)" data-lang="en">
+                            <span>English</span>
+                        </div>
+                        <div class="language-option" onclick="switchLanguage('zh', event)" data-lang="zh">
+                            <span>中文</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主要內容區 -->
+        <div class="main-content">
+            <!-- 時間軸標題 -->
+            <div class="timeline-header">
+                <div class="timeline-label"></div>
+                <div class="phase phase-1">
+                    <div>Phase 1</div>
+                    <div style="font-size: 0.9rem; opacity: 0.9;" data-zh="基礎建立 (0-6M)" data-en="Foundation (0-6M)">Foundation (0-6M)</div>
+                </div>
+                <div class="phase phase-2">
+                    <div>Phase 2</div>
+                    <div style="font-size: 0.9rem; opacity: 0.9;" data-zh="規模擴張 (6-12M)" data-en="Scale Expansion (6-12M)">Scale Expansion (6-12M)</div>
+                </div>
+                <div class="phase phase-3">
+                    <div>Phase 3</div>
+                    <div style="font-size: 0.9rem; opacity: 0.9;" data-zh="生態完善 (12-18M)" data-en="Ecosystem Completion (12-18M)">Ecosystem Completion (12-18M)</div>
+                </div>
+            </div>
+
+            <!-- 三層並行內容 -->
+            <div class="layers">
+                <!-- 用戶發展層 -->
+                <div class="layer">
+                    <div class="layer-label user-layer">
+                        <div>
+                            <div data-zh="用戶發展層" data-en="User Development">
+                                <span class="material-icons">person</span>User Development
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layer-content">
+                        <div class="phase-content">
+                            <div class="feature-item">
+                                <div class="feature-title" data-zh="數位分身創造系統" data-en="Digital Avatar Creation System">
+                                    <span class="material-icons">face</span>數位分身創造系統
+                                </div>
+                                <div data-zh="捏臉編輯器、產品世界觀敘事" data-en="Face editor, product worldview narrative">捏臉編輯器、產品世界觀敘事</div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title" data-zh="養料互動機制" data-en="Nurturing Interaction">
+                                    <span class="material-icons">star</span>養料互動機制
+                                </div>
+                                <div data-zh="AI對話轉換星星、traits解鎖" data-en="AI chat to matrix stars, traits unlock">AI對話轉換星星、traits解鎖</div>
+                            </div>
+                            <div class="metrics" data-zh="命名率>80%、日均對話>3次、Day7留存>40%" data-en="Naming rate >80%, Daily chat >3, Day7 retention >40%">
+                                <span class="material-icons">analytics</span>命名率>80%、日均對話>3次、Day7留存>40%
+                            </div>
+                        </div>
+                        <div class="phase-content">
+                            <div class="feature-item">
+                                <div class="feature-title" data-zh="社交生態建立" data-en="Social Ecosystem">
+                                    <span class="material-icons" style="margin-right: 8px;">groups</span>社交生態建立
+                                </div>
+                                <div data-zh="數位分身拜訪、隨機探險事件" data-en="Digital avatar visits, random adventure events">數位分身拜訪、隨機探險事件</div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title" data-zh="遊戲化機制" data-en="Gamification">
+                                    <span class="material-icons" style="margin-right: 8px;">videogame_asset</span>遊戲化機制
+                                </div>
+                                <div data-zh="稀有traits收集、成就排行榜" data-en="Rare traits collection, achievement leaderboard">稀有traits收集、成就排行榜</div>
+                            </div>
+                            <div class="metrics" data-zh="10萬活躍用戶、社交分享>2次/週、Day30留存>25%" data-en="100K active users, Social sharing >2/week, Day30 retention >25%">
+                                <span class="material-icons">analytics</span>10萬活躍用戶、社交分享>2次/週、Day30留存>25%
+                            </div>
+                        </div>
+                        <div class="phase-content">
+                            <div class="feature-item">
+                                <div class="feature-title" data-zh="AR整合突破" data-en="AR Integration">
+                                    <span class="material-icons" style="margin-right: 8px;">view_in_ar</span>AR整合突破
+                                </div>
+                                <div data-zh="AR眼鏡適配、混合現實體驗" data-en="AR glasses adaptation, mixed reality experience">AR眼鏡適配、混合現實體驗</div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title" data-zh="元宇宙接入" data-en="Metaverse Access">
+                                    <span class="material-icons" style="margin-right: 8px;">public</span>元宇宙接入
+                                </div>
+                                <div data-zh="多平台互通、NFT資產化" data-en="Cross-platform interoperability, NFT assets">多平台互通、NFT資產化</div>
+                            </div>
+                            <div class="metrics" data-zh="100萬活躍用戶、twin3認同率>60%、國際用戶>30%" data-en="1M active users, twin3 identity >60%, International users >30%">
+                                <span class="material-icons">analytics</span>100萬活躍用戶、twin3認同率>60%、國際用戶>30%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 市場拓展層 -->
+                <div class="layer">
+                    <div class="layer-label market-layer">
+                        <div>
+                            <div data-zh="市場拓展層" data-en="Market Expansion">
+                                <span class="material-icons">trending_up</span>市場拓展層
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layer-content">
+                        <div class="phase-content">
+                            <div class="feature-item">
+                                <div class="feature-title" data-zh="Freemium模式" data-en="Freemium Model">
+                                    <span class="material-icons" style="margin-right: 8px;">monetization_on</span>Freemium模式
+                                </div>
+                                <div data-zh="免費版1角色、付費版多角色" data-en="Free: 1 character, Premium: multiple characters">免費版1角色、付費版多角色</div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title" data-zh="用戶獲取策略" data-en="User Acquisition">
+                                    <span class="material-icons" style="margin-right: 8px;">campaign</span>用戶獲取策略
+                                </div>
+                                <div data-zh="GenZ社群行銷、網紅合作" data-en="GenZ social marketing, influencer partnerships">GenZ社群行銷、網紅合作</div>
+                            </div>
+                            <div class="metrics" data-zh="1萬活躍用戶、5%付費轉換、$50K月收入" data-en="10K active users, 5% conversion, $50K monthly revenue">
+                                <span class="material-icons">analytics</span>1萬活躍用戶、5%付費轉換、$50K月收入
+                            </div>
+                        </div>
+                        <div class="phase-content">
+                            <div class="feature-item">
+                                <div class="feature-title" data-zh="自動化任務系統" data-en="Automated Task System">
+                                    <span class="material-icons" style="margin-right: 8px;">smart_toy</span>自動化任務系統
+                                </div>
+                                <div data-zh="Web3任務執行、收益分潤" data-en="Web3 task execution, revenue sharing">Web3任務執行、收益分潤</div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title" data-zh="市場滲透" data-en="Market Penetration">
+                                    <span class="material-icons" style="margin-right: 8px;">travel_explore</span>市場滲透
+                                </div>
+                                <div data-zh="亞洲市場擴展、多語言版本" data-en="Asian market expansion, multi-language versions">亞洲市場擴展、多語言版本</div>
+                            </div>
+                            <div class="metrics" data-zh="50萬註冊用戶、15%付費轉換、$500K月收入" data-en="500K registered users, 15% conversion, $500K monthly revenue">
+                                <span class="material-icons">analytics</span>50萬註冊用戶、15%付費轉換、$500K月收入
+                            </div>
+                        </div>
+                        <div class="phase-content">
+                            <div class="feature-item">
+                                <div class="feature-title" data-zh="全球化佈局" data-en="Global Expansion">
+                                    <span class="material-icons" style="margin-right: 8px;">public</span>全球化佈局
+                                </div>
+                                <div data-zh="歐美市場進入、本地合作夥伴" data-en="EU/US market entry, local partnerships">歐美市場進入、本地合作夥伴</div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title" data-zh="高端服務" data-en="Premium Services">
+                                    <span class="material-icons" style="margin-right: 8px;">diamond</span>高端服務
+                                </div>
+                                <div data-zh="企業定制版本、白標解決方案" data-en="Enterprise customization, white-label solutions">企業定制版本、白標解決方案</div>
+                            </div>
+                            <div class="metrics" data-zh="200萬註冊用戶、$2M月收入、IPO準備" data-en="2M registered users, $2M monthly revenue, IPO preparation">
+                                <span class="material-icons">analytics</span>200萬註冊用戶、$2M月收入、IPO準備
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- B2B模式層 -->
+                <div class="layer">
+                    <div class="layer-label b2b-layer">
+                        <div>
+                            <div data-zh="B2B模式層" data-en="B2B Model">
+                                <span class="material-icons">business</span>B2B模式層
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layer-content">
+                        <div class="phase-content">
+                            <div class="feature-item">
+                                <div class="feature-title" data-zh="數據收集基礎" data-en="Data Collection Foundation">
+                                    <span class="material-icons" style="margin-right: 8px;">insights</span>數據收集基礎
+                                </div>
+                                <div data-zh="用戶行為追蹤、個性化畫像" data-en="User behavior tracking, personalized profiles">用戶行為追蹤、個性化畫像</div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title" data-zh="初期合作" data-en="Initial Partnerships">
+                                    <span class="material-icons" style="margin-right: 8px;">handshake</span>初期合作
+                                </div>
+                                <div data-zh="5家試點企業、數據服務驗證" data-en="5 pilot enterprises, data service validation">5家試點企業、數據服務驗證</div>
+                            </div>
+                            <div class="metrics" data-zh="數據積累、商業模式優化" data-en="Data accumulation, business model optimization">
+                                <span class="material-icons">analytics</span>數據積累、商業模式優化
+                            </div>
+                        </div>
+                        <div class="phase-content">
+                            <div class="feature-item">
+                                <div class="feature-title" data-zh="企業服務推出" data-en="Enterprise Services Launch">
+                                    <span class="material-icons" style="margin-right: 8px;">work</span>企業服務推出
+                                </div>
+                                <div data-zh="數據分析報告、品牌植入合作" data-en="Data analytics reports, brand integration partnerships">數據分析報告、品牌植入合作</div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title" data-zh="客戶拓展" data-en="Client Expansion">
+                                    <span class="material-icons" style="margin-right: 8px;">corporate_fare</span>客戶拓展
+                                </div>
+                                <div data-zh="50家企業客戶、年均合約$100K" data-en="50 enterprise clients, $100K average annual contract">50家企業客戶、年均合約$100K</div>
+                            </div>
+                            <div class="metrics" data-zh="SaaS平台建立、客戶留存>80%" data-en="SaaS platform establishment, client retention >80%">
+                                <span class="material-icons">analytics</span>SaaS平台建立、客戶留存>80%
+                            </div>
+                        </div>
+                        <div class="phase-content">
+                            <div class="feature-item">
+                                <div class="feature-title" data-zh="平台生態" data-en="Platform Ecosystem">
+                                    <span class="material-icons" style="margin-right: 8px;">hub</span>平台生態
+                                </div>
+                                <div data-zh="開發者社群、第三方應用市場" data-en="Developer community, third-party app marketplace">開發者社群、第三方應用市場</div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-title" data-zh="行業解決方案" data-en="Industry Solutions">
+                                    <span class="material-icons" style="margin-right: 8px;">domain</span>行業解決方案
+                                </div>
+                                <div data-zh="教育訓練、醫療健康、企業文化" data-en="Education & training, healthcare, corporate culture">教育訓練、醫療健康、企業文化</div>
+                            </div>
+                            <div class="metrics" data-zh="500家企業客戶、$10M年收入、B2B佔40%" data-en="500 enterprise clients, $10M annual revenue, B2B accounts for 40%">
+                                <span class="material-icons">analytics</span>500家企業客戶、$10M年收入、B2B佔40%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部圖例區 -->
+        <div class="footer">
+            <div class="legend-item">
+                <div class="legend-color user-color"></div>
+                <span class="legend-text" data-zh="用戶發展層：創造養成 → 社交互動 → AR生態整合" data-en="User Development:
+Creation & Nurturing → Social Interaction → AR Ecosystem Integration">用戶發展層：創造養成 → 社交互動 → AR生態整合</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color market-color"></div>
+                <span class="legend-text" data-zh="市場拓展層：付費轉換 → 規模擴張 → 國際佈局" data-en="Market Expansion:
+Paid Conversion → Scale Expansion → Global Layout">市場拓展層：付費轉換 → 規模擴張 → 國際佈局</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color b2b-color"></div>
+                <span class="legend-text" data-zh="B2B模式層：數據積累 → 企業服務 → 生態平台" data-en="B2B Model:
+Data Accumulation → Enterprise Services → Ecosystem Platform">B2B模式層：數據積累 → 企業服務 → 生態平台</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 當前語言
+        let currentLanguage = 'en';
+
+        // 切換語言下拉選單
+        function toggleLanguageMenu(event) {
+            console.log('Toggle language menu clicked');
+            event.preventDefault();
+            event.stopPropagation();
+            const menu = document.getElementById('languageMenu');
+            menu.classList.toggle('show');
+            console.log('Menu show class:', menu.classList.contains('show'));
+        }
+
+        // 語言切換功能
+        function switchLanguage(lang, event) {
+            console.log('Switch language clicked:', lang);
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            currentLanguage = lang;
+
+            // 更新下拉選單狀態
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.classList.remove('active');
+                if (option.getAttribute('data-lang') === lang) {
+                    option.classList.add('active');
+                }
+            });
+
+            // 更新當前語言顯示
+            const currentLangText = lang === 'zh' ? '中文' : 'English';
+            document.getElementById('currentLang').textContent = currentLangText;
+
+            // 關閉下拉選單
+            const menu = document.getElementById('languageMenu');
+            if (menu) {
+                menu.classList.remove('show');
+            }
+
+            // 更新所有有語言屬性的元素
+            document.querySelectorAll('[data-zh][data-en]').forEach(element => {
+                if (lang === 'zh') {
+                    const zhText = element.getAttribute('data-zh');
+                    if (element.querySelector('.material-icons')) {
+                        // 如果包含圖標，保留圖標並更新文字
+                        const icon = element.querySelector('.material-icons');
+                        const iconHtml = icon.outerHTML;
+                        element.innerHTML = iconHtml + zhText;
+                    } else {
+                        element.textContent = zhText;
+                    }
+                } else {
+                    const enText = element.getAttribute('data-en');
+                    if (element.querySelector('.material-icons')) {
+                        // 如果包含圖標，保留圖標並更新文字
+                        const icon = element.querySelector('.material-icons');
+                        const iconHtml = icon.outerHTML;
+                        element.innerHTML = iconHtml + enText;
+                    } else {
+                        element.textContent = enText;
+                    }
+                }
+            });
+
+
+        }
+
+
+
+        // 點擊外部關閉下拉選單
+        document.addEventListener('click', function(event) {
+            const dropdown = document.querySelector('.language-dropdown');
+            if (!dropdown.contains(event.target)) {
+                document.getElementById('languageMenu').classList.remove('show');
+            }
+        });
+
+        // 動畫初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 立即切換到英文
+            switchLanguage('en');
+
+            // 為各個元素添加動畫類
+            setTimeout(() => {
+                document.querySelector('.header').classList.add('animate-fade-in');
+            }, 200);
+
+            setTimeout(() => {
+                document.querySelector('.timeline-header').classList.add('animate-slide-in');
+            }, 400);
+
+            setTimeout(() => {
+                document.querySelectorAll('.layer').forEach((layer, index) => {
+                    setTimeout(() => {
+                        layer.classList.add('animate-fade-in');
+                    }, index * 200);
+                });
+            }, 600);
+
+            // 為進度指示器添加數字
+            addProgressIndicators();
+        });
+
+        // 添加進度指示器
+        function addProgressIndicators() {
+            const phases = document.querySelectorAll('.phase');
+            phases.forEach((phase, index) => {
+                const indicator = document.createElement('div');
+                indicator.className = 'progress-indicator';
+                indicator.textContent = `${index + 1}`;
+                phase.appendChild(indicator);
+            });
+        }
+
+
+
+
+
+
+
+        // 滑鼠懸停效果
+        document.querySelectorAll('.phase').forEach(phase => {
+            phase.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-3px) scale(1.02)';
+            });
+
+            phase.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // 響應式字體調整
+        function adjustFontSize() {
+            const container = document.querySelector('.roadmap-container');
+            const containerWidth = container.offsetWidth;
+
+            if (containerWidth < 900) {
+                document.documentElement.style.fontSize = '14px';
+            } else if (containerWidth < 1200) {
+                document.documentElement.style.fontSize = '15px';
+            } else {
+                document.documentElement.style.fontSize = '16px';
+            }
+        }
+
+        window.addEventListener('resize', adjustFontSize);
+        adjustFontSize();
+    </script>
+</body>
+</html>
