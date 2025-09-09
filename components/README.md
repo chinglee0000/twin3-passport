@@ -1,6 +1,6 @@
-# Dashboard React Component
+# Twin3 Passport - 組件系統
 
-基於 Figma 設計稿 (Node ID: 60:119) 的像素級精確 React 元件實現。
+基於 Figma MCP 數據的像素級精確組件庫，提供完整的可重用 UI 組件。
 
 ## 特點
 

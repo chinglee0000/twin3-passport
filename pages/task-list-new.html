@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task List - 使用新組件系統</title>
+  
+  <!-- 只需要引用兩個 CSS 文件 -->
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  
+  <style>
+    /* 只保留頁面特定的樣式 - 完全按照舊文件的排列方式 */
+    body {
+      font-family: 'Kanit', sans-serif;
+      background: rgba(36, 36, 36, 1);
+      color: rgba(255, 255, 255, 1);
+      margin: 0;
+      padding: 40px 20px;
+      line-height: 1.5;
+    }
+
+    .demo-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .demo-section {
+      margin-bottom: 40px;
+    }
+
+    .demo-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 15px;
+    }
+
+    .demo-description {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 30px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .demo-description strong {
+      color: rgba(255, 255, 255, 1);
+    }
+
+    /* Demo Grid - 完全按照舊文件的方式 */
+    .demo-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .demo-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .demo-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .demo-label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+      text-align: center;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .demo-row {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-container">
+    <h1 style="font-size: 32px; font-weight: 700; margin-bottom: 40px; color: rgba(255, 255, 255, 1);">
+      Figma Task List Component Set
+    </h1>
+
+    <div class="demo-section">
+      <h2 class="demo-title">基於 MCP 數據 (68-40832) 的精確實現</h2>
+      <p class="demo-description">
+        <strong>重點：基於 MCP 深度分析的精確實現 + 玻璃擬態效果</strong><br>
+        • <strong>Type</strong>: Contribution, Reward（2種類型）<br>
+        • <strong>Status</strong>: Default (5% 透明), Hover (10% 透明), Completed (5% 透明)（3種狀態）<br>
+        • <strong>Breakpoints</strong>: Desktop (559px), Mobile (300px)（2種斷點）<br>
+        • <strong>尺寸</strong>: Desktop 88px/112px 高，Mobile 164px/182px 高<br>
+        • <strong>字體</strong>: Kanit 300 12px (按鈕), Inter 500/600 (內容), 16px line-height<br>
+        • <strong>文字顏色</strong>: 白色文字適配玻璃擬態背景，按鈕顏色基於 MCP 精確數據<br>
+        • <strong>玻璃擬態</strong>: Default/Completed 5% 背景，Hover 10% 背景，4px 背景模糊<br>
+        • <strong>行數控制</strong>: Mobile 標題最多 3 行，支援文字截斷<br>
+        使用設計系統變數，完全基於 Figma MCP 數據的像素級精確實現。
+      </p>
+
+      <!-- Desktop Contribution -->
+      <h3 class="demo-title">Type = Contribution (Desktop)</h3>
+      <div class="demo-grid">
+        <!-- Default -->
+        <div class="demo-item">
+          <div class="figma-task-cell type-contribution status-default breakpoint-desktop">
+            <div class="figma-task-content">
+              <div class="figma-company-logo color-white">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+                </svg>
+              </div>
+              <div class="figma-task-description">
+                <div class="figma-task-title">Connect your GitHub account</div>
+              </div>
+            </div>
+            <button class="figma-btn type-white status-default size-s">Start</button>
+          </div>
+          <div class="demo-label">Contribution Default</div>
+        </div>
+
+        <!-- Hover -->
+        <div class="demo-item">
+          <div class="figma-task-cell type-contribution status-hover breakpoint-desktop">
+            <div class="figma-task-content">
+              <div class="figma-company-logo color-white">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M18.5195 0H1.47656C0.660156 0 0 0.644531 0 1.44141V18.5547C0 19.3516 0.660156 20 1.47656 20H18.5195C19.3359 20 20 19.3516 20 18.5586V1.44141C20 0.644531 19.3359 0 18.5195 0ZM5.93359 17.043H2.96484V7.49609H5.93359V17.043ZM4.44922 6.19531C3.49609 6.19531 2.72656 5.42578 2.72656 4.47656C2.72656 3.52734 3.49609 2.75781 4.44922 2.75781C5.39844 2.75781 6.16797 3.52734 6.16797 4.47656C6.16797 5.42188 5.39844 6.19531 4.44922 6.19531ZM17.043 17.043H14.0781V12.4023C14.0781 11.2969 14.0586 9.87109 12.5352 9.87109C10.9922 9.87109 10.7578 11.0781 10.7578 12.3203V17.043H7.79297V7.49609H10.6406V8.80078H10.6797C11.0742 8.05078 12.043 7.25781 13.4844 7.25781C16.4883 7.25781 17.043 9.23438 17.043 11.8047V17.043Z"/>
+                </svg>
+              </div>
+              <div class="figma-task-description">
+                <div class="figma-task-title">Connect your LinkedIn account</div>
+              </div>
+            </div>
+            <button class="figma-btn type-white status-hover size-s">Start</button>
+          </div>
+          <div class="demo-label">Contribution Hover</div>
+        </div>
+
+        <!-- Completed -->
+        <div class="demo-item">
+          <div class="figma-task-cell type-contribution status-completed breakpoint-desktop">
+            <div class="figma-task-content">
+              <div class="figma-company-logo color-white">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M20 3.79688C19.2578 4.125 18.4727 4.34375 17.6445 4.44531C18.4961 3.93359 19.1406 3.14453 19.4492 2.20703C18.6641 2.68359 17.7891 3.02344 16.8418 3.19922C16.0898 2.41406 15.0273 1.9375 13.8477 1.9375C11.5820 1.9375 9.74219 3.77734 9.74219 6.04297C9.74219 6.36719 9.77734 6.68359 9.84375 6.98828C6.43359 6.82422 3.41797 5.19531 1.39453 2.70703C1.03906 3.24609 0.835938 3.93359 0.835938 4.66797C0.835938 6.05078 1.54297 7.26953 2.64453 7.96484C1.98828 7.94531 1.36719 7.76172 0.835938 7.44922V7.5C0.835938 9.49219 2.26172 11.1523 4.15625 11.5391C3.81641 11.6367 3.45703 11.6914 3.08203 11.6914C2.81641 11.6914 2.55859 11.6641 2.30859 11.6133C2.83203 13.2461 4.35156 14.4258 6.16016 14.4609C4.74609 15.5547 2.96484 16.2031 1.02734 16.2031C0.679688 16.2031 0.339844 16.1836 0 16.1445C1.82812 17.3008 4.00391 17.9688 6.34766 17.9688C13.8359 17.9688 17.9648 11.7617 17.9648 6.52734C17.9648 6.34766 17.9609 6.17188 17.9531 5.99609C18.7539 5.41406 19.4492 4.66797 20 3.79688Z"/>
+                </svg>
+              </div>
+              <div class="figma-task-description">
+                <div class="figma-task-title">Connect your X account</div>
+              </div>
+            </div>
+            <button class="figma-btn type-white status-disabled has-icon size-s">
+              Done
+              <div class="figma-btn-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <rect width="12" height="12" rx="6" fill="currentColor" opacity="0.3"/>
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M8.54813 3.69501L4.96815 7.15001L4.01815 6.13501C3.84315 5.97001 3.56815 5.96001 3.36815 6.10001C3.17315 6.24501 3.11815 6.50001 3.23815 6.70501L4.36315 8.53501C4.47315 8.70501 4.66315 8.81001 4.87815 8.81001C5.08315 8.81001 5.27815 8.70501 5.38815 8.53501C5.56815 8.30001 9.00315 4.20501 9.00315 4.20501C9.45315 3.74501 8.89315 3.33501 8.54813 3.69001V3.69501Z" fill="black"/>
+                </svg>
+              </div>
+            </button>
+          </div>
+          <div class="demo-label">Contribution Completed</div>
+        </div>
+      </div>
+
+      <!-- Desktop Reward -->
+      <h3 class="demo-title">Type = Reward (Desktop)</h3>
+      <div class="demo-grid">
+        <!-- Reward Default -->
+        <div class="demo-item">
+          <div class="figma-task-cell type-reward status-default breakpoint-desktop">
+            <div class="figma-task-content">
+              <div class="figma-task-description">
+                <div class="figma-task-type type-auto">Auto</div>
+                <div class="figma-task-title">Complete 5 social connections</div>
+              </div>
+            </div>
+            <button class="figma-btn type-white status-default size-s">Start</button>
+          </div>
+          <div class="demo-label">Reward Default</div>
+        </div>
+
+        <!-- Reward Hover -->
+        <div class="demo-item">
+          <div class="figma-task-cell type-reward status-hover breakpoint-desktop">
+            <div class="figma-task-content">
+              <div class="figma-task-description">
+                <div class="figma-task-type type-review">Review</div>
+                <div class="figma-task-title">Share your first post</div>
+              </div>
+            </div>
+            <button class="figma-btn type-white status-hover size-s">Start</button>
+          </div>
+          <div class="demo-label">Reward Hover</div>
+        </div>
+
+        <!-- Reward Completed -->
+        <div class="demo-item">
+          <div class="figma-task-cell type-reward status-completed breakpoint-desktop">
+            <div class="figma-task-content">
+              <div class="figma-task-description">
+                <div class="figma-task-type type-insight">Insight</div>
+                <div class="figma-task-title">Join the community</div>
+              </div>
+            </div>
+            <button class="figma-btn type-white status-disabled has-icon size-s">
+              Done
+              <div class="figma-btn-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <rect width="12" height="12" rx="6" fill="currentColor" opacity="0.3"/>
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M8.54813 3.69501L4.96815 7.15001L4.01815 6.13501C3.84315 5.97001 3.56815 5.96001 3.36815 6.10001C3.17315 6.24501 3.11815 6.50001 3.23815 6.70501L4.36315 8.53501C4.47315 8.70501 4.66315 8.81001 4.87815 8.81001C5.08315 8.81001 5.27815 8.70501 5.38815 8.53501C5.56815 8.30001 9.00315 4.20501 9.00315 4.20501C9.45315 3.74501 8.89315 3.33501 8.54813 3.69001V3.69501Z" fill="black"/>
+                </svg>
+              </div>
+            </button>
+          </div>
+          <div class="demo-label">Reward Completed</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mobile Task Cells -->
+    <section class="demo-section">
+      <h2 class="demo-subtitle">Mobile Task Cells (300px)</h2>
+      
+      <div class="demo-grid">
+        <!-- Mobile Contribution -->
+        <div class="demo-item">
+          <div class="figma-task-cell type-contribution status-default breakpoint-mobile">
+            <div class="figma-task-content">
+              <div class="figma-task-header">
+                <div class="figma-company-logo color-white">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M20 3.79688C19.2578 4.125 18.4727 4.34375 17.6445 4.44531C18.4961 3.93359 19.1406 3.14453 19.4492 2.20703C18.6641 2.68359 17.7891 3.02344 16.8418 3.19922C16.0898 2.41406 15.0273 1.9375 13.8477 1.9375C11.5820 1.9375 9.74219 3.77734 9.74219 6.04297C9.74219 6.36719 9.77734 6.68359 9.84375 6.98828C6.43359 6.82422 3.41797 5.19531 1.39453 2.70703C1.03906 3.24609 0.835938 3.93359 0.835938 4.66797C0.835938 6.05078 1.54297 7.26953 2.64453 7.96484C1.98828 7.94531 1.36719 7.76172 0.835938 7.44922V7.5C0.835938 9.49219 2.26172 11.1523 4.15625 11.5391C3.81641 11.6367 3.45703 11.6914 3.08203 11.6914C2.81641 11.6914 2.55859 11.6641 2.30859 11.6133C2.83203 13.2461 4.35156 14.4258 6.16016 14.4609C4.74609 15.5547 2.96484 16.2031 1.02734 16.2031C0.679688 16.2031 0.339844 16.1836 0 16.1445C1.82812 17.3008 4.00391 17.9688 6.34766 17.9688C13.8359 17.9688 17.9648 11.7617 17.9648 6.52734C17.9648 6.34766 17.9609 6.17188 17.9531 5.99609C18.7539 5.41406 19.4492 4.66797 20 3.79688Z"/>
+                  </svg>
+                </div>
+                <div class="figma-task-description">
+                  <div class="figma-task-title">Connect your YouTube account to showcase your video content and engage with the community through your channel</div>
+                </div>
+              </div>
+            </div>
+            <button class="figma-btn type-white status-default size-s">Start</button>
+          </div>
+          <div class="demo-label">Mobile Contribution (268×88px content + 268×28px button)</div>
+        </div>
+
+        <!-- Mobile Reward -->
+        <div class="demo-item">
+          <div class="figma-task-cell type-reward status-default breakpoint-mobile">
+            <div class="figma-task-content">
+              <div class="figma-task-description">
+                <div class="figma-task-type type-auto">Auto</div>
+                <div class="figma-task-title">Complete profile setup</div>
+              </div>
+            </div>
+            <button class="figma-btn type-white status-default size-s">Start</button>
+          </div>
+          <div class="demo-label">Mobile Reward</div>
+        </div>
+      </div>
+
+      <!-- 實際應用範例 -->
+      <h3 class="demo-title">實際應用範例</h3>
+      <div class="demo-grid">
+        <div class="figma-task-cell type-contribution status-completed breakpoint-desktop">
+          <div class="figma-task-content">
+            <div class="figma-company-logo color-white">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+              </svg>
+            </div>
+            <div class="figma-task-description">
+              <div class="figma-task-title">✅ Connect GitHub account</div>
+            </div>
+          </div>
+          <button class="figma-btn type-white status-disabled has-icon size-s">
+            Done
+            <div class="figma-btn-icon">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                <rect width="12" height="12" rx="6" fill="currentColor" opacity="0.3"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M8.54813 3.69501L4.96815 7.15001L4.01815 6.13501C3.84315 5.97001 3.56815 5.96001 3.36815 6.10001C3.17315 6.24501 3.11815 6.50001 3.23815 6.70501L4.36315 8.53501C4.47315 8.70501 4.66315 8.81001 4.87815 8.81001C5.08315 8.81001 5.27815 8.70501 5.38815 8.53501C5.56815 8.30001 9.00315 4.20501 9.00315 4.20501C9.45315 3.74501 8.89315 3.33501 8.54813 3.69001V3.69501Z" fill="black"/>
+              </svg>
+            </div>
+          </button>
+        </div>
+
+        <div class="figma-task-cell type-contribution status-default breakpoint-desktop">
+          <div class="figma-task-content">
+            <div class="figma-company-logo color-white">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M18.5195 0H1.47656C0.660156 0 0 0.644531 0 1.44141V18.5547C0 19.3516 0.660156 20 1.47656 20H18.5195C19.3359 20 20 19.3516 20 18.5586V1.44141C20 0.644531 19.3359 0 18.5195 0ZM5.93359 17.043H2.96484V7.49609H5.93359V17.043ZM4.44922 6.19531C3.49609 6.19531 2.72656 5.42578 2.72656 4.47656C2.72656 3.52734 3.49609 2.75781 4.44922 2.75781C5.39844 2.75781 6.16797 3.52734 6.16797 4.47656C6.16797 5.42188 5.39844 6.19531 4.44922 6.19531ZM17.043 17.043H14.0781V12.4023C14.0781 11.2969 14.0586 9.87109 12.5352 9.87109C10.9922 9.87109 10.7578 11.0781 10.7578 12.3203V17.043H7.79297V7.49609H10.6406V8.80078H10.6797C11.0742 8.05078 12.043 7.25781 13.4844 7.25781C16.4883 7.25781 17.043 9.23438 17.043 11.8047V17.043Z"/>
+              </svg>
+            </div>
+            <div class="figma-task-description">
+              <div class="figma-task-title">Connect LinkedIn account</div>
+            </div>
+          </div>
+          <button class="figma-btn type-white status-default size-s">Start</button>
+        </div>
+
+        <div class="figma-task-cell type-reward status-default breakpoint-desktop">
+          <div class="figma-task-content">
+            <div class="figma-task-description">
+              <div class="figma-task-type type-review">Review</div>
+              <div class="figma-task-title">🎉 Early Adopter Badge</div>
+            </div>
+          </div>
+          <button class="figma-btn type-white status-default size-s">Claim</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 60px; padding: 40px; background: var(--color-white-5); border-radius: 12px;">
+      <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 16px;">🎉 組件系統重構完成！</h3>
+      <p style="color: rgba(255, 255, 255, 0.8); font-size: 16px;">
+        現在所有組件都從 <code>css/components.css</code> 載入，<br>
+        您可以直接使用組件類名，無需重複定義樣式！<br>
+        <strong>展示頁面的排列方式完全跟舊的檔案一樣。</strong>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

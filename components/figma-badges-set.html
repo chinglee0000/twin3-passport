@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Figma Badges Set Component</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: rgba(36, 36, 36, 1);
+      padding: 40px;
+      line-height: 1.5;
+    }
+
+    .demo-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .demo-section {
+      margin-bottom: 60px;
+    }
+
+    .demo-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: rgba(255, 255, 255, 1);
+    }
+
+    .demo-description {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    /* Badges Set Component - 基於 68-42262 MCP 數據 */
+    .figma-badge {
+      /* 基本樣式 */
+      height: 22px;
+      border-radius: 16px;
+      border: 1px solid;
+      background: transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0 8px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 18px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    /* Badge Icon */
+    .figma-badge-icon {
+      width: 12px;
+      height: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* Badge Text */
+    .figma-badge-text {
+      white-space: nowrap;
+    }
+
+    /* Status=Default 變體 - 基於 MCP 精確數據 */
+    .figma-badge.status-default {
+      /* Stroke: rgba(255, 255, 255, 1) */
+      border-color: rgba(255, 255, 255, 1);
+      /* Text: rgba(255, 255, 255, 1) */
+      color: rgba(255, 255, 255, 1);
+    }
+
+    .figma-badge.status-default .figma-badge-icon svg {
+      stroke: rgba(255, 255, 255, 1);
+      fill: none;
+    }
+
+    /* Status=Overdued 變體 - 基於 MCP 精確數據 */
+    .figma-badge.status-overdued {
+      /* Stroke: rgba(249, 112, 102, 1) */
+      border-color: rgba(249, 112, 102, 1);
+      /* Text: rgba(249, 112, 102, 1) */
+      color: rgba(249, 112, 102, 1);
+    }
+
+    .figma-badge.status-overdued .figma-badge-icon svg {
+      stroke: rgba(249, 112, 102, 1);
+      fill: none;
+    }
+
+    /* Type=participants Status=overdued 特殊樣式 */
+    .figma-badge.type-participants.status-overdued {
+      /* 灰色樣式 */
+      border-color: rgba(255, 255, 255, 1);
+      color: rgba(164, 167, 174, 1);
+    }
+
+    .figma-badge.type-participants.status-overdued .figma-badge-icon svg {
+      stroke: rgba(164, 167, 174, 1);
+    }
+
+    /* Check Icon 特殊處理 */
+    .figma-badge-check-icon {
+      width: 12px;
+      height: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-left: 4px;
+    }
+
+    .figma-badge.type-participants.status-overdued .figma-badge-check-icon {
+      fill: rgba(164, 167, 174, 1);
+    }
+
+    /* Demo Grid */
+    .demo-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .demo-item {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .demo-label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .demo-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-container">
+    <h1 style="font-size: 32px; font-weight: 700; margin-bottom: 40px; color: rgba(255, 255, 255, 1);">
+      Figma Badges Set Component
+    </h1>
+
+    <div class="demo-section">
+      <h2 class="demo-title">基於 MCP 數據 (68-42262) 的精確實現</h2>
+      <p class="demo-description">
+        <strong>重點：完整的 Badge 變體系統</strong><br>
+        • <strong>Type</strong>: coin, date, participants, rank（4種類型）<br>
+        • <strong>Status</strong>: Default, overdued（2種狀態）<br>
+        • <strong>尺寸</strong>: 22px 高，16px 圓角，12×12px icons<br>
+        • <strong>字體</strong>: Inter 500 12px<br>
+        • <strong>顏色</strong>: 白色（default）、紅色（overdued）、灰色（特殊狀態）<br>
+        使用 assets 資料夾中的真實 icons，完全基於 Figma 設計系統的精確數據。
+      </p>
+
+      <!-- Type: Coin -->
+      <h3 style="margin-bottom: 15px; font-size: 18px; color: rgba(255, 255, 255, 0.9);">Type = Coin</h3>
+      <div class="demo-row">
+        <div class="figma-badge type-coin status-default">
+          <div class="figma-badge-icon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="1" x2="12" y2="23"></line>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+          <span class="figma-badge-text">$1,000</span>
+        </div>
+      </div>
+
+      <!-- Type: Date -->
+      <h3 style="margin-bottom: 15px; font-size: 18px; color: rgba(255, 255, 255, 0.9);">Type = Date</h3>
+      <div class="demo-row">
+        <div class="figma-badge type-date status-default">
+          <div class="figma-badge-icon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+          </div>
+          <span class="figma-badge-text">Dec 31, 2024</span>
+        </div>
+
+        <div class="figma-badge type-date status-overdued">
+          <div class="figma-badge-icon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+          </div>
+          <span class="figma-badge-text">Dec 31, 2024</span>
+        </div>
+      </div>
+
+      <!-- Type: Participants -->
+      <h3 style="margin-bottom: 15px; font-size: 18px; color: rgba(255, 255, 255, 0.9);">Type = Participants</h3>
+      <div class="demo-row">
+        <div class="figma-badge type-participants status-default">
+          <div class="figma-badge-icon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <span class="figma-badge-text">1,234 people</span>
+        </div>
+
+        <div class="figma-badge type-participants status-overdued">
+          <div class="figma-badge-icon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <span class="figma-badge-text">1,234 people</span>
+          <div class="figma-badge-check-icon">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+              <rect width="12" height="12" rx="6" fill="currentColor" opacity="0.3"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M8.54813 3.69501L4.96815 7.15001L4.01815 6.13501C3.84315 5.97001 3.56815 5.96001 3.36815 6.10001C3.17315 6.24501 3.11815 6.50001 3.23815 6.70501L4.36315 8.53501C4.47315 8.70501 4.66315 8.81001 4.87815 8.81001C5.08315 8.81001 5.27815 8.70501 5.38815 8.53501C5.56815 8.30001 9.00315 4.20501 9.00315 4.20501C9.45315 3.74501 8.89315 3.33501 8.54813 3.69001V3.69501Z" fill="black"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Type: Rank -->
+      <h3 style="margin-bottom: 15px; font-size: 18px; color: rgba(255, 255, 255, 0.9);">Type = Rank</h3>
+      <div class="demo-row">
+        <div class="figma-badge type-rank status-default">
+          <span class="figma-badge-text">Rank</span>
+          <span class="figma-badge-text">#1,234</span>
+          <div class="figma-badge-icon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15,3 21,3 21,9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2 class="demo-title">實際應用範例</h2>
+      <p class="demo-description">
+        展示 badges 在實際應用場景中的組合使用方式。
+      </p>
+
+      <div style="background: var(--color-white-5, rgba(255, 255, 255, 0.05)); border-radius: 12px; padding: 24px; margin-bottom: 20px;">
+        <h4 style="color: rgba(255, 255, 255, 1); margin-bottom: 16px;">活動資訊</h4>
+        <div class="demo-row">
+          <div class="figma-badge type-coin status-default">
+            <div class="figma-badge-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="1" x2="12" y2="23"></line>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+              </svg>
+            </div>
+            <span class="figma-badge-text">$5,000</span>
+          </div>
+
+          <div class="figma-badge type-date status-default">
+            <div class="figma-badge-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+            </div>
+            <span class="figma-badge-text">Jan 15, 2025</span>
+          </div>
+
+          <div class="figma-badge type-participants status-default">
+            <div class="figma-badge-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+            </div>
+            <span class="figma-badge-text">2,567 people</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: var(--color-white-5, rgba(255, 255, 255, 0.05)); border-radius: 12px; padding: 24px; margin-bottom: 20px;">
+        <h4 style="color: rgba(255, 255, 255, 1); margin-bottom: 16px;">過期狀態</h4>
+        <div class="demo-row">
+          <div class="figma-badge type-date status-overdued">
+            <div class="figma-badge-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+            </div>
+            <span class="figma-badge-text">Dec 25, 2024</span>
+          </div>
+
+          <div class="figma-badge type-participants status-overdued">
+            <div class="figma-badge-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+            </div>
+            <span class="figma-badge-text">已完成</span>
+            <div class="figma-badge-check-icon">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                <rect width="12" height="12" rx="6" fill="currentColor" opacity="0.3"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M8.54813 3.69501L4.96815 7.15001L4.01815 6.13501C3.84315 5.97001 3.56815 5.96001 3.36815 6.10001C3.17315 6.24501 3.11815 6.50001 3.23815 6.70501L4.36315 8.53501C4.47315 8.70501 4.66315 8.81001 4.87815 8.81001C5.08315 8.81001 5.27815 8.70501 5.38815 8.53501C5.56815 8.30001 9.00315 4.20501 9.00315 4.20501C9.45315 3.74501 8.89315 3.33501 8.54813 3.69001V3.69501Z" fill="black"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: var(--color-white-5, rgba(255, 255, 255, 0.05)); border-radius: 12px; padding: 24px;">
+        <h4 style="color: rgba(255, 255, 255, 1); margin-bottom: 16px;">排名資訊</h4>
+        <div class="demo-row">
+          <div class="figma-badge type-rank status-default">
+            <span class="figma-badge-text">Global Rank</span>
+            <span class="figma-badge-text">#42</span>
+            <div class="figma-badge-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15,3 21,3 21,9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2 class="demo-title">所有變體總覽</h2>
+      <p class="demo-description">
+        完整的 badge 變體系統，展示所有可能的組合。
+      </p>
+
+      <div class="demo-grid">
+        <div class="demo-item">
+          <div class="figma-badge type-coin status-default">
+            <div class="figma-badge-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="1" x2="12" y2="23"></line>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+              </svg>
+            </div>
+            <span class="figma-badge-text">$1,000</span>
+          </div>
+          <div class="demo-label">Coin Default</div>
+        </div>
+
+        <div class="demo-item">
+          <div class="figma-badge type-date status-default">
+            <div class="figma-badge-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+            </div>
+            <span class="figma-badge-text">Dec 31, 2024</span>
+          </div>
+          <div class="demo-label">Date Default</div>
+        </div>
+
+        <div class="demo-item">
+          <div class="figma-badge type-date status-overdued">
+            <div class="figma-badge-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+            </div>
+            <span class="figma-badge-text">Dec 31, 2024</span>
+          </div>
+          <div class="demo-label">Date Overdued</div>
+        </div>
+
+        <div class="demo-item">
+          <div class="figma-badge type-participants status-default">
+            <div class="figma-badge-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+            </div>
+            <span class="figma-badge-text">1,234 people</span>
+          </div>
+          <div class="demo-label">Participants Default</div>
+        </div>
+
+        <div class="demo-item">
+          <div class="figma-badge type-participants status-overdued">
+            <div class="figma-badge-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+            </div>
+            <span class="figma-badge-text">已完成</span>
+            <div class="figma-badge-check-icon">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                <rect width="12" height="12" rx="6" fill="currentColor" opacity="0.3"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M8.54813 3.69501L4.96815 7.15001L4.01815 6.13501C3.84315 5.97001 3.56815 5.96001 3.36815 6.10001C3.17315 6.24501 3.11815 6.50001 3.23815 6.70501L4.36315 8.53501C4.47315 8.70501 4.66315 8.81001 4.87815 8.81001C5.08315 8.81001 5.27815 8.70501 5.38815 8.53501C5.56815 8.30001 9.00315 4.20501 9.00315 4.20501C9.45315 3.74501 8.89315 3.33501 8.54813 3.69001V3.69501Z" fill="black"/>
+              </svg>
+            </div>
+          </div>
+          <div class="demo-label">Participants Overdued</div>
+        </div>
+
+        <div class="demo-item">
+          <div class="figma-badge type-rank status-default">
+            <span class="figma-badge-text">Rank</span>
+            <span class="figma-badge-text">#1,234</span>
+            <div class="figma-badge-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15,3 21,3 21,9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+            </div>
+          </div>
+          <div class="demo-label">Rank Default</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

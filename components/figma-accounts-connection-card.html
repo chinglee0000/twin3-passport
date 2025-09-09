@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Figma Accounts Connection Card Component</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Kanit', sans-serif;
+      /* 基於 MCP 數據：Tab bar 背景是 rgba(36, 36, 36, 1) */
+      background: rgba(36, 36, 36, 1);
+      padding: 40px;
+      line-height: 1.5;
+    }
+
+    .demo-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .demo-section {
+      margin-bottom: 60px;
+    }
+
+    .demo-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: rgba(255, 255, 255, 1); /* 深色背景下的白色文字 */
+    }
+
+    .demo-description {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.8); /* 深色背景下的半透明白色文字 */
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      align-items: start;
+    }
+
+    /* Accounts Connection Card - 基於 67-26383 MCP 數據 + 玻璃擬態效果 */
+    .figma-accounts-connection-card {
+      /* 響應式寬度：min-width 180px, max-width 256px, fill container */
+      min-width: 180px;
+      max-width: 256px;
+      width: 100%;
+      height: 108px;
+      /* 玻璃擬態效果 */
+      border-radius: 12px;
+      border: var(--stroke-weight-1, 1px) solid var(--color-white-10, rgba(255, 255, 255, 0.10));
+      background: var(--color-white-5, rgba(255, 255, 255, 0.05));
+      backdrop-filter: blur(4px);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    /* Container - 響應式寬度，填滿卡片 */
+    .figma-card-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      height: 32px;
+    }
+
+    /* Company Logo - 32×32px, 4px corner radius - 基於 67-26437 MCP 數據 */
+    .figma-company-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    /* SVG Container - 20×20px 或 24×24px */
+    .figma-logo-svg {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .figma-logo-svg.size-24 {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* Company Logo Color=black 變體 - 基於 MCP 精確數據 */
+    .figma-company-logo.color-black {
+      /* Fill: rgba(255, 255, 255, 1) */
+      background: rgba(255, 255, 255, 1);
+      border: none;
+    }
+
+    .figma-company-logo.color-black .figma-logo-svg svg {
+      /* Vector Fill: rgba(0, 0, 0, 1) */
+      fill: rgba(0, 0, 0, 1);
+    }
+
+    /* Company Logo Color=White 變體 - 基於 MCP 精確數據 */
+    .figma-company-logo.color-white {
+      /* Background: transparent with white stroke */
+      background: transparent;
+      /* Stroke: rgba(255, 255, 255, 1), 1px */
+      border: 1px solid rgba(255, 255, 255, 1);
+    }
+
+    .figma-company-logo.color-white .figma-logo-svg svg {
+      /* Vector Fill: rgba(255, 255, 255, 1) */
+      fill: rgba(255, 255, 255, 1);
+    }
+
+    /* Heading - 彈性寬度，填滿剩餘空間 */
+    .figma-card-heading {
+      flex: 1;
+      height: 24px;
+      font-family: 'Kanit', sans-serif;
+      font-weight: 400;
+      font-size: 14px;
+      color: #333;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Button Component - 基於新的 btn component set */
+    .figma-btn {
+      /* 基本樣式 */
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'Kanit', sans-serif;
+      font-weight: 300;
+      border: none;
+      outline: none;
+      /* 卡片中的按鈕填滿寬度 */
+      width: 100%;
+      height: 28px;
+      font-size: 12px;
+      line-height: 16px;
+      padding: 0 12px;
+    }
+
+    .figma-btn.has-icon {
+      padding-right: 8px;
+    }
+
+    /* Type=White 變體 */
+    .figma-btn.type-white.status-default {
+      background: rgba(255, 255, 255, 1);
+      border: 1px solid rgba(255, 255, 255, 1);
+      color: rgba(0, 0, 0, 1);
+    }
+
+    .figma-btn.type-white.status-hover {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 1);
+      color: rgba(255, 255, 255, 1);
+    }
+
+    .figma-btn.type-white.status-disabled {
+      background: transparent;
+      border: 1px solid rgba(83, 88, 98, 1);
+      color: rgba(164, 167, 174, 1);
+      cursor: not-allowed;
+    }
+
+    /* Type=Grey 變體 */
+    .figma-btn.type-grey.status-default {
+      background: rgba(255, 255, 255, 0.30);
+      border: 1px solid rgba(255, 255, 255, 0.30);
+      color: rgba(255, 255, 255, 1);
+    }
+
+    .figma-btn.type-grey.status-hover {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 1);
+      color: rgba(255, 255, 255, 1);
+    }
+
+    .figma-btn.type-grey.status-disabled {
+      background: transparent;
+      border: 1px solid rgba(83, 88, 98, 1);
+      color: rgba(164, 167, 174, 1);
+      cursor: not-allowed;
+    }
+
+    /* Type=Stroke 變體 */
+    .figma-btn.type-stroke.status-default {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 1);
+      color: rgba(255, 255, 255, 1);
+    }
+
+    .figma-btn.type-stroke.status-hover {
+      background: rgba(255, 255, 255, 1);
+      border: 1px solid rgba(255, 255, 255, 1);
+      color: rgba(0, 0, 0, 1);
+    }
+
+    .figma-btn.type-stroke.status-disabled {
+      background: transparent;
+      border: 1px solid rgba(83, 88, 98, 1);
+      color: rgba(164, 167, 174, 1);
+      cursor: not-allowed;
+    }
+
+    /* Button Icon */
+    .figma-btn-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 12px;
+      height: 12px;
+    }
+
+    /* Interactive Hover Effects */
+    .figma-btn.type-white.status-default:hover {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 1);
+      color: rgba(255, 255, 255, 1);
+    }
+
+    .figma-btn.type-stroke.status-default:hover {
+      background: rgba(255, 255, 255, 1);
+      border: 1px solid rgba(255, 255, 255, 1);
+      color: rgba(0, 0, 0, 1);
+    }
+
+    .figma-btn.type-grey.status-default:hover {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 1);
+      color: rgba(255, 255, 255, 1);
+    }
+
+    /* State: Connected=No, Hover=No (Default) - 基於 MCP 精確數據 + 玻璃擬態 */
+    .figma-accounts-connection-card.state-disconnected {
+      /* 玻璃擬態效果 */
+      background: var(--color-white-5, rgba(255, 255, 255, 0.05));
+      border: var(--stroke-weight-1, 1px) solid var(--color-white-10, rgba(255, 255, 255, 0.10));
+      backdrop-filter: blur(4px);
+    }
+
+
+
+    .figma-accounts-connection-card.state-disconnected .figma-card-heading {
+      /* Heading Text: VariableID:60:122 */
+      color: rgba(255, 255, 255, 1);
+    }
+
+    /* State: Connected=Yes, Hover=No - 基於 MCP 精確數據 + 玻璃擬態 */
+    .figma-accounts-connection-card.state-connected {
+      /* 玻璃擬態效果 */
+      background: var(--color-white-5, rgba(255, 255, 255, 0.05));
+      border: var(--stroke-weight-1, 1px) solid var(--color-white-10, rgba(255, 255, 255, 0.10));
+      backdrop-filter: blur(4px);
+    }
+
+
+
+    .figma-accounts-connection-card.state-connected .figma-card-heading {
+      /* Heading Text: VariableID:60:122 */
+      color: rgba(255, 255, 255, 1);
+    }
+
+    /* State: Connected=No, Hover=Yes - 基於 MCP 精確數據 + 玻璃擬態 */
+    .figma-accounts-connection-card.state-hover {
+      /* 玻璃擬態效果 - 懸停時稍微增強透明度 */
+      background: var(--color-white-10, rgba(255, 255, 255, 0.10));
+      border: var(--stroke-weight-1, 1px) solid var(--color-white-10, rgba(255, 255, 255, 0.10));
+      backdrop-filter: blur(4px);
+    }
+
+
+
+    .figma-accounts-connection-card.state-hover .figma-card-heading {
+      /* Heading Text: VariableID:60:122 */
+      color: rgba(255, 255, 255, 1);
+    }
+
+    /* Interactive Hover Effects - 基於 MCP 精確數據 + 玻璃擬態 */
+    .figma-accounts-connection-card.state-disconnected:hover {
+      /* Hover 時變為 state-hover 的玻璃擬態樣式 */
+      background: var(--color-white-10, rgba(255, 255, 255, 0.10));
+      border: var(--stroke-weight-1, 1px) solid var(--color-white-10, rgba(255, 255, 255, 0.10));
+      backdrop-filter: blur(4px);
+    }
+
+
+  </style>
+</head>
+<body>
+  <div class="demo-container">
+    <h1 style="font-size: 32px; font-weight: 700; margin-bottom: 40px; color: rgba(255, 255, 255, 1);">
+      Figma Accounts Connection Card Component
+    </h1>
+
+    <div class="demo-section">
+      <h2 class="demo-title">基於 MCP 數據 (67-26383) 的精確實現</h2>
+      <p class="demo-description">
+        <strong>重點：顏色精確提取 + Company Logo 整合</strong><br>
+        使用 get_variable_defs 從 Figma 設計系統提取所有顏色：<br>
+        • AccountConnectionCard 所有狀態的背景顏色 (VariableID:60:130, 60:131)<br>
+        • 邊框顏色的精確 RGBA 值 (rgba(83, 88, 98, 1), rgba(255, 255, 255, 1))<br>
+        • 文字顏色在不同狀態下的變化 (VariableID:60:122, 60:354)<br>
+        • 按鈕顏色的所有變體 (rgba(164, 167, 174, 1))<br>
+        • <strong>Company Logo (67-26437)</strong>：32×32px，4px 圓角，統一使用 Color=black 變體<br>
+        • <strong>Button Component (67-26368)</strong>：整合新的 btn component set，支援多種類型和狀態<br>
+        尺寸：min-width 180px, max-width 256px（響應式），高度 108px，12px 圓角，現已整合真實的公司 logo 和按鈕組件。
+      </p>
+
+      <div class="demo-grid">
+        <!-- State 1: Connected=No, Hover=No (Default) -->
+        <div>
+          <h3 style="margin-bottom: 15px; font-size: 16px; color: rgba(255, 255, 255, 0.8);">未連接狀態</h3>
+          <div class="figma-accounts-connection-card state-disconnected">
+            <div class="figma-card-container">
+              <div class="figma-company-logo color-black">
+                <div class="figma-logo-svg size-24">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="figma-card-heading">GitHub</div>
+            </div>
+            <button class="figma-btn type-stroke status-default">Connect</button>
+          </div>
+        </div>
+
+        <!-- State 2: Connected=Yes, Hover=No -->
+        <div>
+          <h3 style="margin-bottom: 15px; font-size: 16px; color: rgba(255, 255, 255, 0.8);">已連接狀態</h3>
+          <div class="figma-accounts-connection-card state-connected">
+            <div class="figma-card-container">
+              <div class="figma-company-logo color-black">
+                <div class="figma-logo-svg">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M18.5195 0H1.47656C0.660156 0 0 0.644531 0 1.44141V18.5547C0 19.3516 0.660156 20 1.47656 20H18.5195C19.3359 20 20 19.3516 20 18.5586V1.44141C20 0.644531 19.3359 0 18.5195 0ZM5.93359 17.043H2.96484V7.49609H5.93359V17.043ZM4.44922 6.19531C3.49609 6.19531 2.72656 5.42578 2.72656 4.47656C2.72656 3.52734 3.49609 2.75781 4.44922 2.75781C5.39844 2.75781 6.16797 3.52734 6.16797 4.47656C6.16797 5.42188 5.39844 6.19531 4.44922 6.19531ZM17.043 17.043H14.0781V12.4023C14.0781 11.2969 14.0586 9.87109 12.5352 9.87109C10.9922 9.87109 10.7578 11.0781 10.7578 12.3203V17.043H7.79297V7.49609H10.6406V8.80078H10.6797C11.0742 8.05078 12.043 7.25781 13.4844 7.25781C16.4883 7.25781 17.043 9.23438 17.043 11.8047V17.043Z"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="figma-card-heading">LinkedIn</div>
+            </div>
+            <button class="figma-btn type-grey status-disabled has-icon">
+              Connected
+              <div class="figma-btn-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <rect width="12" height="12" rx="6" fill="currentColor" opacity="0.3"/>
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M8.54813 3.69501L4.96815 7.15001L4.01815 6.13501C3.84315 5.97001 3.56815 5.96001 3.36815 6.10001C3.17315 6.24501 3.11815 6.50001 3.23815 6.70501L4.36315 8.53501C4.47315 8.70501 4.66315 8.81001 4.87815 8.81001C5.08315 8.81001 5.27815 8.70501 5.38815 8.53501C5.56815 8.30001 9.00315 4.20501 9.00315 4.20501C9.45315 3.74501 8.89315 3.33501 8.54813 3.69001V3.69501Z" fill="black"/>
+                </svg>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- State 3: Connected=No, Hover=Yes -->
+        <div>
+          <h3 style="margin-bottom: 15px; font-size: 16px; color: rgba(255, 255, 255, 0.8);">懸停狀態</h3>
+          <div class="figma-accounts-connection-card state-hover">
+            <div class="figma-card-container">
+              <div class="figma-company-logo color-black">
+                <div class="figma-logo-svg">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M11.9026 8.46875L19.3151 0H17.5776L11.1151 7.35938L6.11511 0H0.884766L8.67227 11.1188L0.884766 20H2.62227L9.46102 12.2313L14.7651 20H20.0026L11.9026 8.46875ZM10.4026 11.2188L9.58511 10.1063L3.27227 1.30625H5.27227L10.2776 8.40625L11.0951 9.51875L17.5776 18.7688H15.5776L10.4026 11.2188Z"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="figma-card-heading">X (Twitter)</div>
+            </div>
+            <button class="figma-btn type-stroke status-hover">Connect</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2 class="demo-title">交互式演示</h2>
+      <p class="demo-description">
+        下面的卡片具有真實的懸停效果，未連接狀態會在懸停時變為懸停樣式。
+      </p>
+
+      <div class="demo-grid">
+        <div class="figma-accounts-connection-card state-disconnected">
+          <div class="figma-card-container">
+            <div class="figma-company-logo color-black">
+              <div class="figma-logo-svg">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M19.582 5.186c-.23-.86-.908-1.538-1.768-1.768C16.254 3 10 3 10 3s-6.254 0-7.814.418c-.86.23-1.538.908-1.768 1.768C0 6.746 0 10 0 10s0 3.254.418 4.814c.23.86.908 1.538 1.768 1.768C3.746 17 10 17 10 17s6.254 0 7.814-.418c.86-.23 1.538-.908 1.768-1.768C20 13.254 20 10 20 10s0-3.254-.418-4.814zM8 13V7l5.196 3L8 13z"/>
+                </svg>
+              </div>
+            </div>
+            <div class="figma-card-heading">YouTube</div>
+          </div>
+          <button class="figma-btn type-stroke status-default">Connect</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

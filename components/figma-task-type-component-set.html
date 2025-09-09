@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Figma Task Type Component Set</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Kanit', sans-serif;
+      background: rgba(36, 36, 36, 1);
+      padding: 40px;
+      line-height: 1.5;
+    }
+
+    .demo-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .demo-section {
+      margin-bottom: 60px;
+    }
+
+    .demo-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: rgba(255, 255, 255, 1);
+    }
+
+    .demo-description {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    /* Task Type Component Set - 基於 160-1583 MCP 數據 */
+    .figma-task-type {
+      /* 基本樣式 */
+      height: 20px;
+      border-radius: 4px;
+      border: 1px solid;
+      background: transparent;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 8px;
+      font-family: 'Kanit', sans-serif;
+      font-weight: 300;
+      font-size: 12px;
+      line-height: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    /* Type=Auto 變體 - 基於 MCP 精確數據 */
+    .figma-task-type.type-auto {
+      /* 尺寸: 42×20px */
+      width: 42px;
+      /* 顏色: rgba(166, 244, 197, 1) */
+      border-color: rgba(166, 244, 197, 1);
+      color: rgba(166, 244, 197, 1);
+    }
+
+    /* Type=Review 變體 - 基於 MCP 精確數據 */
+    .figma-task-type.type-review {
+      /* 尺寸: 54×20px */
+      width: 54px;
+      /* 顏色: rgba(254, 223, 137, 1) */
+      border-color: rgba(254, 223, 137, 1);
+      color: rgba(254, 223, 137, 1);
+    }
+
+    /* Type=Insight 變體 - 基於 MCP 精確數據 */
+    .figma-task-type.type-insight {
+      /* 尺寸: 52×20px */
+      width: 52px;
+      /* 顏色: rgba(214, 187, 251, 1) */
+      border-color: rgba(214, 187, 251, 1);
+      color: rgba(214, 187, 251, 1);
+    }
+
+    /* Hover Effects */
+    .figma-task-type:hover {
+      opacity: 0.8;
+      transform: translateY(-1px);
+    }
+
+    /* Demo Grid */
+    .demo-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .demo-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .demo-label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+      text-align: center;
+    }
+
+    .demo-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    /* Usage Examples */
+    .usage-example {
+      background: var(--color-white-5, rgba(255, 255, 255, 0.05));
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .usage-title {
+      color: rgba(255, 255, 255, 1);
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .task-item:last-child {
+      border-bottom: none;
+    }
+
+    .task-content {
+      flex: 1;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-container">
+    <h1 style="font-size: 32px; font-weight: 700; margin-bottom: 40px; color: rgba(255, 255, 255, 1);">
+      Figma Task Type Component Set
+    </h1>
+
+    <div class="demo-section">
+      <h2 class="demo-title">基於 MCP 數據 (160-1583) 的精確實現</h2>
+      <p class="demo-description">
+        <strong>重點：任務類型標籤系統</strong><br>
+        • <strong>Type</strong>: Auto, Review, Insight（3種類型）<br>
+        • <strong>尺寸</strong>: Auto (42×20px), Review (54×20px), Insight (52×20px)<br>
+        • <strong>字體</strong>: Kanit 300 12px<br>
+        • <strong>圓角</strong>: 4px，1px 邊框<br>
+        • <strong>顏色</strong>: 綠色（Auto）、黃色（Review）、紫色（Insight）<br>
+        完全基於 Figma 設計系統的精確數據，用於標識不同類型的任務。
+      </p>
+
+      <!-- All Types -->
+      <h3 style="margin-bottom: 15px; font-size: 18px; color: rgba(255, 255, 255, 0.9);">所有類型</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <div class="figma-task-type type-auto">Auto</div>
+          <div class="demo-label">Auto (42×20px)</div>
+        </div>
+
+        <div class="demo-item">
+          <div class="figma-task-type type-review">Review</div>
+          <div class="demo-label">Review (54×20px)</div>
+        </div>
+
+        <div class="demo-item">
+          <div class="figma-task-type type-insight">Insight</div>
+          <div class="demo-label">Insight (52×20px)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2 class="demo-title">實際應用範例</h2>
+      <p class="demo-description">
+        展示 task type 標籤在實際任務列表中的使用方式。
+      </p>
+
+      <div class="usage-example">
+        <div class="usage-title">📋 任務列表</div>
+        
+        <div class="task-item">
+          <div class="figma-task-type type-auto">Auto</div>
+          <div class="task-content">自動連接 GitHub 帳戶並同步貢獻數據</div>
+        </div>
+
+        <div class="task-item">
+          <div class="figma-task-type type-review">Review</div>
+          <div class="task-content">審核用戶提交的專案資料和技能認證</div>
+        </div>
+
+        <div class="task-item">
+          <div class="figma-task-type type-insight">Insight</div>
+          <div class="task-content">分析社群互動數據並生成洞察報告</div>
+        </div>
+
+        <div class="task-item">
+          <div class="figma-task-type type-auto">Auto</div>
+          <div class="task-content">定期更新用戶活動狀態和排名</div>
+        </div>
+
+        <div class="task-item">
+          <div class="figma-task-type type-review">Review</div>
+          <div class="task-content">人工審核高價值獎勵申請</div>
+        </div>
+      </div>
+
+      <div class="usage-example">
+        <div class="usage-title">🎯 任務分類統計</div>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+          <div style="text-align: center; padding: 16px;">
+            <div class="figma-task-type type-auto" style="margin-bottom: 8px;">Auto</div>
+            <div style="color: rgba(255, 255, 255, 0.7); font-size: 14px;">自動化任務</div>
+            <div style="color: rgba(166, 244, 197, 1); font-size: 20px; font-weight: 600; margin-top: 4px;">24</div>
+          </div>
+
+          <div style="text-align: center; padding: 16px;">
+            <div class="figma-task-type type-review" style="margin-bottom: 8px;">Review</div>
+            <div style="color: rgba(255, 255, 255, 0.7); font-size: 14px;">審核任務</div>
+            <div style="color: rgba(254, 223, 137, 1); font-size: 20px; font-weight: 600; margin-top: 4px;">12</div>
+          </div>
+
+          <div style="text-align: center; padding: 16px;">
+            <div class="figma-task-type type-insight" style="margin-bottom: 8px;">Insight</div>
+            <div style="color: rgba(255, 255, 255, 0.7); font-size: 14px;">洞察任務</div>
+            <div style="color: rgba(214, 187, 251, 1); font-size: 20px; font-weight: 600; margin-top: 4px;">8</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="usage-example">
+        <div class="usage-title">🔄 混合使用範例</div>
+        
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+          <span style="color: rgba(255, 255, 255, 0.8);">任務類型：</span>
+          <div class="figma-task-type type-auto">Auto</div>
+          <div class="figma-task-type type-review">Review</div>
+          <span style="color: rgba(255, 255, 255, 0.6);">|</span>
+          <span style="color: rgba(255, 255, 255, 0.8);">優先級：高</span>
+        </div>
+
+        <div style="margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+          <span style="color: rgba(255, 255, 255, 0.8);">分析類型：</span>
+          <div class="figma-task-type type-insight">Insight</div>
+          <span style="color: rgba(255, 255, 255, 0.6);">|</span>
+          <span style="color: rgba(255, 255, 255, 0.8);">狀態：進行中</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2 class="demo-title">顏色規格</h2>
+      <p class="demo-description">
+        基於 MCP 數據的精確顏色值，確保設計一致性。
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+        <div style="background: rgba(166, 244, 197, 0.1); border: 1px solid rgba(166, 244, 197, 1); border-radius: 8px; padding: 16px;">
+          <div class="figma-task-type type-auto" style="margin-bottom: 12px;">Auto</div>
+          <div style="color: rgba(166, 244, 197, 1); font-size: 14px; font-family: monospace;">rgba(166, 244, 197, 1)</div>
+          <div style="color: rgba(255, 255, 255, 0.7); font-size: 12px; margin-top: 4px;">自動化任務 - 綠色系</div>
+        </div>
+
+        <div style="background: rgba(254, 223, 137, 0.1); border: 1px solid rgba(254, 223, 137, 1); border-radius: 8px; padding: 16px;">
+          <div class="figma-task-type type-review" style="margin-bottom: 12px;">Review</div>
+          <div style="color: rgba(254, 223, 137, 1); font-size: 14px; font-family: monospace;">rgba(254, 223, 137, 1)</div>
+          <div style="color: rgba(255, 255, 255, 0.7); font-size: 12px; margin-top: 4px;">審核任務 - 黃色系</div>
+        </div>
+
+        <div style="background: rgba(214, 187, 251, 0.1); border: 1px solid rgba(214, 187, 251, 1); border-radius: 8px; padding: 16px;">
+          <div class="figma-task-type type-insight" style="margin-bottom: 12px;">Insight</div>
+          <div style="color: rgba(214, 187, 251, 1); font-size: 14px; font-family: monospace;">rgba(214, 187, 251, 1)</div>
+          <div style="color: rgba(255, 255, 255, 0.7); font-size: 12px; margin-top: 4px;">洞察任務 - 紫色系</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

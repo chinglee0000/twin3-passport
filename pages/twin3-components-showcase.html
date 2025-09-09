@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Twin3 Passport - UI Components Showcase</title>
+  
+  <!-- 只需要引用兩個 CSS 文件 -->
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  
+  <style>
+    body {
+      padding: 40px 20px;
+      background: linear-gradient(135deg, rgba(36, 36, 36, 1) 0%, rgba(24, 24, 24, 1) 100%);
+      min-height: 100vh;
+    }
+    
+    .showcase-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    .hero-section {
+      text-align: center;
+      margin-bottom: 80px;
+      padding: 60px 0;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .hero-title {
+      font-size: 48px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 1);
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #ffffff 0%, #a0a0a0 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero-subtitle {
+      font-size: 20px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+    
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 40px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 32px;
+      font-weight: 700;
+      color: rgba(166, 244, 197, 1);
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 8px;
+    }
+    
+    .showcase-section {
+      margin-bottom: 80px;
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+    }
+    
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 40px;
+    }
+    
+    .section-title {
+      font-size: 28px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 1);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .section-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, rgba(166, 244, 197, 0.2) 0%, rgba(214, 187, 251, 0.2) 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .section-meta {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.05);
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .component-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      align-items: start;
+    }
+    
+    .component-demo {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 12px;
+      padding: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+    }
+    
+    .component-demo:hover {
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+    
+    .demo-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .demo-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .demo-label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+      text-align: center;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 4px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .demo-code {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 16px;
+      font-family: 'Monaco', 'Menlo', monospace;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.8);
+      overflow-x: auto;
+      margin-top: 16px;
+    }
+    
+    .footer-section {
+      text-align: center;
+      padding: 60px 40px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 80px;
+    }
+    
+    .footer-title {
+      font-size: 24px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 1);
+      margin-bottom: 16px;
+    }
+    
+    .footer-text {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.6;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .tech-stack {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+    
+    .tech-item {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+    
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 32px;
+      }
+      
+      .hero-stats {
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      
+      .component-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .showcase-section {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="showcase-container">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <h1 class="hero-title">Twin3 Passport UI Components</h1>
+      <p class="hero-subtitle">
+        基於 Figma MCP 數據的像素級精確組件庫<br>
+        完整的響應式設計系統，支援玻璃擬態效果
+      </p>
+      
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-number">7</span>
+          <div class="stat-label">組件集合</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">25+</span>
+          <div class="stat-label">變體支援</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">100%</span>
+          <div class="stat-label">像素精確</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Button Component Set -->
+    <section class="showcase-section">
+      <div class="section-header">
+        <h2 class="section-title">
+          <div class="section-icon">🔘</div>
+          Button Component Set
+        </h2>
+        <div class="section-meta">Node ID: 67-26368</div>
+      </div>
+      
+      <div class="component-grid">
+        <div class="component-demo">
+          <div class="demo-title">Size & Type 變體</div>
+          <div class="demo-content">
+            <button class="figma-btn type-white status-default size-s">Small</button>
+            <button class="figma-btn type-white status-default size-m">Medium</button>
+            <button class="figma-btn type-grey status-default size-s">Grey</button>
+            <button class="figma-btn type-stroke status-default size-s">Stroke</button>
+          </div>
+          <div class="demo-code">
+&lt;button class="figma-btn type-white status-default size-s"&gt;Small&lt;/button&gt;
+&lt;button class="figma-btn type-grey status-default size-s"&gt;Grey&lt;/button&gt;</div>
+        </div>
+        
+        <div class="component-demo">
+          <div class="demo-title">Status 變體</div>
+          <div class="demo-content">
+            <button class="figma-btn type-white status-default size-s">Default</button>
+            <button class="figma-btn type-white status-hover size-s">Hover</button>
+            <button class="figma-btn type-white status-disabled size-s has-icon">
+              Done
+              <div class="figma-btn-icon">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                  <rect width="12" height="12" rx="6" fill="currentColor" opacity="0.3"/>
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M8.54813 3.69501L4.96815 7.15001L4.01815 6.13501C3.84315 5.97001 3.56815 5.96001 3.36815 6.10001C3.17315 6.24501 3.11815 6.50001 3.23815 6.70501L4.36315 8.53501C4.47315 8.70501 4.66315 8.81001 4.87815 8.81001C5.08315 8.81001 5.27815 8.70501 5.38815 8.53501C5.56815 8.30001 9.00315 4.20501 9.00315 4.20501C9.45315 3.74501 8.89315 3.33501 8.54813 3.69001V3.69501Z" fill="black"/>
+                </svg>
+              </div>
+            </button>
+          </div>
+          <div class="demo-label">Default → Hover → Disabled</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Task Type Component Set -->
+    <section class="showcase-section">
+      <div class="section-header">
+        <h2 class="section-title">
+          <div class="section-icon">🏷️</div>
+          Task Type Component Set
+        </h2>
+        <div class="section-meta">Node ID: 160-1583</div>
+      </div>
+      
+      <div class="component-grid">
+        <div class="component-demo">
+          <div class="demo-title">Type 變體</div>
+          <div class="demo-content">
+            <div class="figma-task-type type-auto">Auto</div>
+            <div class="figma-task-type type-review">Review</div>
+            <div class="figma-task-type type-insight">Insight</div>
+          </div>
+          <div class="demo-label">42×20px | 54×20px | 52×20px</div>
+          <div class="demo-code">
+&lt;div class="figma-task-type type-auto"&gt;Auto&lt;/div&gt;
+&lt;div class="figma-task-type type-review"&gt;Review&lt;/div&gt;
+&lt;div class="figma-task-type type-insight"&gt;Insight&lt;/div&gt;</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Company Logo Component Set -->
+    <section class="showcase-section">
+      <div class="section-header">
+        <h2 class="section-title">
+          <div class="section-icon">🏢</div>
+          Company Logo Component Set
+        </h2>
+        <div class="section-meta">Node ID: 67-26437</div>
+      </div>
+      
+      <div class="component-grid">
+        <div class="component-demo">
+          <div class="demo-title">Color 變體</div>
+          <div class="demo-content">
+            <div class="figma-company-logo color-black">
+              <div class="figma-logo-svg">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+                </svg>
+              </div>
+            </div>
+            <div class="figma-company-logo color-white">
+              <div class="figma-logo-svg">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="demo-label">Black (白底黑圖) | White (透明底白圖)</div>
+          <div class="demo-code">
+&lt;div class="figma-company-logo color-black"&gt;
+  &lt;div class="figma-logo-svg"&gt;&lt;svg&gt;...&lt;/svg&gt;&lt;/div&gt;
+&lt;/div&gt;</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Account Connection Card -->
+    <section class="showcase-section">
+      <div class="section-header">
+        <h2 class="section-title">
+          <div class="section-icon">🔗</div>
+          Account Connection Card
+        </h2>
+        <div class="section-meta">Node ID: 67-26383</div>
+      </div>
+
+      <div class="component-grid">
+        <div class="component-demo">
+          <div class="demo-title">玻璃擬態卡片</div>
+          <div class="demo-content">
+            <div class="figma-accounts-connection-card">
+              <div class="figma-card-container">
+                <div class="figma-company-logo color-white">
+                  <div class="figma-logo-svg">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                      <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="figma-card-heading">GitHub</div>
+              </div>
+              <button class="figma-btn type-stroke status-default size-s">Connect</button>
+            </div>
+          </div>
+          <div class="demo-label">180×108px 響應式卡片</div>
+          <div class="demo-code">
+&lt;div class="figma-accounts-connection-card"&gt;
+  &lt;div class="figma-card-container"&gt;
+    &lt;div class="figma-company-logo color-white"&gt;...&lt;/div&gt;
+    &lt;div class="figma-card-heading"&gt;GitHub&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;button class="figma-btn type-stroke status-default size-s"&gt;Connect&lt;/button&gt;
+&lt;/div&gt;</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab Component Set -->
+    <section class="showcase-section">
+      <div class="section-header">
+        <h2 class="section-title">
+          <div class="section-icon">📑</div>
+          Tab Component Set
+        </h2>
+        <div class="section-meta">Node ID: 151-3559</div>
+      </div>
+
+      <div class="component-grid">
+        <div class="component-demo">
+          <div class="demo-title">Tab Navigation</div>
+          <div class="demo-content">
+            <div class="figma-tab-bar">
+              <button class="figma-tab-active">Active</button>
+              <button class="figma-tab-default">Default</button>
+              <button class="figma-tab-default">Tab 3</button>
+            </div>
+            <button class="figma-add-button">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                <path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </button>
+          </div>
+          <div class="demo-label">950×46px Container + 24×24px Add Button</div>
+          <div class="demo-code">
+&lt;div class="figma-tab-bar"&gt;
+  &lt;button class="figma-tab-active"&gt;Active&lt;/button&gt;
+  &lt;button class="figma-tab-default"&gt;Default&lt;/button&gt;
+&lt;/div&gt;</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Badges Set -->
+    <section class="showcase-section">
+      <div class="section-header">
+        <h2 class="section-title">
+          <div class="section-icon">🏷️</div>
+          Badges Set Component
+        </h2>
+        <div class="section-meta">Node ID: 68-42262</div>
+      </div>
+
+      <div class="component-grid">
+        <div class="component-demo">
+          <div class="demo-title">Badge Types</div>
+          <div class="demo-content">
+            <div class="figma-badge type-coin status-default">
+              <div class="figma-badge-icon">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="currentColor" stroke-width="2"/>
+                </svg>
+              </div>
+              <div class="figma-badge-text">0.005</div>
+            </div>
+            <div class="figma-badge type-date status-default">
+              <div class="figma-badge-icon">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="currentColor" stroke-width="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="2"/>
+                  <line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="2"/>
+                  <line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="2"/>
+                </svg>
+              </div>
+              <div class="figma-badge-text">mm-dd-yyyy</div>
+            </div>
+            <div class="figma-badge type-date status-overdued">
+              <div class="figma-badge-icon">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="currentColor" stroke-width="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="2"/>
+                  <line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="2"/>
+                  <line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="2"/>
+                </svg>
+              </div>
+              <div class="figma-badge-text">mm-dd-yyyy</div>
+            </div>
+          </div>
+          <div class="demo-label">Coin | Date | Date Overdued</div>
+          <div class="demo-code">
+&lt;div class="figma-badge type-coin status-default"&gt;
+  &lt;div class="figma-badge-icon"&gt;...&lt;/div&gt;
+  &lt;div class="figma-badge-text"&gt;0.005&lt;/div&gt;
+&lt;/div&gt;</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Task List Cell -->
+    <section class="showcase-section">
+      <div class="section-header">
+        <h2 class="section-title">
+          <div class="section-icon">📋</div>
+          Task List Cell Component
+        </h2>
+        <div class="section-meta">Node ID: 68-40832</div>
+      </div>
+
+      <div class="component-grid">
+        <div class="component-demo">
+          <div class="demo-title">Desktop Task Cell</div>
+          <div class="demo-content">
+            <div class="figma-task-cell type-contribution status-default breakpoint-desktop">
+              <div class="figma-task-content">
+                <div class="figma-company-logo color-white">
+                  <div class="figma-logo-svg">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                      <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="figma-task-description">
+                  <div class="figma-task-title">Connect your GitHub account</div>
+                </div>
+              </div>
+              <button class="figma-btn type-white status-default size-s">Start</button>
+            </div>
+
+            <div class="figma-task-cell type-reward status-default breakpoint-desktop">
+              <div class="figma-task-content">
+                <div class="figma-task-description">
+                  <div class="figma-task-type type-auto">Auto</div>
+                  <div class="figma-task-title">Complete 5 social connections</div>
+                </div>
+              </div>
+              <button class="figma-btn type-white status-default size-s">Start</button>
+            </div>
+          </div>
+          <div class="demo-label">559×88px (Contribution) | 559×112px (Reward)</div>
+          <div class="demo-code">
+&lt;div class="figma-task-cell type-contribution status-default breakpoint-desktop"&gt;
+  &lt;div class="figma-task-content"&gt;...&lt;/div&gt;
+  &lt;button class="figma-btn type-white status-default size-s"&gt;Start&lt;/button&gt;
+&lt;/div&gt;</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <section class="footer-section">
+      <h3 class="footer-title">🎉 完整的組件系統</h3>
+      <p class="footer-text">
+        所有組件都基於 Figma MCP 數據的像素級精確實現，支援完整的響應式設計和玻璃擬態效果。<br>
+        只需引用兩個 CSS 文件，即可使用所有組件，無需重複定義樣式。
+      </p>
+
+      <div class="tech-stack">
+        <div class="tech-item">Figma MCP API</div>
+        <div class="tech-item">像素級精確</div>
+        <div class="tech-item">響應式設計</div>
+        <div class="tech-item">玻璃擬態效果</div>
+        <div class="tech-item">CSS 變數系統</div>
+        <div class="tech-item">Kanit + Inter 字體</div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

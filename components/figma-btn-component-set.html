@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Figma Button Component Set</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Kanit', sans-serif;
+      background: rgba(36, 36, 36, 1);
+      padding: 40px;
+      line-height: 1.5;
+    }
+
+    .demo-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .demo-section {
+      margin-bottom: 60px;
+    }
+
+    .demo-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: rgba(255, 255, 255, 1);
+    }
+
+    .demo-description {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    /* Button Component Set - 基於 67-26368 MCP 數據 */
+    .figma-btn {
+      /* 基本樣式 */
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'Kanit', sans-serif;
+      font-weight: 300;
+      border: none;
+      outline: none;
+    }
+
+    /* Size=s (Small) - 基於 MCP 精確數據 */
+    .figma-btn.size-s {
+      height: 28px;
+      padding: 0 12px;
+      font-size: 12px;
+      line-height: 16px;
+    }
+
+    .figma-btn.size-s.has-icon {
+      padding-right: 8px;
+    }
+
+    /* Size=m (Medium) - 基於 MCP 精確數據 */
+    .figma-btn.size-m {
+      height: 32px;
+      padding: 0 16px;
+      font-size: 16px;
+      line-height: 16px;
+    }
+
+    .figma-btn.size-m.has-icon {
+      padding-right: 12px;
+    }
+
+    /* Type=White 變體 - 基於 MCP 精確數據 */
+    .figma-btn.type-white.status-default {
+      /* Fill: rgba(255, 255, 255, 1) */
+      background: rgba(255, 255, 255, 1);
+      /* 加上相同顏色的 border 避免 hover 時大小變化 */
+      border: 1px solid rgba(255, 255, 255, 1);
+      /* Text: rgba(0, 0, 0, 1) */
+      color: rgba(0, 0, 0, 1);
+    }
+
+    .figma-btn.type-white.status-hover {
+      /* Stroke: rgba(255, 255, 255, 1) */
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 1);
+      /* Text: rgba(255, 255, 255, 1) */
+      color: rgba(255, 255, 255, 1);
+    }
+
+    .figma-btn.type-white.status-disabled {
+      /* Stroke: rgba(83, 88, 98, 1) */
+      background: transparent;
+      border: 1px solid rgba(83, 88, 98, 1);
+      /* Text: rgba(164, 167, 174, 1) */
+      color: rgba(164, 167, 174, 1);
+      cursor: not-allowed;
+    }
+
+    /* Type=Grey 變體 - 基於 MCP 精確數據 */
+    .figma-btn.type-grey.status-default {
+      /* Fill: rgba(255, 255, 255, 0.30) */
+      background: rgba(255, 255, 255, 0.30);
+      /* 加上相同顏色的 border 避免 hover 時大小變化 */
+      border: 1px solid rgba(255, 255, 255, 0.30);
+      /* Text: rgba(255, 255, 255, 1) */
+      color: rgba(255, 255, 255, 1);
+    }
+
+    .figma-btn.type-grey.status-hover {
+      /* Stroke: rgba(255, 255, 255, 1) */
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 1);
+      /* Text: rgba(255, 255, 255, 1) */
+      color: rgba(255, 255, 255, 1);
+    }
+
+    .figma-btn.type-grey.status-disabled {
+      /* Stroke: rgba(83, 88, 98, 1) */
+      background: transparent;
+      border: 1px solid rgba(83, 88, 98, 1);
+      /* Text: rgba(164, 167, 174, 1) */
+      color: rgba(164, 167, 174, 1);
+      cursor: not-allowed;
+    }
+
+    /* Type=Stroke 變體 - 基於 MCP 精確數據 */
+    .figma-btn.type-stroke.status-default {
+      /* Stroke: rgba(255, 255, 255, 1) */
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 1);
+      /* Text: rgba(255, 255, 255, 1) */
+      color: rgba(255, 255, 255, 1);
+    }
+
+    .figma-btn.type-stroke.status-hover {
+      /* Fill: rgba(255, 255, 255, 1) */
+      background: rgba(255, 255, 255, 1);
+      border: none;
+      /* Text: rgba(0, 0, 0, 1) */
+      color: rgba(0, 0, 0, 1);
+    }
+
+    .figma-btn.type-stroke.status-disabled {
+      /* Stroke: rgba(83, 88, 98, 1) */
+      background: transparent;
+      border: 1px solid rgba(83, 88, 98, 1);
+      /* Text: rgba(164, 167, 174, 1) */
+      color: rgba(164, 167, 174, 1);
+      cursor: not-allowed;
+    }
+
+    /* Check Icon - 基於 MCP 數據 */
+    .figma-btn-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .figma-btn.size-s .figma-btn-icon {
+      width: 12px;
+      height: 12px;
+    }
+
+    .figma-btn.size-m .figma-btn-icon {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Interactive Hover Effects */
+    .figma-btn.type-white.status-default:hover {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 1);
+      color: rgba(255, 255, 255, 1);
+    }
+
+    .figma-btn.type-stroke.status-default:hover {
+      background: rgba(255, 255, 255, 1);
+      border: 1px solid rgba(255, 255, 255, 1);
+      color: rgba(0, 0, 0, 1);
+    }
+
+    .figma-btn.type-grey.status-default:hover {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 1);
+      color: rgba(255, 255, 255, 1);
+    }
+
+    /* Demo Grid */
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 20px;
+      align-items: start;
+    }
+
+    .demo-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .demo-label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+      text-align: center;
+    }
+
+    .demo-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-container">
+    <h1 style="font-size: 32px; font-weight: 700; margin-bottom: 40px; color: rgba(255, 255, 255, 1);">
+      Figma Button Component Set
+    </h1>
+
+    <div class="demo-section">
+      <h2 class="demo-title">基於 MCP 數據 (67-26368) 的精確實現</h2>
+      <p class="demo-description">
+        <strong>重點：完整的按鈕變體系統</strong><br>
+        • <strong>Type</strong>: White, Grey, Stroke（3種類型）<br>
+        • <strong>Status</strong>: Default, Hover, Disabled（3種狀態）<br>
+        • <strong>Size</strong>: s (28px高), m (32px高)（2種尺寸）<br>
+        • <strong>字體</strong>: Kanit 300, 12px (small), 16px (medium)<br>
+        • <strong>圓角</strong>: 8px，支援 Check icon<br>
+        總共 18 個按鈕變體，完全基於 Figma 設計系統的精確數據。
+      </p>
+
+      <!-- Size Small -->
+      <h3 style="margin-bottom: 15px; font-size: 18px; color: rgba(255, 255, 255, 0.9);">Size = Small (28px)</h3>
+      
+      <div class="demo-row">
+        <button class="figma-btn type-white status-default size-s">Button</button>
+        <button class="figma-btn type-white status-hover size-s">Button</button>
+        <button class="figma-btn type-white status-disabled size-s">Button</button>
+        <button class="figma-btn type-white status-disabled size-s has-icon">
+          Button
+          <div class="figma-btn-icon">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+              <rect width="12" height="12" rx="6" fill="currentColor" opacity="0.3"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M8.54813 3.69501L4.96815 7.15001L4.01815 6.13501C3.84315 5.97001 3.56815 5.96001 3.36815 6.10001C3.17315 6.24501 3.11815 6.50001 3.23815 6.70501L4.36315 8.53501C4.47315 8.70501 4.66315 8.81001 4.87815 8.81001C5.08315 8.81001 5.27815 8.70501 5.38815 8.53501C5.56815 8.30001 9.00315 4.20501 9.00315 4.20501C9.45315 3.74501 8.89315 3.33501 8.54813 3.69001V3.69501Z" fill="black"/>
+            </svg>
+          </div>
+        </button>
+      </div>
+
+      <div class="demo-row">
+        <button class="figma-btn type-grey status-default size-s">Button</button>
+        <button class="figma-btn type-grey status-hover size-s">Button</button>
+        <button class="figma-btn type-grey status-disabled size-s">Button</button>
+      </div>
+
+      <div class="demo-row">
+        <button class="figma-btn type-stroke status-default size-s">Button</button>
+        <button class="figma-btn type-stroke status-hover size-s">Button</button>
+        <button class="figma-btn type-stroke status-disabled size-s">Button</button>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <!-- Size Medium -->
+      <h3 style="margin-bottom: 15px; font-size: 18px; color: rgba(255, 255, 255, 0.9);">Size = Medium (32px)</h3>
+
+      <div class="demo-row">
+        <button class="figma-btn type-white status-default size-m">Button</button>
+        <button class="figma-btn type-white status-hover size-m">Button</button>
+        <button class="figma-btn type-white status-disabled size-m">Button</button>
+        <button class="figma-btn type-white status-disabled size-m has-icon">
+          Button
+          <div class="figma-btn-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <rect width="16" height="16" rx="8" fill="currentColor" opacity="0.3"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M11.3975 4.92669L6.62421 9.53335L5.35755 8.18002C5.12421 7.96002 4.75755 7.94669 4.49088 8.13335C4.23088 8.32669 4.15755 8.66669 4.31755 8.94002L5.81755 11.38C5.96421 11.6067 6.21755 11.7467 6.50421 11.7467C6.77755 11.7467 7.03755 11.6067 7.18421 11.38C7.42421 11.0667 12.0042 5.60669 12.0042 5.60669C12.6042 4.99335 11.8775 4.45335 11.3975 4.92002V4.92669Z" fill="black"/>
+            </svg>
+          </div>
+        </button>
+      </div>
+
+      <div class="demo-row">
+        <button class="figma-btn type-grey status-default size-m">Button</button>
+        <button class="figma-btn type-grey status-hover size-m">Button</button>
+        <button class="figma-btn type-grey status-disabled size-m">Button</button>
+      </div>
+
+      <div class="demo-row">
+        <button class="figma-btn type-stroke status-default size-m">Button</button>
+        <button class="figma-btn type-stroke status-hover size-m">Button</button>
+        <button class="figma-btn type-stroke status-disabled size-m">Button</button>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2 class="demo-title">交互式演示</h2>
+      <p class="demo-description">
+        下面的按鈕具有真實的懸停效果，展示不同類型的交互行為。
+      </p>
+
+      <div class="demo-row">
+        <button class="figma-btn type-white status-default size-m">White Button</button>
+        <button class="figma-btn type-grey status-default size-m">Grey Button</button>
+        <button class="figma-btn type-stroke status-default size-m">Stroke Button</button>
+        <button class="figma-btn type-white status-default size-m has-icon">
+          With Icon
+          <div class="figma-btn-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <rect width="16" height="16" rx="8" fill="currentColor" opacity="0.3"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M11.3975 4.92669L6.62421 9.53335L5.35755 8.18002C5.12421 7.96002 4.75755 7.94669 4.49088 8.13335C4.23088 8.32669 4.15755 8.66669 4.31755 8.94002L5.81755 11.38C5.96421 11.6067 6.21755 11.7467 6.50421 11.7467C6.77755 11.7467 7.03755 11.6067 7.18421 11.38C7.42421 11.0667 12.0042 5.60669 12.0042 5.60669C12.6042 4.99335 11.8775 4.45335 11.3975 4.92002V4.92669Z" fill="black"/>
+            </svg>
+          </div>
+        </button>
+      </div>
+
+      <div class="demo-row">
+        <button class="figma-btn type-white status-default size-s">Small White</button>
+        <button class="figma-btn type-stroke status-default size-s">Small Stroke</button>
+        <button class="figma-btn type-white status-disabled size-s">Disabled</button>
+        <button class="figma-btn type-stroke status-disabled size-s">Disabled</button>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2 class="demo-title">使用範例</h2>
+      <p class="demo-description">
+        展示按鈕在實際應用場景中的使用方式。
+      </p>
+
+      <div style="background: var(--color-white-5, rgba(255, 255, 255, 0.05)); border-radius: 12px; padding: 24px; margin-bottom: 20px;">
+        <h4 style="color: rgba(255, 255, 255, 1); margin-bottom: 16px;">表單操作</h4>
+        <div class="demo-row">
+          <button class="figma-btn type-white status-default size-m">確認</button>
+          <button class="figma-btn type-stroke status-default size-m">取消</button>
+        </div>
+      </div>
+
+      <div style="background: var(--color-white-5, rgba(255, 255, 255, 0.05)); border-radius: 12px; padding: 24px;">
+        <h4 style="color: rgba(255, 255, 255, 1); margin-bottom: 16px;">連接狀態</h4>
+        <div class="demo-row">
+          <button class="figma-btn type-stroke status-default size-s">Connect</button>
+          <button class="figma-btn type-grey status-disabled size-s has-icon">
+            Connected
+            <div class="figma-btn-icon">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                <rect width="12" height="12" rx="6" fill="currentColor" opacity="0.3"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M8.54813 3.69501L4.96815 7.15001L4.01815 6.13501C3.84315 5.97001 3.56815 5.96001 3.36815 6.10001C3.17315 6.24501 3.11815 6.50001 3.23815 6.70501L4.36315 8.53501C4.47315 8.70501 4.66315 8.81001 4.87815 8.81001C5.08315 8.81001 5.27815 8.70501 5.38815 8.53501C5.56815 8.30001 9.00315 4.20501 9.00315 4.20501C9.45315 3.74501 8.89315 3.33501 8.54813 3.69001V3.69501Z" fill="black"/>
+              </svg>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Twin3 Passport - 組件使用範例</title>
+  
+  <!-- 只需要引用兩個 CSS 文件 -->
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+</head>
+<body>
+  <div class="container">
+    <h1 style="font-size: 32px; font-weight: 700; margin-bottom: 40px; text-align: center;">
+      Twin3 Passport - 組件使用範例
+    </h1>
+
+    <!-- =================================================================
+         Button Component 使用範例
+         ================================================================= -->
+    <section class="mb-8">
+      <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 20px;">Button Components</h2>
+      
+      <div class="flex gap-4 mb-4">
+        <button class="figma-btn type-white status-default size-s">Start</button>
+        <button class="figma-btn type-white status-hover size-s">Hover</button>
+        <button class="figma-btn type-white status-disabled size-s has-icon">
+          Done
+          <div class="figma-btn-icon">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+              <rect width="12" height="12" rx="6" fill="currentColor" opacity="0.3"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M8.54813 3.69501L4.96815 7.15001L4.01815 6.13501C3.84315 5.97001 3.56815 5.96001 3.36815 6.10001C3.17315 6.24501 3.11815 6.50001 3.23815 6.70501L4.36315 8.53501C4.47315 8.70501 4.66315 8.81001 4.87815 8.81001C5.08315 8.81001 5.27815 8.70501 5.38815 8.53501C5.56815 8.30001 9.00315 4.20501 9.00315 4.20501C9.45315 3.74501 8.89315 3.33501 8.54813 3.69001V3.69501Z" fill="black"/>
+            </svg>
+          </div>
+        </button>
+      </div>
+
+      <div class="flex gap-4 mb-4">
+        <button class="figma-btn type-grey status-default size-s">Grey</button>
+        <button class="figma-btn type-stroke status-default size-s">Stroke</button>
+        <button class="figma-btn type-white status-default size-m">Medium</button>
+      </div>
+    </section>
+
+    <!-- =================================================================
+         Task Type Component 使用範例
+         ================================================================= -->
+    <section class="mb-8">
+      <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 20px;">Task Type Components</h2>
+      
+      <div class="flex gap-4 mb-4">
+        <div class="figma-task-type type-auto">Auto</div>
+        <div class="figma-task-type type-review">Review</div>
+        <div class="figma-task-type type-insight">Insight</div>
+      </div>
+    </section>
+
+    <!-- =================================================================
+         Company Logo Component 使用範例
+         ================================================================= -->
+    <section class="mb-8">
+      <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 20px;">Company Logo Components</h2>
+      
+      <div class="flex gap-4 mb-4">
+        <div class="figma-company-logo color-black">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+          </svg>
+        </div>
+        
+        <div class="figma-company-logo color-white">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================
+         Account Connection Card 使用範例
+         ================================================================= -->
+    <section class="mb-8">
+      <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 20px;">Account Connection Card</h2>
+      
+      <div class="flex gap-4 mb-4" style="flex-wrap: wrap;">
+        <div class="figma-accounts-connection-card">
+          <div class="figma-card-header">
+            <div class="figma-company-logo color-white">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+              </svg>
+            </div>
+            <div class="figma-card-title">GitHub</div>
+          </div>
+          <button class="figma-btn type-stroke status-default size-s">Connect</button>
+        </div>
+
+        <div class="figma-accounts-connection-card">
+          <div class="figma-card-header">
+            <div class="figma-company-logo color-white">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M18.5195 0H1.47656C0.660156 0 0 0.644531 0 1.44141V18.5547C0 19.3516 0.660156 20 1.47656 20H18.5195C19.3359 20 20 19.3516 20 18.5586V1.44141C20 0.644531 19.3359 0 18.5195 0ZM5.93359 17.043H2.96484V7.49609H5.93359V17.043ZM4.44922 6.19531C3.49609 6.19531 2.72656 5.42578 2.72656 4.47656C2.72656 3.52734 3.49609 2.75781 4.44922 2.75781C5.39844 2.75781 6.16797 3.52734 6.16797 4.47656C6.16797 5.42188 5.39844 6.19531 4.44922 6.19531ZM17.043 17.043H14.0781V12.4023C14.0781 11.2969 14.0586 9.87109 12.5352 9.87109C10.9922 9.87109 10.7578 11.0781 10.7578 12.3203V17.043H7.79297V7.49609H10.6406V8.80078H10.6797C11.0742 8.05078 12.043 7.25781 13.4844 7.25781C16.4883 7.25781 17.043 9.23438 17.043 11.8047V17.043Z"/>
+              </svg>
+            </div>
+            <div class="figma-card-title">LinkedIn</div>
+          </div>
+          <button class="figma-btn type-grey status-disabled size-s has-icon">
+            Connected
+            <div class="figma-btn-icon">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                <rect width="12" height="12" rx="6" fill="currentColor" opacity="0.3"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M8.54813 3.69501L4.96815 7.15001L4.01815 6.13501C3.84315 5.97001 3.56815 5.96001 3.36815 6.10001C3.17315 6.24501 3.11815 6.50001 3.23815 6.70501L4.36315 8.53501C4.47315 8.70501 4.66315 8.81001 4.87815 8.81001C5.08315 8.81001 5.27815 8.70501 5.38815 8.53501C5.56815 8.30001 9.00315 4.20501 9.00315 4.20501C9.45315 3.74501 8.89315 3.33501 8.54813 3.69001V3.69501Z" fill="black"/>
+              </svg>
+            </div>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================
+         Task List Cell 使用範例
+         ================================================================= -->
+    <section class="mb-8">
+      <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 20px;">Task List Cells</h2>
+      
+      <!-- Desktop Task Cell -->
+      <div class="figma-task-cell type-contribution status-default breakpoint-desktop">
+        <div class="figma-task-content">
+          <div class="figma-company-logo color-white">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+            </svg>
+          </div>
+          <div class="figma-task-description">
+            <div class="figma-task-title">Connect your GitHub account</div>
+          </div>
+        </div>
+        <button class="figma-btn type-white status-default size-s">Start</button>
+      </div>
+
+      <!-- Reward Task Cell -->
+      <div class="figma-task-cell type-reward status-default breakpoint-desktop">
+        <div class="figma-task-content">
+          <div class="figma-task-description">
+            <div class="figma-task-type type-auto">Auto</div>
+            <div class="figma-task-title">Complete 5 social connections</div>
+          </div>
+        </div>
+        <button class="figma-btn type-white status-default size-s">Start</button>
+      </div>
+
+      <!-- Mobile Task Cell -->
+      <div class="figma-task-cell type-contribution status-default breakpoint-mobile">
+        <div class="figma-task-content">
+          <div class="figma-task-header">
+            <div class="figma-company-logo color-white">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+              </svg>
+            </div>
+            <div class="figma-task-description">
+              <div class="figma-task-title">Connect your GitHub account to track contributions</div>
+            </div>
+          </div>
+        </div>
+        <button class="figma-btn type-white status-default size-s">Start</button>
+      </div>
+    </section>
+
+    <div style="text-align: center; margin-top: 60px; padding: 40px; background: var(--color-white-5); border-radius: 12px;">
+      <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 16px;">🎉 組件系統完成！</h3>
+      <p style="color: rgba(255, 255, 255, 0.8); font-size: 16px;">
+        現在您可以直接使用這些組件類名，無需重複定義樣式。<br>
+        所有組件都基於 Figma MCP 數據的像素級精確實現。
+      </p>
+    </div>
+  </div>
+</body>
+</html>
