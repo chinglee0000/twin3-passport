@@ -1,0 +1,33 @@
+{
+  "defaultInstructions": [
+    "當處理Figma任務時自動執行MCP數據獲取",
+    "確保像素級精確匹配",
+    "要求複誦指令確認理解",
+    "逐行驗證樣式屬性來源"
+  ],
+  "figmaWorkflow": true,
+  "pixelPerfect": true,
+  "mcpIntegration": true,
+  "projectName": "Twin3 Passport",
+  "designSystem": {
+    "enforcePixelPerfect": true,
+    "requireMcpValidation": true,
+    "autoGenerateComments": true
+  },
+  "workflowRules": {
+    "figmaToCode": {
+      "steps": [
+        "從MCP獲取完整設計數據",
+        "列出所有獲取的數據項目",
+        "複誦任務確認理解",
+        "生成像素級精確代碼",
+        "標註每個樣式的來源"
+      ],
+      "validation": {
+        "requireDataSource": true,
+        "pixelTolerance": 0,
+        "colorAccuracy": "exact"
+      }
+    }
+  }
+}

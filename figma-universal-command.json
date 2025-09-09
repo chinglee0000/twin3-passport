@@ -1,0 +1,93 @@
+{
+  "universalFigmaCommand": {
+    "trigger": "!figma",
+    "template": "執行完整的 MCP 驅動設計還原：\n\n來源：{figmaUrl}\n\nMCP 工具鏈：\n1. get_code → 提取 {componentName} 結構和樣式\n2. get_variable_defs → 提取相關設計 tokens\n3. get_assets → 提取圖標和圖片資源\n\n輸出要求：\n- 列出所有 MCP 提取的精確數據\n- 複誦理解的設計要求\n- 詢問：「以上理解是否正確？」\n- 等待確認後生成程式碼\n- 每個 CSS 屬性標註 MCP 來源\n- 確保像素級精確匹配\n\n禁止行為：\n- 猜測任何數值\n- 使用預設顏色\n- 跳過 MCP 數據驗證\n- 自動執行未確認的操作\n\n元件名稱：{componentName}\nNode ID：{nodeId}",
+    "variables": {
+      "figmaUrl": "https://www.figma.com/design/AJ58vJatMPOuKFFdYfo5g3/passport",
+      "componentName": "",
+      "nodeId": ""
+    },
+    "mcpTools": [
+      "get_code",
+      "get_variable_defs", 
+      "get_assets"
+    ],
+    "validationRules": {
+      "pixelTolerance": 0,
+      "colorAccuracy": "exact",
+      "requireDataSource": true,
+      "mandatoryConfirmation": true
+    }
+  },
+  "quickCommands": {
+    "!figma [componentName] [nodeId]": {
+      "description": "執行完整 Figma 轉換流程",
+      "example": "!figma AccountConnectionCard 67:26383"
+    },
+    "!mcp-extract [nodeId]": {
+      "description": "僅提取 MCP 數據不生成程式碼",
+      "template": "使用 MCP 工具提取 Node {nodeId} 的完整數據：\n\n1. get_code - 結構和樣式數據\n2. get_variable_defs - 設計變數\n3. get_assets - 資源文件\n\n請以表格形式列出所有精確數據，等待確認後再進行下一步。"
+    },
+    "!pixel-verify [componentName]": {
+      "description": "驗證像素級精確度",
+      "template": "驗證 {componentName} 的像素級精確度：\n\n檢查項目：\n- 尺寸精確度 (±0px)\n- 顏色精確度 (exact RGBA)\n- 間距精確度 (±0px)\n- 字體樣式一致性\n\n請提供詳細對比報告。"
+    },
+    "!twin3-structure": {
+      "description": "應用 Twin3 統一頁面結構",
+      "template": "應用 Twin3 統一頁面結構：\n\n結構層級：\n- page-container (min-h-screen)\n- page-video-background\n- page-content-container\n- page-unified-content\n- page-left-content\n- page-right-action\n- 統一 Footer\n\n請基於此結構重新組織元件。"
+    }
+  },
+  "workflowSteps": [
+    {
+      "step": 1,
+      "action": "MCP 數據提取",
+      "description": "使用 get_code, get_variable_defs, get_assets 提取完整數據"
+    },
+    {
+      "step": 2,
+      "action": "數據列表展示",
+      "description": "以結構化方式列出所有精確數據"
+    },
+    {
+      "step": 3,
+      "action": "理解確認",
+      "description": "複誦設計要求並詢問確認"
+    },
+    {
+      "step": 4,
+      "action": "等待用戶確認",
+      "description": "必須等待用戶確認後才能繼續"
+    },
+    {
+      "step": 5,
+      "action": "程式碼生成",
+      "description": "生成像素級精確程式碼並標註來源"
+    }
+  ],
+  "prohibitedActions": [
+    "猜測任何數值",
+    "跳過驗證步驟",
+    "使用近似值",
+    "自動執行未確認的操作",
+    "假設顏色為白色或黑色",
+    "忽略 MCP 提供的數據"
+  ],
+  "outputFormat": {
+    "dataExtraction": {
+      "format": "table",
+      "includeSource": true,
+      "precision": "exact"
+    },
+    "codeGeneration": {
+      "language": "react",
+      "styling": "tailwind + custom css",
+      "annotations": "mcp-source-comments",
+      "structure": "twin3-standard"
+    }
+  },
+  "commonNodes": {
+    "AccountConnectionCard": "67:26383",
+    "TaskListCell": "68:40832",
+    "Button": "67:26368"
+  }
+}

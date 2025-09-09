@@ -1,0 +1,88 @@
+{
+  "mcpAdvancedTools": {
+    "get_code": {
+      "description": "生成結構化的React/HTML代碼",
+      "outputFormats": ["react", "html", "vue", "angular"],
+      "defaultFormat": "react",
+      "includeTypeScript": true,
+      "includeTailwind": true,
+      "autoImports": true
+    },
+    "get_variable_defs": {
+      "description": "提取設計變數和tokens",
+      "outputFormats": ["css", "scss", "js", "json"],
+      "categories": ["colors", "typography", "spacing", "shadows", "borders"],
+      "generateCustomProperties": true,
+      "createTokenFile": true
+    },
+    "get_assets": {
+      "description": "獲取圖片和SVG資源",
+      "formats": ["svg", "png", "jpg", "webp"],
+      "optimizeImages": true,
+      "generateSprites": false,
+      "localPath": "./assets/",
+      "createManifest": true
+    },
+    "component_sync": {
+      "description": "同步元件庫更新",
+      "checkInterval": "hourly",
+      "autoUpdate": false,
+      "notifyChanges": true,
+      "generateMigrationGuide": true,
+      "backupBeforeUpdate": true
+    },
+    "design_tokens": {
+      "description": "管理設計系統tokens",
+      "syncWithFigma": true,
+      "validateConsistency": true,
+      "generateDocumentation": true,
+      "exportFormats": ["css", "scss", "js", "json", "xml"]
+    }
+  },
+  "automationRules": {
+    "batchProcessing": {
+      "enabled": true,
+      "maxConcurrent": 5,
+      "retryOnFailure": 3,
+      "logProgress": true
+    },
+    "qualityChecks": {
+      "pixelPerfectValidation": true,
+      "colorAccuracyCheck": true,
+      "typographyConsistency": true,
+      "spacingValidation": true
+    },
+    "codeGeneration": {
+      "addSourceComments": true,
+      "includeAccessibility": true,
+      "optimizeForPerformance": true,
+      "followBestPractices": true
+    }
+  },
+  "twin3Integration": {
+    "pageStructure": {
+      "enforceTemplate": true,
+      "validateStructure": true,
+      "autoApplyClasses": true
+    },
+    "designSystem": {
+      "enforceConsistency": true,
+      "validateTokens": true,
+      "checkResponsive": true
+    }
+  },
+  "monitoring": {
+    "componentLibrary": {
+      "enabled": true,
+      "checkFrequency": "hourly",
+      "notificationChannels": ["console", "file"],
+      "trackVersions": true
+    },
+    "designTokens": {
+      "enabled": true,
+      "validateChanges": true,
+      "generateChangeLog": true,
+      "alertOnBreakingChanges": true
+    }
+  }
+}

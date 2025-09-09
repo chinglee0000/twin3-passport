@@ -1,0 +1,7 @@
+{
+  "codeConnect": {
+    "parser": "react",
+    "include": ["components/TabComponent.figma.tsx"],
+    "exclude": ["node_modules/**"]
+  }
+}

@@ -1,0 +1,54 @@
+# Figma項目自動規則
+ALWAYS:
+- 從MCP獲取數據前先列出要獲取的內容
+- 確保所有尺寸、位置、顏色都精確匹配
+- 生成程式碼前複誦理解的任務
+- 註明每個CSS屬性的Figma來源
+- 使用統一的頁面結構模板（page-container, page-video-background, page-content-container等）
+- 確保響應式設計完全一致
+- 優先使用進階MCP工具(get_code, get_variable_defs, get_assets)
+- 自動檢查Component Library更新
+
+NEVER:
+- 假設或猜測任何設計數值
+- 忽略MCP提供的精確數據
+- 生成程式碼時跳過驗證步驟
+- 偏離既定的頁面結構模板
+- 手動處理可以用MCP工具自動化的任務
+
+FIGMA_WORKFLOW:
+1. 列出要從MCP獲取的具體數據項目
+2. 執行MCP數據獲取
+3. 複誦任務和理解的設計要求
+4. 等待用戶確認理解正確
+5. 生成像素級精確的HTML/CSS代碼
+6. 為每個樣式屬性標註Figma來源
+7. 驗證與設計規格的一致性
+
+VALIDATION_STEPS:
+1. 數據提取驗證 - 先列出所有精確數據
+2. 結構確認 - 描述HTML結構等待確認
+3. 樣式實現 - 生成CSS並標註來源
+4. 像素級對比 - 檢查每個元素的精確度
+
+MONITOR:
+- 每小時檢查Component Library更新
+- 自動同步設計token變更
+- 追蹤元件版本差異
+- 生成更新通知和遷移指南
+
+MCP_TOOLS:
+- 優先使用get_code生成結構化代碼
+- 使用get_variable_defs提取所有設計變數
+- 使用get_assets獲取圖片和SVG資源
+- 批次處理多個元件時使用適當的MCP工具
+
+TWIN3_STANDARDS:
+- 使用統一頁面結構：page-container (min-h-screen)
+- 背景視頻：page-video-background
+- 內容容器：page-content-container
+- 統一內容區塊：page-unified-content
+- 左側內容：page-left-content (標題描述)
+- 右側操作：page-right-action (操作區域)
+- 統一Footer樣式
+- 確保所有頁面字體、響應式設計完全一致

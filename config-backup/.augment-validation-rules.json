@@ -1,0 +1,77 @@
+{
+  "pixelPerfectValidation": {
+    "enabled": true,
+    "tolerance": 0,
+    "requireMcpData": true,
+    "mandatorySteps": [
+      "extractPreciseData",
+      "confirmUnderstanding", 
+      "validateBeforeCoding",
+      "pixelLevelComparison"
+    ]
+  },
+  "dataExtractionRules": {
+    "coordinates": "exact_xy_values",
+    "dimensions": "precise_width_height",
+    "colors": "hex_rgba_hsl_all",
+    "typography": "font_size_weight_lineheight",
+    "spacing": "margin_padding_exact"
+  },
+  "prohibitedBehaviors": [
+    "guessing_values",
+    "approximating_measurements", 
+    "skipping_visual_elements",
+    "simplifying_design_structure"
+  ],
+  "validationSteps": {
+    "step1_dataExtraction": {
+      "description": "數據獲取驗證",
+      "requirements": [
+        "列出所有精確數據",
+        "以表格形式呈現",
+        "等待用戶確認準確性"
+      ]
+    },
+    "step2_structureConfirmation": {
+      "description": "結構確認",
+      "requirements": [
+        "描述HTML結構",
+        "說明層級關係",
+        "等待用戶確認結構正確"
+      ]
+    },
+    "step3_styleImplementation": {
+      "description": "樣式實現",
+      "requirements": [
+        "每個數值來自MCP數據",
+        "註明每個屬性來源",
+        "使用exact values"
+      ]
+    }
+  },
+  "qualityChecks": {
+    "layout": [
+      "整體佈局是否正確",
+      "元素定位是否精確",
+      "響應式行為是否符合設計",
+      "Container尺寸是否匹配"
+    ],
+    "visual": [
+      "顏色是否完全匹配",
+      "字體大小和樣式是否正確",
+      "間距是否pixel-perfect",
+      "邊框和陰影是否準確"
+    ],
+    "interaction": [
+      "Hover效果是否實現",
+      "Focus狀態是否正確",
+      "Active狀態是否符合設計",
+      "動畫效果是否匹配"
+    ]
+  },
+  "debugTools": {
+    "colorCorrection": "使用get_variable_defs精確提取所有顏色",
+    "spacingMeasurement": "重新測量所有spacing和sizing",
+    "fontMatching": "從Figma提取完整的typography系統"
+  }
+}
