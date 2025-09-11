@@ -1,0 +1,3556 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Twin3 Passport - Components Dev Spec</title>
+
+  <!-- 字體載入 - 統一使用 pages 的字體邏輯 -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- 使用統一的 CSS 系統 -->
+  <link rel="stylesheet" href="../css/components.css">
+
+  <style>
+    /* 統一的設計系統變數 - 基於 pages 邏輯 */
+    :root {
+      --primary-bg: #0A0A0A;
+      --text-primary: #FFFFFF;
+      --text-secondary: #A4A7AE;
+      --text-muted: #888888;
+      --border-color: rgba(255, 255, 255, 0.1);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --glass-bg: rgba(255, 255, 255, 0.1);
+      --glass-border: rgba(255, 255, 255, 0.2);
+      --accent-green: #32D583;
+      --accent-purple: #D6BBFB;
+      --accent-gray: #414651;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--primary-bg);
+      min-height: 100vh;
+      font-family: 'Kanit', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-primary);
+    }
+
+    /* Navigation Styles - 使用統一字體系統 */
+    .dev-spec-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 280px;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.8);
+      border-right: 1px solid var(--border-color);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      overflow-y: auto;
+    }
+
+    .nav-header {
+      padding: 24px 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .nav-title {
+      font-family: 'Kanit', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0;
+    }
+
+    .nav-subtitle {
+      font-family: 'Kanit', sans-serif;
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--text-secondary);
+      margin: 4px 0 0 0;
+    }
+
+    .nav-menu {
+      padding: 20px 0;
+    }
+
+    .nav-section {
+      margin-bottom: 24px;
+    }
+
+    .nav-section-title {
+      font-family: 'Kanit', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 0 20px 8px 20px;
+    }
+
+    .nav-item {
+      display: block;
+      padding: 12px 20px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-family: 'Kanit', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      transition: all 0.2s ease;
+      border-left: 3px solid transparent;
+    }
+
+    .nav-item:hover {
+      background: var(--card-bg);
+      color: var(--text-primary);
+    }
+
+    .nav-item.active {
+      background: var(--glass-bg);
+      color: var(--text-primary);
+      border-left-color: var(--accent-green);
+      font-weight: 400;
+    }
+
+    /* Main Content Styles */
+    .dev-spec-main {
+      margin-left: 280px;
+      padding: 40px;
+      min-height: 100vh;
+    }
+
+    .component-section {
+      display: none;
+      max-width: 1200px;
+    }
+
+    .component-section.active {
+      display: block !important;
+    }
+
+    .component-header {
+      margin-bottom: 40px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .component-title {
+      font-family: 'Kanit', sans-serif;
+      font-size: 32px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0 0 8px 0;
+    }
+
+    .component-description {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .component-meta {
+      display: flex;
+      gap: 24px;
+      margin-top: 16px;
+    }
+
+    .meta-item {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .meta-value {
+      color: rgba(166, 244, 197, 1);
+      font-weight: 500;
+    }
+
+    /* Demo Styles */
+    .demo-container {
+      margin-bottom: 48px;
+    }
+
+    .demo-title {
+      font-family: 'Kanit', sans-serif;
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin: 0 0 16px 0;
+    }
+
+    .demo-content {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 16px;
+    }
+
+    .demo-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .demo-specs {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      border-left: 3px solid var(--accent-green);
+    }
+
+    .spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+
+    .spec-table th,
+    .spec-table td {
+      padding: 8px 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 12px;
+    }
+
+    .spec-table th {
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 500;
+    }
+
+    .spec-table td {
+      color: rgba(255, 255, 255, 0.6);
+      font-family: 'Courier New', monospace;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .dev-spec-nav {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+      }
+
+      .dev-spec-nav.open {
+        transform: translateX(0);
+      }
+
+      .dev-spec-main {
+        margin-left: 0;
+        padding: 20px;
+      }
+
+      .nav-toggle {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1001;
+        background: rgba(0, 0, 0, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        padding: 12px;
+        color: white;
+        cursor: pointer;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="dev-spec-nav" id="devSpecNav">
+    <div class="nav-header">
+      <h1 class="nav-title">Components</h1>
+      <p class="nav-subtitle">Dev Specification</p>
+    </div>
+    
+    <div class="nav-menu">
+      <div class="nav-section">
+        <div class="nav-section-title">基礎元件</div>
+        <a href="#" class="nav-item" data-component="add-button">Add Button 新增按鈕</a>
+        <a href="#" class="nav-item active" data-component="button">Button 按鈕</a>
+        <a href="#" class="nav-item" data-component="carousel-arrow">Carousel Arrow 輪播箭頭</a>
+        <a href="#" class="nav-item" data-component="earned-badges">Earned Badges 獲得徽章</a>
+        <a href="#" class="nav-item" data-component="tab">Tab 標籤頁</a>
+        <a href="#" class="nav-item" data-component="task-type">Task Type 任務類型</a>
+      </div>
+      
+      <div class="nav-section">
+        <div class="nav-section-title">複合元件</div>
+        <a href="#" class="nav-item" data-component="accounts-connection-card">Accounts Connection Card 帳戶連接卡片</a>
+
+        <a href="#" class="nav-item" data-component="horizontal-tabs">Horizontal Tabs 水平標籤</a>
+        <a href="#" class="nav-item" data-component="matrix-traits-cell">Matrix Traits Cell 矩陣特徵單元</a>
+        <a href="#" class="nav-item" data-component="task-list">Task List 任務列表</a>
+      </div>
+      
+      <div class="nav-section">
+        <div class="nav-section-title">佈局元件</div>
+        <a href="#" class="nav-item" data-component="company-logo">Company Logo 公司標誌</a>
+        <a href="#" class="nav-item" data-component="twin3-logo">Twin3 Logo 品牌標誌</a>
+
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Navigation Toggle -->
+  <button class="nav-toggle" id="navToggle" style="display: none;">☰</button>
+
+  <!-- Main Content -->
+  <main class="dev-spec-main">
+    <!-- Button Component Section -->
+    <section class="component-section active" id="button-section">
+      <div class="component-header">
+        <h1 class="component-title">Button 按鈕元件 (MCP 精確版本)</h1>
+        <p class="component-description">
+          基於 Figma MCP 數據的像素級精確按鈕元件，支援多種尺寸、類型和狀態變體。所有數值都來自 MCP API 精確提取，禁止猜測。
+        </p>
+        <div class="component-meta">
+          <div class="meta-item">Node ID: <span class="meta-value">67-26368</span></div>
+          <div class="meta-item">CSS Class: <span class="meta-value">._btn</span></div>
+          <div class="meta-item">狀態: <span class="meta-value">✅ MCP 驗證完成</span></div>
+          <div class="meta-item">更新: <span class="meta-value">2025-09-09 (MCP 精確化)</span></div>
+        </div>
+      </div>
+
+      <!-- Size 變體 -->
+      <div class="demo-container">
+        <h2 class="demo-title">📏 Size 變體</h2>
+        <div class="demo-content">
+          <div class="demo-grid">
+            <button class="_btn type-white status-default size-s">Small</button>
+            <button class="_btn type-white status-default size-m">Medium</button>
+          </div>
+        </div>
+        <div class="demo-specs">
+          <strong>MCP 精確規格：</strong><br>
+          • size-s: 28px height, 12px font-size, 6px-12px padding<br>
+          • size-m: 32px height, 16px font-size, 8px-16px padding
+
+          <table class="spec-table">
+            <tr><th>屬性</th><th>Small (size-s)</th><th>Medium (size-m)</th><th>MCP 來源</th></tr>
+            <tr><td>height</td><td>28px</td><td>32px</td><td>absoluteBoundingBox.height</td></tr>
+            <tr><td>font-size</td><td>12px</td><td>16px</td><td>style.fontSize</td></tr>
+            <tr><td>padding</td><td>6px 12px</td><td>8px 16px</td><td>paddingTop/Bottom, paddingLeft/Right</td></tr>
+            <tr><td>border-radius</td><td>8px</td><td>8px</td><td>cornerRadius</td></tr>
+            <tr><td>gap</td><td>6px</td><td>6px</td><td>itemSpacing</td></tr>
+            <tr><td>layout</td><td>row (水平)</td><td>row (水平)</td><td>按鈕內容水平排列</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- Type 變體 -->
+      <div class="demo-container">
+        <h2 class="demo-title">🎨 Type 變體</h2>
+        <div class="demo-content">
+          <div class="demo-grid">
+            <button class="_btn type-white status-default size-s">White</button>
+            <button class="_btn type-grey status-default size-s">Grey</button>
+            <button class="_btn type-stroke status-default size-s">Stroke</button>
+          </div>
+        </div>
+        <div class="demo-specs">
+          <strong>MCP 精確類型規格：</strong><br>
+          • type-white: 白色填充背景 (MCP: fills[0].color)<br>
+          • type-grey: 30% 透明度白色背景 (MCP: fills[0].opacity + color)<br>
+          • type-stroke: 透明背景 + 白色邊框 (MCP: fills empty array)
+
+          <table class="spec-table">
+            <tr><th>Type</th><th>Background</th><th>Border</th><th>Text Color</th><th>MCP 來源</th></tr>
+            <tr><td>white</td><td>rgba(255,255,255,1)</td><td>1px solid rgba(255,255,255,1)</td><td>rgba(0,0,0,1)</td><td>fills[0].color</td></tr>
+            <tr><td>grey</td><td>rgba(255,255,255,0.3)</td><td>1px solid rgba(255,255,255,0.3)</td><td>rgba(255,255,255,1)</td><td>opacity + color</td></tr>
+            <tr><td>stroke</td><td>transparent</td><td>1px solid rgba(255,255,255,1)</td><td>rgba(255,255,255,1)</td><td>fills empty</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- Status 變體 -->
+      <div class="demo-container">
+        <h2 class="demo-title">⚡ Status 變體</h2>
+        <div class="demo-content">
+          <div class="demo-grid">
+            <button class="_btn type-white status-default size-s">Default</button>
+            <button class="_btn type-white status-hover size-s">Hover</button>
+            <button class="_btn type-white status-disabled size-s">
+              Disabled
+              <div class="btn-icon">
+                <img src="../assets/img/icons/Check icon.svg" alt="Check" width="12" height="12">
+              </div>
+            </button>
+          </div>
+        </div>
+        <div class="demo-specs">
+          <strong>MCP 精確狀態規格：</strong><br>
+          • status-default: 預設狀態<br>
+          • status-hover: 滑鼠懸停狀態<br>
+          • status-disabled: 禁用狀態 (MCP 精確顏色)
+
+          <table class="spec-table">
+            <tr><th>Status</th><th>Border Color</th><th>Text Color</th><th>MCP 來源</th></tr>
+            <tr><td>default</td><td>依 Type 變體</td><td>依 Type 變體</td><td>各變體定義</td></tr>
+            <tr><td>hover</td><td>opacity: 0.8</td><td>opacity: 0.8</td><td>視覺效果</td></tr>
+            <tr><td>disabled</td><td>rgba(83,88,98,1)</td><td>rgba(164,167,174,1)</td><td>strokes[0].color, fills[0].color</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- Icon 變體 -->
+      <div class="demo-container">
+        <h2 class="demo-title">🔗 Icon 變體 (只有 White + Disabled 才有 Check icon)</h2>
+        <div class="demo-content">
+          <div class="demo-grid">
+            <!-- 只有這兩個組合才有 Check icon -->
+            <button class="_btn type-white status-disabled size-s">
+              Done (S)
+              <div class="btn-icon">
+                <img src="../assets/img/icons/Check icon.svg" alt="Check" width="12" height="12">
+              </div>
+            </button>
+            <button class="_btn type-white status-disabled size-m">
+              Done (M)
+              <div class="btn-icon">
+                <img src="../assets/img/icons/Check icon.svg" alt="Check" width="16" height="16">
+              </div>
+            </button>
+
+            <!-- 其他組合沒有 icon (用於對比) -->
+            <button class="_btn type-white status-default size-s">
+              Start (無 icon)
+              <div class="btn-icon">
+                <img src="../assets/img/icons/Check icon.svg" alt="Check" width="12" height="12">
+              </div>
+            </button>
+            <button class="_btn type-grey status-disabled size-s">
+              Grey Disabled (無 icon)
+              <div class="btn-icon">
+                <img src="../assets/img/icons/Check icon.svg" alt="Check" width="12" height="12">
+              </div>
+            </button>
+          </div>
+        </div>
+        <div class="demo-specs">
+          <strong>MCP 精確圖標規格：</strong><br>
+          • 使用 assets/img/icons/Check icon.svg<br>
+          • size-s: 12×12px 圖標 (MCP: absoluteBoundingBox)<br>
+          • size-m: 16×16px 圖標 (MCP: 基於 size-s 推算)<br>
+          • Gap: 6px (MCP: itemSpacing)
+
+          <table class="spec-table">
+            <tr><th>Size</th><th>Icon Size</th><th>Gap</th><th>MCP 來源</th></tr>
+            <tr><td>size-s</td><td>12×12px</td><td>6px</td><td>absoluteBoundingBox, itemSpacing</td></tr>
+            <tr><td>size-m</td><td>16×16px</td><td>6px</td><td>推算, itemSpacing</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- 使用範例 -->
+      <div class="demo-container">
+        <h2 class="demo-title">💻 使用範例</h2>
+        <div class="demo-specs">
+          <strong>HTML 結構：</strong><br>
+          &lt;button class="_btn type-white status-default size-s"&gt;按鈕文字&lt;/button&gt;<br><br>
+
+          <strong>帶 Check Icon 的按鈕 (只有 type-white + status-disabled)：</strong><br>
+          &lt;button class="_btn type-white status-disabled size-s"&gt;<br>
+          &nbsp;&nbsp;Done<br>
+          &nbsp;&nbsp;&lt;div class="btn-icon"&gt;<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&lt;img src="../assets/img/icons/Check icon.svg" alt="Check" width="12" height="12"&gt;<br>
+          &nbsp;&nbsp;&lt;/div&gt;<br>
+          &lt;/button&gt;<br><br>
+
+          <strong>CSS 類別組合：</strong><br>
+          • 必需：._btn<br>
+          • 類型：.type-white | .type-grey | .type-stroke<br>
+          • 狀態：.status-default | .status-hover | .status-disabled<br>
+          • 尺寸：.size-s | .size-m<br>
+          • <strong>Check Icon：只有 .type-white.status-disabled 才顯示</strong>
+        </div>
+      </div>
+    </section>
+
+
+
+  <!-- Task Type Component Section -->
+  <section class="component-section" id="task-type-section">
+    <div class="component-header">
+      <h1 class="component-title">Task Type 任務類型</h1>
+      <p class="component-description">
+        基於 MCP 數據 (Node: 160-1583) 的任務類型標籤組件，支援 3 種類型 (Auto, Review, Insight)。使用 Kanit 字體和精確的 MCP 尺寸規格。
+      </p>
+      <div class="component-meta">
+        <div class="meta-item">規格: <span class="meta-value">20px 高度，自適應寬度</span></div>
+        <div class="meta-item">CSS Class: <span class="meta-value">.task-type</span></div>
+        <div class="meta-item">MCP Node: <span class="meta-value">160-1583</span></div>
+        <div class="meta-item">狀態: <span class="meta-value">✅ MCP 驗證完成</span></div>
+      </div>
+    </div>
+
+    <!-- 組件規格 -->
+    <div class="demo-container">
+      <h2 class="demo-title">📐 組件規格</h2>
+      <div class="demo-specs">
+        <strong>MCP 精確規格 (Node: 160-1583)：</strong><br>
+        • 高度：20px ← MCP: absoluteBoundingBox.height<br>
+        • 圓角：4px ← MCP: cornerRadius<br>
+        • Padding：2px 8px ← MCP: paddingTop/Bottom=2px, paddingLeft/Right=8px<br>
+        • 邊框：1px solid (內側對齊) ← MCP: strokeWeight + strokeAlign<br>
+        • 字體：Kanit Light 300 12px/16px ← MCP: style 精確數值<br>
+        • 寬度：自適應內容 (HUG) ← MCP: layoutSizingHorizontal<br><br>
+
+        <strong>3 種類型變體：</strong><br>
+        • 🟢 <strong>auto</strong>: Success/200 綠色 rgba(166,244,197,1) + "Auto" 文字<br>
+        • 🟡 <strong>review</strong>: Warning/200 黃色 rgba(254,223,137,1) + "Review" 文字<br>
+        • 🟣 <strong>insight</strong>: Brand/300 紫色 rgba(214,187,251,1) + "Insight" 文字<br><br>
+
+        <table class="spec-table">
+          <tr><th>屬性</th><th>MCP 數值</th><th>來源</th></tr>
+          <tr><td>height</td><td>20px</td><td>absoluteBoundingBox.height</td></tr>
+          <tr><td>border-radius</td><td>4px</td><td>cornerRadius</td></tr>
+          <tr><td>padding</td><td>2px 8px</td><td>paddingTop/Bottom + paddingLeft/Right</td></tr>
+          <tr><td>border</td><td>1px solid</td><td>strokeWeight + strokeAlign</td></tr>
+          <tr><td>font-family</td><td>Kanit</td><td>style.fontFamily</td></tr>
+          <tr><td>font-weight</td><td>300</td><td>style.fontWeight</td></tr>
+          <tr><td>font-size</td><td>12px</td><td>style.fontSize</td></tr>
+          <tr><td>line-height</td><td>16px</td><td>style.lineHeightPx</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- 所有變體展示 -->
+    <div class="demo-container">
+      <h2 class="demo-title">🎨 所有變體展示</h2>
+      <div class="demo-content">
+        <div class="demo-grid">
+          <!-- Auto Type -->
+          <div style="text-align: center;">
+            <div class="task-type type-auto">Auto</div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 8px;">
+              Auto Type<br>
+              <span style="font-size: 10px;">Success/200</span>
+            </div>
+          </div>
+
+          <!-- Review Type -->
+          <div style="text-align: center;">
+            <div class="task-type type-review">Review</div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 8px;">
+              Review Type<br>
+              <span style="font-size: 10px;">Warning/200</span>
+            </div>
+          </div>
+
+          <!-- Insight Type -->
+          <div style="text-align: center;">
+            <div class="task-type type-insight">Insight</div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 8px;">
+              Insight Type<br>
+              <span style="font-size: 10px;">Brand/300</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>MCP 精確顏色對照：</strong><br>
+        • <strong>Auto (Success/200)</strong>: rgba(166,244,197,1) ← MCP: strokes[0].color + fills[0].color<br>
+        • <strong>Review (Warning/200)</strong>: rgba(254,223,137,1) ← MCP: strokes[0].color + fills[0].color<br>
+        • <strong>Insight (Brand/300)</strong>: rgba(214,187,251,1) ← MCP: strokes[0].color + fills[0].color<br><br>
+
+        <strong>正確的 HTML 結構：</strong><br>
+        &lt;div class="task-type type-auto"&gt;Auto&lt;/div&gt;<br>
+        &lt;div class="task-type type-review"&gt;Review&lt;/div&gt;<br>
+        &lt;div class="task-type type-insight"&gt;Insight&lt;/div&gt;
+      </div>
+    </div>
+
+    <!-- 尺寸對比展示 -->
+    <div class="demo-container">
+      <h2 class="demo-title">📏 尺寸對比 (MCP 精確數據)</h2>
+      <div class="demo-content">
+        <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <div class="task-type type-auto">Auto</div>
+            <div style="font-size: 10px; color: rgba(255,255,255,0.5); margin-top: 4px;">42px 寬</div>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <div class="task-type type-review">Review</div>
+            <div style="font-size: 10px; color: rgba(255,255,255,0.5); margin-top: 4px;">54px 寬</div>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <div class="task-type type-insight">Insight</div>
+            <div style="font-size: 10px; color: rgba(255,255,255,0.5); margin-top: 4px;">52px 寬</div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>MCP 精確寬度數據：</strong><br>
+        • Auto: 42px ← MCP: children[0].absoluteBoundingBox.width<br>
+        • Review: 54px ← MCP: children[1].absoluteBoundingBox.width<br>
+        • Insight: 52px ← MCP: children[2].absoluteBoundingBox.width<br><br>
+
+        <strong>寬度計算公式：</strong><br>
+        實際寬度 = 文字寬度 + padding-left(8px) + padding-right(8px) + border-left(1px) + border-right(1px)
+      </div>
+    </div>
+
+    <!-- 使用範例 -->
+    <div class="demo-container">
+      <h2 class="demo-title">💻 使用範例</h2>
+      <div class="demo-specs">
+        <strong>基於 MCP 數據的完整實現：</strong><br><br>
+
+        <strong>JavaScript 動態生成範例：</strong><br>
+        <code>
+        // 創建 Task Type 標籤<br>
+        const taskType = document.createElement('div');<br>
+        taskType.className = 'task-type type-auto';<br>
+        taskType.textContent = 'Auto';<br><br>
+
+        // 根據任務類型動態設定<br>
+        function createTaskType(type) {<br>
+        &nbsp;&nbsp;const element = document.createElement('div');<br>
+        &nbsp;&nbsp;element.className = `task-type type-${type.toLowerCase()}`;<br>
+        &nbsp;&nbsp;element.textContent = type;<br>
+        &nbsp;&nbsp;return element;<br>
+        }<br><br>
+
+        // 使用範例<br>
+        const autoTag = createTaskType('Auto');<br>
+        const reviewTag = createTaskType('Review');<br>
+        const insightTag = createTaskType('Insight');<br>
+        </code><br><br>
+
+        <strong>支援的所有變體：</strong><br>
+        • .task-type.type-auto<br>
+        • .task-type.type-review<br>
+        • .task-type.type-insight<br><br>
+
+        <strong>Kanit 字體載入：</strong><br>
+        確保在 HTML head 中載入 Kanit 字體：<br>
+        &lt;link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300&display=swap" rel="stylesheet"&gt;
+      </div>
+    </div>
+  </section>
+
+  <!-- Task List Cell Component Section -->
+  <section class="component-section" id="task-list-section">
+    <div class="component-header">
+      <h1 class="component-title">Task List Cell 任務列表單元</h1>
+      <p class="component-description">
+        基於 MCP 68-40832 精確數據的任務列表單元組件，支援 2 種類型 × 3 種狀態 × 2 種斷點的完整變體系統。整合 company-logo、_btn 等共用組件，實現像素級精確的 Glassmorphism 效果。
+      </p>
+      <div class="component-meta">
+        <div class="meta-item">Node ID: <span class="meta-value">68-40832</span></div>
+        <div class="meta-item">CSS Class: <span class="meta-value">.task-list-cell</span></div>
+        <div class="meta-item">狀態: <span class="meta-value">✅ MCP 精確實現</span></div>
+      </div>
+    </div>
+
+    <!-- MCP 變體系統 -->
+    <div class="demo-container">
+      <h2 class="demo-title">🎯 MCP 變體系統 (2×3×2 = 12 變體)</h2>
+      <div class="demo-content">
+        <!-- Contribution Desktop Default (有 Logo) -->
+        <div class="task-list-cell type-contribution status-default breakpoint-desktop">
+          <div class="task-container">
+            <div class="company-logo white">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+              </svg>
+            </div>
+            <div class="task-description">
+              <div class="task-description-text">Connect your GitHub account to start earning contribution points and unlock exclusive rewards</div>
+            </div>
+          </div>
+          <button class="_btn type-white status-default size-s">Start</button>
+        </div>
+
+        <!-- Reward Desktop Default (無 Logo，有 Badges) -->
+        <div class="task-list-cell type-reward status-default breakpoint-desktop" style="margin-top: 16px;">
+          <div class="task-container">
+            <div class="task-type type-auto">Auto</div>
+            <div class="task-description">
+              <div class="task-description-text">Complete 5 social media connections to unlock rewards</div>
+              <div class="task-badges">
+                <div class="earned-badge type-coin status-default">
+                  <svg class="badge-icon" viewBox="0 0 24 24">
+                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                  </svg>
+                  <span>0.005</span>
+                </div>
+                <div class="earned-badge type-participants status-default">
+                  <svg class="badge-icon" viewBox="0 0 24 24">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+                  <span>30/1,000</span>
+                </div>
+                <div class="earned-badge type-date status-default">
+                  <svg class="badge-icon" viewBox="0 0 24 24">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                  <span>12-31-2024</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="_btn type-white status-default size-s">Start</button>
+        </div>
+
+        <!-- Completed State (有 Logo) -->
+        <div class="task-list-cell type-contribution status-completed breakpoint-desktop" style="margin-top: 16px;">
+          <div class="task-container">
+            <div class="company-logo white">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+              </svg>
+            </div>
+            <div class="task-description">
+              <div class="task-description-text">Successfully connected GitHub account</div>
+            </div>
+          </div>
+          <button class="_btn type-white status-disabled size-s">
+            Done
+            <div class="btn-icon">
+              <img src="../assets/img/icons/Check icon.svg" alt="Check" width="12" height="12">
+            </div>
+          </button>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>MCP 精確尺寸：</strong><br>
+        • Contribution Desktop: 559×88px (MCP: absoluteBoundingBox)<br>
+        • Reward Desktop: 559×112px (MCP: absoluteBoundingBox)<br>
+        • Contribution Mobile: 300×164px (MCP: absoluteBoundingBox)<br>
+        • Reward Mobile: 300×182px (MCP: absoluteBoundingBox)<br><br>
+
+        <table class="spec-table">
+          <tr><th>Type</th><th>Desktop 尺寸</th><th>Mobile 尺寸</th><th>MCP 來源</th></tr>
+          <tr><td>contribution</td><td>559×88px</td><td>300×164px</td><td>Node: 68:40831</td></tr>
+          <tr><td>reward</td><td>559×112px</td><td>300×182px</td><td>Node: 160:2914</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- 響應式斷點 -->
+    <div class="demo-container">
+      <h2 class="demo-title">📱 響應式斷點系統</h2>
+      <div class="demo-content">
+        <!-- Desktop Layout -->
+        <div style="margin-bottom: 24px;">
+          <h3 style="color: rgba(255,255,255,0.8); font-size: 14px; margin-bottom: 12px;">Desktop (559px 寬度)</h3>
+          <div class="task-list-cell type-contribution status-default breakpoint-desktop">
+            <div class="task-container">
+              <div class="company-logo white">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+                </svg>
+              </div>
+              <div class="task-description">
+                <div class="task-description-text">Desktop horizontal layout with company logo and description</div>
+              </div>
+            </div>
+            <button class="_btn type-white status-default size-s">Start</button>
+          </div>
+        </div>
+
+        <!-- Mobile Layout -->
+        <div>
+          <h3 style="color: rgba(255,255,255,0.8); font-size: 14px; margin-bottom: 12px;">Mobile (300px 寬度)</h3>
+          <div class="task-list-cell type-reward status-default breakpoint-mobile">
+            <div class="task-container">
+              <div class="task-type type-review">Review</div>
+              <div class="task-description">
+                <div class="task-description-text">Mobile vertical layout with full-width button</div>
+                <div class="task-badges">
+                  <div class="earned-badge type-coin status-default">
+                    <svg class="badge-icon" viewBox="0 0 24 24">
+                      <line x1="12" y1="1" x2="12" y2="23"></line>
+                      <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                    <span>0.005</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="_btn type-white status-default size-s">Start</button>
+          </div>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>MCP 佈局數據：</strong><br>
+        • Desktop: layoutMode: HORIZONTAL (MCP: children[0].layoutMode)<br>
+        • Mobile: layoutMode: VERTICAL (MCP: children[3].layoutMode)<br>
+        • Gap: 16px (MCP: itemSpacing)<br>
+        • Padding: 16px (MCP: paddingLeft/Right/Top/Bottom)<br><br>
+
+        <table class="spec-table">
+          <tr><th>Breakpoint</th><th>Layout Mode</th><th>寬度</th><th>按鈕行為</th></tr>
+          <tr><td>desktop (>1024px)</td><td>flex-direction: row</td><td>559px</td><td>固定寬度</td></tr>
+          <tr><td>tablet (769-1024px)</td><td>flex-direction: row</td><td>100% (max 500px)</td><td>固定寬度</td></tr>
+          <tr><td>mobile (≤768px)</td><td>flex-direction: column</td><td>100% (max 300px)</td><td>100% 寬度</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- 響應式測試 -->
+    <div class="demo-container">
+      <h2 class="demo-title">📐 響應式測試</h2>
+      <div class="demo-content">
+        <p style="color: rgba(255,255,255,0.8); margin-bottom: 16px;">
+          <strong>📱 響應式測試說明：</strong><br>
+          • 調整瀏覽器寬度查看響應式效果<br>
+          • <strong>Desktop (>1024px)</strong>: 水平佈局，559px 固定寬度<br>
+          • <strong>Tablet (769-1024px)</strong>: 水平佈局，100% 寬度 (最大 500px)<br>
+          • <strong>Mobile (≤768px)</strong>: 垂直佈局，100% 寬度 (最大 300px)，按鈕填滿寬度
+        </p>
+
+        <!-- 響應式 Contribution 任務 - Desktop 預設 -->
+        <div class="task-list-cell type-contribution status-default breakpoint-desktop" style="margin-bottom: 16px;">
+          <div class="task-container">
+            <div class="company-logo white">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.30 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+              </svg>
+            </div>
+            <div class="task-description">
+              <div class="task-description-text">響應式 Contribution 任務：在大螢幕水平排列，小螢幕垂直排列</div>
+            </div>
+          </div>
+          <button class="_btn type-white status-default size-s">Start</button>
+        </div>
+
+        <!-- 響應式 Reward 任務 - Desktop 預設 -->
+        <div class="task-list-cell type-reward status-default breakpoint-desktop">
+          <div class="task-container">
+            <div class="task-type type-auto">Auto</div>
+            <div class="task-description">
+              <div class="task-description-text">響應式 Reward 任務：自動適應螢幕寬度</div>
+              <div class="task-badges">
+                <div class="earned-badge type-coin status-default">
+                  <svg class="badge-icon" viewBox="0 0 24 24">
+                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                  </svg>
+                  <span>0.005</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="_btn type-white status-default size-s">Start</button>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>響應式斷點：</strong><br>
+        • <strong>Desktop (>1024px)</strong>: 559px 固定寬度，水平佈局<br>
+        • <strong>Tablet (769-1024px)</strong>: 100% 寬度 (最大 500px)，水平佈局<br>
+        • <strong>Mobile (≤768px)</strong>: 100% 寬度 (最大 300px)，垂直佈局<br><br>
+
+        <strong>CSS Media Queries：</strong><br>
+        @media (max-width: 768px) { /* Mobile */ }<br>
+        @media (max-width: 1024px) and (min-width: 769px) { /* Tablet */ }<br>
+        @media (min-width: 1200px) { /* Large Desktop */ }
+      </div>
+    </div>
+
+    <!-- Glassmorphism 效果 -->
+    <div class="demo-container">
+      <h2 class="demo-title">✨ MCP Glassmorphism 效果</h2>
+      <div class="demo-content">
+        <!-- Default State -->
+        <div class="task-list-cell type-contribution status-default breakpoint-desktop">
+          <div class="task-container">
+            <div class="company-logo white">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+              </svg>
+            </div>
+            <div class="task-description">
+              <div class="task-description-text">Default: 5% 背景透明度 + 10% 邊框透明度</div>
+            </div>
+          </div>
+          <button class="_btn type-white status-default size-s">Default</button>
+        </div>
+
+        <!-- Hover State -->
+        <div class="task-list-cell type-contribution status-hover breakpoint-desktop" style="margin-top: 16px;">
+          <div class="task-container">
+            <div class="company-logo white">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+              </svg>
+            </div>
+            <div class="task-description">
+              <div class="task-description-text">Hover: 10% 背景透明度 + 10% 邊框透明度</div>
+            </div>
+          </div>
+          <button class="_btn type-white status-hover size-s">Hover</button>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>MCP 精確透明度：</strong><br>
+        • Default 背景: rgba(255,255,255,0.05) (MCP: fills[0].opacity = 5%)<br>
+        • Hover 背景: rgba(255,255,255,0.1) (MCP: fills[0].opacity = 10%)<br>
+        • 邊框: rgba(255,255,255,0.1) (MCP: strokes[0].opacity = 10%)<br>
+        • 背景模糊: blur(8px) (MCP: effects[0].radius)<br><br>
+
+        <strong>CSS 實現：</strong><br>
+        background: rgba(255, 255, 255, 0.05); /* MCP: fills[0].opacity */<br>
+        border: 1px solid rgba(255, 255, 255, 0.1); /* MCP: strokes[0].opacity */<br>
+        backdrop-filter: blur(8px); /* MCP: effects[0].radius */
+      </div>
+    </div>
+
+    <!-- 組件整合 -->
+    <div class="demo-container">
+      <h2 class="demo-title">🔧 共用組件整合</h2>
+      <div class="demo-specs">
+        <strong>整合的共用組件：</strong><br>
+        • <strong>company-logo</strong>: 32×32px 公司標誌，Color=White (只在 Contribution 類型顯示)<br>
+        • <strong>_btn</strong>: Size=s, Type=White 按鈕 (MCP: _btn 實例)<br>
+        • <strong>task-type</strong>: Auto/Review/Insight 標籤 (只在 Reward 類型顯示)<br>
+        • <strong>earned-badges</strong>: 獲得徽章顯示 (只在 Reward 類型顯示)<br><br>
+
+        <strong>Contribution 類型 HTML 結構：</strong><br>
+        &lt;div class="task-list-cell type-contribution status-default breakpoint-desktop"&gt;<br>
+        &nbsp;&nbsp;&lt;div class="task-container"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="company-logo company-github color-white"&gt;&lt;/div&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="task-description"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="task-description-text"&gt;任務描述 (最多2行)&lt;/div&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+        &nbsp;&nbsp;&lt;/div&gt;<br>
+        &nbsp;&nbsp;&lt;button class="_btn type-white status-default size-s"&gt;Start&lt;/button&gt;<br>
+        &lt;/div&gt;<br><br>
+
+        <strong>Reward 類型 HTML 結構：</strong><br>
+        &lt;div class="task-list-cell type-reward status-default breakpoint-desktop"&gt;<br>
+        &nbsp;&nbsp;&lt;div class="task-container"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="task-type type-auto"&gt;Auto&lt;/div&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="task-description"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="task-description-text"&gt;任務描述 (最多1行)&lt;/div&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="task-badges"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="earned-badge type-coin"&gt;...&lt;/div&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+        &nbsp;&nbsp;&lt;/div&gt;<br>
+        &nbsp;&nbsp;&lt;button class="_btn type-white status-default size-s"&gt;Start&lt;/button&gt;<br>
+        &lt;/div&gt;<br><br>
+
+        <strong>JavaScript 動態創建：</strong><br>
+        function createTaskCell(config) {<br>
+        &nbsp;&nbsp;return `&lt;div class="task-list-cell ${config.type} ${config.status} ${config.breakpoint}"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="task-container"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="company-logo"&gt;${config.logo}&lt;/div&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="task-description"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${config.hasType ? `&lt;div class="task-type ${config.taskType}"&gt;${config.taskTypeText}&lt;/div&gt;` : ''}<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="task-description-text"&gt;${config.description}&lt;/div&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;button class="_btn ${config.buttonClass}"&gt;${config.buttonText}&lt;/button&gt;<br>
+        &nbsp;&nbsp;&lt;/div&gt;`;<br>
+        }
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- Earned Badges Component Section -->
+  <section class="component-section" id="earned-badges-section">
+    <div class="component-header">
+      <h1 class="component-title">Earned Badges 獲得徽章</h1>
+      <p class="component-description">
+        基於 MCP 數據 (Node: 68-42262) 的獲得徽章組件，支援 4 種類型 (coin, date, participants, rank) 和 2 種狀態 (default, overdued)。使用 Inter 字體和精確的 MCP 尺寸規格。
+      </p>
+      <div class="component-meta">
+        <div class="meta-item">規格: <span class="meta-value">22px 高度，自適應寬度</span></div>
+        <div class="meta-item">CSS Class: <span class="meta-value">.earned-badge</span></div>
+        <div class="meta-item">MCP Node: <span class="meta-value">68-42262</span></div>
+        <div class="meta-item">狀態: <span class="meta-value">✅ MCP 驗證完成</span></div>
+      </div>
+    </div>
+
+    <!-- 組件規格 -->
+    <div class="demo-container">
+      <h2 class="demo-title">📐 組件規格</h2>
+      <div class="demo-specs">
+        <strong>MCP 精確規格 (Node: 68-42262)：</strong><br>
+        • 高度：22px ← MCP: absoluteBoundingBox.height<br>
+        • 圓角：16px ← MCP: cornerRadius<br>
+        • Padding：2px 8px 2px 6px ← MCP: paddingTop/Right/Bottom/Left<br>
+        • 間距：4px ← MCP: itemSpacing<br>
+        • 邊框：1px solid ← MCP: strokeWeight + strokeAlign<br>
+        • 字體：Inter Medium 500 12px/18px ← MCP: style 精確數值<br>
+        • Icon：12×12px, stroke-width: 1.5px ← 統一 icon 粗細規範<br><br>
+
+        <strong>4 種類型變體：</strong><br>
+        • 💰 <strong>coin</strong>: dollar-sign icon + 價格文字 (約 64px 寬)<br>
+        • 📅 <strong>date</strong>: calendar icon + 日期文字 (約 105px 寬)<br>
+        • 👥 <strong>participants</strong>: users icon + 參與者數量 (約 82-98px 寬)<br>
+        • 🏆 <strong>rank</strong>: 排名文字 + external-link icon (約 115px 寬)<br><br>
+
+        <strong>2 種狀態變體：</strong><br>
+        • <strong>default</strong>: rgba(255,255,255,0.2) 邊框, rgba(255,255,255,1) 文字<br>
+        • <strong>date overdued</strong>: rgba(249,112,102,1) 邊框和文字<br>
+        • <strong>participants overdued</strong>: rgba(255,255,255,0.2) 邊框, rgba(164,167,174,1) 文字 (Gray/400)<br><br>
+
+        <table class="spec-table">
+          <tr><th>屬性</th><th>MCP 數值</th><th>來源</th></tr>
+          <tr><td>height</td><td>22px</td><td>absoluteBoundingBox.height</td></tr>
+          <tr><td>border-radius</td><td>16px</td><td>cornerRadius</td></tr>
+          <tr><td>padding</td><td>2px 8px 2px 6px</td><td>paddingTop/Right/Bottom/Left</td></tr>
+          <tr><td>gap</td><td>4px</td><td>itemSpacing</td></tr>
+          <tr><td>font-size</td><td>12px</td><td>style.fontSize</td></tr>
+          <tr><td>line-height</td><td>18px</td><td>style.lineHeightPx</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Default 狀態展示 -->
+    <div class="demo-container">
+      <h2 class="demo-title">✨ Default 狀態 (Status=Default)</h2>
+      <div class="demo-content">
+        <div class="demo-grid">
+          <!-- Coin Badge -->
+          <div style="text-align: center;">
+            <div class="earned-badge type-coin">
+              <svg class="badge-icon" viewBox="0 0 24 24">
+                <line x1="12" y1="1" x2="12" y2="23"></line>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+              </svg>
+              <span>0.005</span>
+            </div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 8px;">Coin Badge</div>
+          </div>
+
+          <!-- Date Badge -->
+          <div style="text-align: center;">
+            <div class="earned-badge type-date">
+              <svg class="badge-icon" viewBox="0 0 24 24">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              <span>12-25-2024</span>
+            </div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 8px;">Date Badge</div>
+          </div>
+
+          <!-- Participants Badge -->
+          <div style="text-align: center;">
+            <div class="earned-badge type-participants">
+              <svg class="badge-icon" viewBox="0 0 24 24">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+              <span>30/1,000</span>
+            </div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 8px;">Participants Badge</div>
+          </div>
+
+          <!-- Rank Badge -->
+          <div style="text-align: center;">
+            <div class="earned-badge type-rank">
+              <div class="badge-text">
+                <span>Rank:</span>
+                <span>000/000</span>
+              </div>
+              <svg class="badge-icon" viewBox="0 0 24 24">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15,3 21,3 21,9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+            </div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 8px;">Rank Badge</div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>MCP 精確顏色 (Default 狀態)：</strong><br>
+        • 邊框：rgba(255,255,255,0.2) ← MCP: strokes[0].opacity + color<br>
+        • 文字：rgba(255,255,255,1) ← MCP: fills[0].color<br>
+        • Icon：rgba(255,255,255,1) ← MCP: strokes[0].color<br><br>
+
+        <strong>正確的 HTML 結構：</strong><br>
+        &lt;div class="earned-badge type-coin"&gt;<br>
+        &nbsp;&nbsp;&lt;svg class="badge-icon" viewBox="0 0 24 24"&gt;...&lt;/svg&gt;<br>
+        &nbsp;&nbsp;&lt;span&gt;0.005&lt;/span&gt;<br>
+        &lt;/div&gt;
+      </div>
+    </div>
+
+    <!-- Overdued 狀態展示 -->
+    <div class="demo-container">
+      <h2 class="demo-title">🚨 Overdued 狀態 (Status=overdued)</h2>
+      <div class="demo-content">
+        <div class="demo-grid">
+          <!-- Date Badge Overdued -->
+          <div style="text-align: center;">
+            <div class="earned-badge type-date status-overdued">
+              <svg class="badge-icon" viewBox="0 0 24 24">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              <span>11-30-2024</span>
+            </div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 8px;">Overdued Date</div>
+          </div>
+
+          <!-- Participants Badge Overdued -->
+          <div style="text-align: center;">
+            <div class="earned-badge type-participants status-overdued">
+              <svg class="badge-icon" viewBox="0 0 24 24">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+              <span>30/1,000</span>
+              <div class="check-icon"></div>
+            </div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 8px;">Participants Overdued (Gray/400)</div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>MCP 精確顏色 (Overdued 狀態)：</strong><br>
+        <strong>Date Overdued:</strong><br>
+        • 邊框：rgba(249,112,102,1) ← MCP: strokes[0].color (date overdued)<br>
+        • 文字：rgba(249,112,102,1) ← MCP: fills[0].color (date overdued)<br>
+        • Icon：rgba(249,112,102,1) ← MCP: strokes[0].color (date overdued)<br><br>
+
+        <strong>Participants Overdued (Node: 95-1697):</strong><br>
+        • 邊框：rgba(255,255,255,0.2) ← MCP: strokes[0].opacity + color (仍是白色)<br>
+        • 文字：rgba(164,167,174,1) ← MCP: fills[0].color (Gray/400)<br>
+        • Check Icon：使用 assets/img/Check icon.svg + CSS filter 調整為 Gray/400 色調<br><br>
+
+        <strong>HTML 結構範例：</strong><br>
+        &lt;div class="earned-badge type-participants status-overdued"&gt;<br>
+        &nbsp;&nbsp;&lt;svg class="badge-icon" viewBox="0 0 24 24"&gt;...&lt;/svg&gt;<br>
+        &nbsp;&nbsp;&lt;span&gt;30/1,000&lt;/span&gt;<br>
+        &nbsp;&nbsp;&lt;div class="check-icon"&gt;&lt;/div&gt; &lt;!-- 使用 assets 中的 SVG --&gt;<br>
+        &lt;/div&gt;
+      </div>
+    </div>
+
+    <!-- 使用範例 -->
+    <div class="demo-container">
+      <h2 class="demo-title">💻 使用範例</h2>
+      <div class="demo-specs">
+        <strong>基於 MCP 數據的完整變體支援：</strong><br><br>
+
+        <strong>JavaScript 動態生成範例：</strong><br>
+        <code>
+        // 創建 Coin Badge<br>
+        const coinBadge = document.createElement('div');<br>
+        coinBadge.className = 'earned-badge type-coin';<br>
+        coinBadge.innerHTML = `<br>
+        &nbsp;&nbsp;&lt;svg class="badge-icon" viewBox="0 0 24 24"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;line x1="12" y1="1" x2="12" y2="23"&gt;&lt;/line&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"&gt;&lt;/path&gt;<br>
+        &nbsp;&nbsp;&lt;/svg&gt;<br>
+        &nbsp;&nbsp;&lt;span&gt;${priceValue}&lt;/span&gt;<br>
+        `;<br><br>
+
+        // 添加 Overdued 狀態<br>
+        if (isOverdued) {<br>
+        &nbsp;&nbsp;coinBadge.classList.add('status-overdued');<br>
+        }<br>
+        </code><br><br>
+
+        <strong>支援的所有變體組合：</strong><br>
+        • .earned-badge.type-coin<br>
+        • .earned-badge.type-date<br>
+        • .earned-badge.type-date.status-overdued<br>
+        • .earned-badge.type-participants<br>
+        • .earned-badge.type-participants.status-overdued<br>
+        • .earned-badge.type-rank<br>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tab Component Section -->
+  <section class="component-section" id="tab-section">
+    <div class="component-header">
+      <h1 class="component-title">Tab 標籤頁元件</h1>
+      <p class="component-description">
+        用於內容分組和導航的標籤頁元件，支援活動和非活動狀態。基於 Figma 設計的響應式標籤頁系統。
+      </p>
+      <div class="component-meta">
+        <div class="meta-item">Node ID: <span class="meta-value">67-26370</span></div>
+        <div class="meta-item">CSS Class: <span class="meta-value">.tab</span></div>
+        <div class="meta-item">狀態: <span class="meta-value">✅ 完成</span></div>
+      </div>
+    </div>
+
+    <!-- 基本標籤頁 -->
+    <div class="demo-container">
+      <h2 class="demo-title">📑 基本標籤頁</h2>
+      <div class="demo-content">
+        <div class="tab-container" id="basic-tabs">
+          <div class="tab-nav">
+            <button class="tab-item active" data-tab="tab1">Overview</button>
+            <button class="tab-item" data-tab="tab2">Tasks</button>
+            <button class="tab-item" data-tab="tab3">Rewards</button>
+          </div>
+          <div class="tab-content">
+            <div class="tab-panel active" id="tab1">
+              <p style="color: rgba(255,255,255,0.8); padding: 20px;">Overview 內容區域</p>
+            </div>
+            <div class="tab-panel" id="tab2">
+              <p style="color: rgba(255,255,255,0.8); padding: 20px;">Tasks 內容區域</p>
+            </div>
+            <div class="tab-panel" id="tab3">
+              <p style="color: rgba(255,255,255,0.8); padding: 20px;">Rewards 內容區域</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>HTML 結構：</strong><br>
+        &lt;div class="tab-container" id="my-tabs"&gt;<br>
+        &nbsp;&nbsp;&lt;div class="tab-nav"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;button class="tab-item active" data-tab="tab1"&gt;Tab 1&lt;/button&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;button class="tab-item" data-tab="tab2"&gt;Tab 2&lt;/button&gt;<br>
+        &nbsp;&nbsp;&lt;/div&gt;<br>
+        &nbsp;&nbsp;&lt;div class="tab-content"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="tab-panel active" id="tab1"&gt;內容 1&lt;/div&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="tab-panel" id="tab2"&gt;內容 2&lt;/div&gt;<br>
+        &nbsp;&nbsp;&lt;/div&gt;<br>
+        &lt;/div&gt;
+      </div>
+    </div>
+
+    <!-- 帶圖標的標籤頁 -->
+    <div class="demo-container">
+      <h2 class="demo-title">🔗 帶圖標標籤頁</h2>
+      <div class="demo-content">
+        <div class="tab-container" id="icon-tabs">
+          <div class="tab-nav">
+            <button class="tab-item active has-icon" data-tab="dashboard">
+              <span class="tab-icon">📊</span>
+              Dashboard
+            </button>
+            <button class="tab-item has-icon" data-tab="profile">
+              <span class="tab-icon">👤</span>
+              Profile
+            </button>
+            <button class="tab-item has-icon" data-tab="settings">
+              <span class="tab-icon">⚙️</span>
+              Settings
+            </button>
+          </div>
+          <div class="tab-content">
+            <div class="tab-panel active" id="dashboard">
+              <p style="color: rgba(255,255,255,0.8); padding: 20px;">📊 Dashboard 內容</p>
+            </div>
+            <div class="tab-panel" id="profile">
+              <p style="color: rgba(255,255,255,0.8); padding: 20px;">👤 Profile 內容</p>
+            </div>
+            <div class="tab-panel" id="settings">
+              <p style="color: rgba(255,255,255,0.8); padding: 20px;">⚙️ Settings 內容</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>帶圖標結構：</strong><br>
+        &lt;button class="tab-item has-icon" data-tab="dashboard"&gt;<br>
+        &nbsp;&nbsp;&lt;span class="tab-icon"&gt;📊&lt;/span&gt;<br>
+        &nbsp;&nbsp;Dashboard<br>
+        &lt;/button&gt;<br><br>
+
+        <strong>CSS 類別：</strong><br>
+        • .tab-container: 標籤頁容器<br>
+        • .tab-nav: 導航區域<br>
+        • .tab-item: 單個標籤<br>
+        • .tab-item.active: 活動標籤<br>
+        • .has-icon: 帶圖標的標籤
+      </div>
+    </div>
+
+    <!-- JavaScript 功能 -->
+    <div class="demo-container">
+      <h2 class="demo-title">⚡ JavaScript 功能</h2>
+      <div class="demo-specs">
+        <strong>基本初始化：</strong><br>
+        // 初始化標籤頁功能<br>
+        function initTabs(containerId) {<br>
+        &nbsp;&nbsp;const container = document.getElementById(containerId);<br>
+        &nbsp;&nbsp;const tabItems = container.querySelectorAll('.tab-item');<br>
+        &nbsp;&nbsp;const tabPanels = container.querySelectorAll('.tab-panel');<br><br>
+
+        &nbsp;&nbsp;tabItems.forEach(item => {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;item.addEventListener('click', () => {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// 移除所有 active 類別<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tabItems.forEach(tab => tab.classList.remove('active'));<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tabPanels.forEach(panel => panel.classList.remove('active'));<br><br>
+
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// 添加 active 到當前標籤<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item.classList.add('active');<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const targetPanel = document.getElementById(item.dataset.tab);<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;targetPanel.classList.add('active');<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+        &nbsp;&nbsp;});<br>
+        }<br><br>
+
+        <strong>使用方式：</strong><br>
+        // 初始化指定的標籤頁<br>
+        initTabs('my-tabs');<br><br>
+
+        // 程式化切換標籤<br>
+        function switchTab(containerId, tabId) {<br>
+        &nbsp;&nbsp;const container = document.getElementById(containerId);<br>
+        &nbsp;&nbsp;const targetTab = container.querySelector(`[data-tab="${tabId}"]`);<br>
+        &nbsp;&nbsp;targetTab.click();<br>
+        }
+      </div>
+    </div>
+
+    <!-- 樣式規格 -->
+    <div class="demo-container">
+      <h2 class="demo-title">🎨 樣式規格</h2>
+      <div class="demo-specs">
+        <table class="spec-table">
+          <tr><th>元素</th><th>樣式屬性</th><th>數值</th></tr>
+          <tr><td>.tab-nav</td><td>border-bottom</td><td>1px solid rgba(255,255,255,0.1)</td></tr>
+          <tr><td>.tab-item</td><td>padding</td><td>12px 24px</td></tr>
+          <tr><td>.tab-item</td><td>font-size</td><td>14px</td></tr>
+          <tr><td>.tab-item.active</td><td>border-bottom</td><td>2px solid rgba(166,244,197,1)</td></tr>
+          <tr><td>.tab-panel</td><td>padding</td><td>24px</td></tr>
+          <tr><td>.tab-icon</td><td>margin-right</td><td>8px</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Task Type Component Section -->
+  <section class="component-section" id="task-type-section">
+    <div class="component-header">
+      <h1 class="component-title">Task Type 任務類型元件</h1>
+      <p class="component-description">
+        用於標識任務類型的小型標籤元件，支援 Auto、Review、Insight 三種類型。基於 Figma MCP 數據的精確色彩系統。
+      </p>
+      <div class="component-meta">
+        <div class="meta-item">Node ID: <span class="meta-value">160-1583</span></div>
+        <div class="meta-item">CSS Class: <span class="meta-value">.task-type</span></div>
+        <div class="meta-item">狀態: <span class="meta-value">✅ 完成</span></div>
+      </div>
+    </div>
+
+    <!-- 基本類型 -->
+    <div class="demo-container">
+      <h2 class="demo-title">🏷️ 任務類型標籤</h2>
+      <div class="demo-content">
+        <div class="demo-grid">
+          <div class="task-type type-auto" id="task-type-auto">Auto</div>
+          <div class="task-type type-review" id="task-type-review">Review</div>
+          <div class="task-type type-insight" id="task-type-insight">Insight</div>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>HTML 結構：</strong><br>
+        &lt;div class="task-type type-auto" id="task-type-1"&gt;Auto&lt;/div&gt;<br><br>
+
+        <strong>CSS 類別：</strong><br>
+        • .task-type: 基本任務類型樣式<br>
+        • .type-auto: 自動任務 (綠色)<br>
+        • .type-review: 審核任務 (黃色)<br>
+        • .type-insight: 洞察任務 (紫色)
+
+        <table class="spec-table">
+          <tr><th>Type</th><th>Background Color</th><th>Text Color</th><th>用途</th></tr>
+          <tr><td>auto</td><td>rgba(166,244,197,1)</td><td>rgba(0,0,0,1)</td><td>自動執行任務</td></tr>
+          <tr><td>review</td><td>rgba(254,223,137,1)</td><td>rgba(0,0,0,1)</td><td>需要審核的任務</td></tr>
+          <tr><td>insight</td><td>rgba(214,187,251,1)</td><td>rgba(0,0,0,1)</td><td>數據洞察任務</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- 尺寸變體 -->
+    <div class="demo-container">
+      <h2 class="demo-title">📏 尺寸變體</h2>
+      <div class="demo-content">
+        <div class="demo-grid">
+          <div class="task-type type-auto size-sm">Small Auto</div>
+          <div class="task-type type-review size-md">Medium Review</div>
+          <div class="task-type type-insight size-lg">Large Insight</div>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>尺寸規格：</strong><br>
+        • size-sm: 小尺寸 (padding: 2px 6px, font-size: 10px)<br>
+        • size-md: 中尺寸 (padding: 4px 8px, font-size: 12px) - 預設<br>
+        • size-lg: 大尺寸 (padding: 6px 12px, font-size: 14px)
+
+        <table class="spec-table">
+          <tr><th>Size</th><th>Padding</th><th>Font Size</th><th>Border Radius</th></tr>
+          <tr><td>sm</td><td>2px 6px</td><td>10px</td><td>8px</td></tr>
+          <tr><td>md</td><td>4px 8px</td><td>12px</td><td>10px</td></tr>
+          <tr><td>lg</td><td>6px 12px</td><td>14px</td><td>12px</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- 互動功能 -->
+    <div class="demo-container">
+      <h2 class="demo-title">⚡ 互動功能</h2>
+      <div class="demo-content">
+        <div class="demo-grid">
+          <div class="task-type type-auto clickable" id="interactive-auto">Click Me - Auto</div>
+          <div class="task-type type-review clickable" id="interactive-review">Click Me - Review</div>
+          <div class="task-type type-insight clickable" id="interactive-insight">Click Me - Insight</div>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>互動樣式：</strong><br>
+        • .clickable: 添加點擊效果和 cursor: pointer<br>
+        • hover 效果：輕微的透明度變化<br>
+        • active 效果：按下時的縮放效果<br><br>
+
+        <strong>JavaScript 功能：</strong><br>
+        // 切換任務類型<br>
+        function switchTaskType(elementId, newType) {<br>
+        &nbsp;&nbsp;const element = document.getElementById(elementId);<br>
+        &nbsp;&nbsp;element.className = element.className.replace(/type-\w+/, `type-${newType}`);<br>
+        &nbsp;&nbsp;element.textContent = newType.charAt(0).toUpperCase() + newType.slice(1);<br>
+        }<br><br>
+
+        // 動態創建任務類型標籤<br>
+        function createTaskType(type, text, size = 'md') {<br>
+        &nbsp;&nbsp;return `&lt;div class="task-type type-${type} size-${size}"&gt;${text}&lt;/div&gt;`;<br>
+        }
+      </div>
+    </div>
+
+    <!-- 使用場景 -->
+    <div class="demo-container">
+      <h2 class="demo-title">💼 使用場景</h2>
+      <div class="demo-content">
+        <div style="background: rgba(255,255,255,0.02); padding: 20px; border-radius: 12px;">
+          <div style="margin-bottom: 16px;">
+            <div class="task-type type-auto" style="margin-right: 8px; display: inline-block;">Auto</div>
+            <span style="color: rgba(255,255,255,0.8);">Connect your GitHub account</span>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div class="task-type type-review" style="margin-right: 8px; display: inline-block;">Review</div>
+            <span style="color: rgba(255,255,255,0.8);">Verify your profile information</span>
+          </div>
+          <div>
+            <div class="task-type type-insight" style="margin-right: 8px; display: inline-block;">Insight</div>
+            <span style="color: rgba(255,255,255,0.8);">Analyze your contribution patterns</span>
+          </div>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>實際應用：</strong><br>
+        • 在任務列表中標識任務類型<br>
+        • 在儀表板中分類顯示不同類型的任務<br>
+        • 在篩選器中作為分類標籤<br>
+        • 在統計圖表中作為圖例標識
+      </div>
+    </div>
+  </section>
+
+  <!-- Company Logo Component Section -->
+  <section class="component-section" id="company-logo-section">
+    <div class="component-header">
+      <h1 class="component-title">Company Logo 公司標誌元件</h1>
+      <p class="component-description">
+        基於用戶精確規格的第三方平台 Logo 組件，支援兩種變體：Black (白底黑圖標) 和 White (透明底白邊框白圖標)。
+      </p>
+      <div class="component-meta">
+        <div class="meta-item">規格: <span class="meta-value">32×32px 容器，24×23.408px 圖標</span></div>
+        <div class="meta-item">CSS Class: <span class="meta-value">.company-logo</span></div>
+        <div class="meta-item">狀態: <span class="meta-value">✅ 完成</span></div>
+      </div>
+    </div>
+
+    <!-- 組件規格 -->
+    <div class="demo-container">
+      <h2 class="demo-title">📐 組件規格</h2>
+      <div class="demo-specs">
+        <strong>容器規格：</strong><br>
+        • 尺寸: 32×32px<br>
+        • 圓角: 4px<br>
+        • 比例: 1:1 (aspect-ratio: 1/1)<br>
+        • 佈局: Flexbox (居中對齊)<br><br>
+
+        <strong>圖標規格：</strong><br>
+        • 尺寸: 24×23.408px<br>
+        • 格式: SVG<br>
+        • 來源: 基於 PDF 表格中的第三方平台列表
+
+        <table class="spec-table">
+          <tr><th>變體</th><th>背景</th><th>邊框</th><th>圖標顏色</th></tr>
+          <tr><td>black</td><td>var(--White, #FFF)</td><td>無</td><td>var(--Black, #000)</td></tr>
+          <tr><td>white</td><td>透明</td><td>1px solid rgba(255,255,255,0.10)</td><td>var(--White, #FFF)</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Black 變體展示 -->
+    <div class="demo-container">
+      <h2 class="demo-title">⚫ Black 變體 (白底黑圖標)</h2>
+      <div class="demo-content">
+        <div class="demo-grid">
+          <!-- GitHub -->
+          <div style="text-align: center;">
+            <div class="company-logo black">
+              <svg width="24" height="23.408" viewBox="0 0 24 24" fill="none">
+                <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+              </svg>
+            </div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 8px;">GitHub</div>
+          </div>
+
+          <!-- LinkedIn -->
+          <div style="text-align: center;">
+            <div class="company-logo black">
+              <svg width="24" height="23.408" viewBox="0 0 20 20" fill="none">
+                <path d="M18.5195 0H1.47656C0.660156 0 0 0.644531 0 1.44141V18.5547C0 19.3516 0.660156 20 1.47656 20H18.5195C19.3359 20 20 19.3516 20 18.5586V1.44141C20 0.644531 19.3359 0 18.5195 0ZM5.93359 17.043H2.96484V7.49609H5.93359V17.043ZM4.44922 6.19531C3.49609 6.19531 2.72656 5.42578 2.72656 4.47656C2.72656 3.52734 3.49609 2.75781 4.44922 2.75781C5.39844 2.75781 6.16797 3.52734 6.16797 4.47656C6.16797 5.42188 5.39844 6.19531 4.44922 6.19531ZM17.043 17.043H14.0781V12.4023C14.0781 11.2969 14.0586 9.87109 12.5352 9.87109C10.9922 9.87109 10.7578 11.0781 10.7578 12.3203V17.043H7.79297V7.49609H10.6406V8.80078H10.6797C11.0742 8.05078 12.043 7.25781 13.4844 7.25781C16.4883 7.25781 17.043 9.23438 17.043 11.8047V17.043Z"/>
+              </svg>
+            </div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 8px;">LinkedIn</div>
+          </div>
+
+          <!-- X (Twitter) -->
+          <div style="text-align: center;">
+            <div class="company-logo black">
+              <svg width="24" height="23.408" viewBox="0 0 24 24" fill="none">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+            </div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 8px;">X (Twitter)</div>
+          </div>
+
+          <!-- Discord -->
+          <div style="text-align: center;">
+            <div class="company-logo black">
+              <svg width="24" height="23.408" viewBox="0 0 24 24" fill="none">
+                <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419-.0002 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1568 2.4189Z"/>
+              </svg>
+            </div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 8px;">Discord</div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>Black 變體 CSS：</strong><br>
+        .company-logo.black {<br>
+        &nbsp;&nbsp;display: flex;<br>
+        &nbsp;&nbsp;width: 32px;<br>
+        &nbsp;&nbsp;height: 32px;<br>
+        &nbsp;&nbsp;justify-content: center;<br>
+        &nbsp;&nbsp;align-items: center;<br>
+        &nbsp;&nbsp;flex-shrink: 0;<br>
+        &nbsp;&nbsp;aspect-ratio: 1/1;<br>
+        &nbsp;&nbsp;border-radius: 4px;<br>
+        &nbsp;&nbsp;background: var(--White, #FFF);<br>
+        }<br><br>
+
+        .company-logo.black svg {<br>
+        &nbsp;&nbsp;fill: var(--Black, #000);<br>
+        &nbsp;&nbsp;opacity: var(--opacity-100, 1);<br>
+        }
+      </div>
+    </div>
+
+    <!-- White 變體展示 -->
+    <div class="demo-container">
+      <h2 class="demo-title">⚪ White 變體 (透明底白邊框白圖標)</h2>
+      <div class="demo-content">
+        <div class="demo-grid">
+          <!-- GitHub -->
+          <div style="text-align: center;">
+            <div class="company-logo white">
+              <svg width="24" height="23.408" viewBox="0 0 24 24" fill="none">
+                <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+              </svg>
+            </div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 8px;">GitHub</div>
+          </div>
+
+          <!-- LinkedIn -->
+          <div style="text-align: center;">
+            <div class="company-logo white">
+              <svg width="24" height="23.408" viewBox="0 0 20 20" fill="none">
+                <path d="M18.5195 0H1.47656C0.660156 0 0 0.644531 0 1.44141V18.5547C0 19.3516 0.660156 20 1.47656 20H18.5195C19.3359 20 20 19.3516 20 18.5586V1.44141C20 0.644531 19.3359 0 18.5195 0ZM5.93359 17.043H2.96484V7.49609H5.93359V17.043ZM4.44922 6.19531C3.49609 6.19531 2.72656 5.42578 2.72656 4.47656C2.72656 3.52734 3.49609 2.75781 4.44922 2.75781C5.39844 2.75781 6.16797 3.52734 6.16797 4.47656C6.16797 5.42188 5.39844 6.19531 4.44922 6.19531ZM17.043 17.043H14.0781V12.4023C14.0781 11.2969 14.0586 9.87109 12.5352 9.87109C10.9922 9.87109 10.7578 11.0781 10.7578 12.3203V17.043H7.79297V7.49609H10.6406V8.80078H10.6797C11.0742 8.05078 12.043 7.25781 13.4844 7.25781C16.4883 7.25781 17.043 9.23438 17.043 11.8047V17.043Z"/>
+              </svg>
+            </div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 8px;">LinkedIn</div>
+          </div>
+
+          <!-- X (Twitter) -->
+          <div style="text-align: center;">
+            <div class="company-logo white">
+              <svg width="24" height="23.408" viewBox="0 0 24 24" fill="none">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+            </div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 8px;">X (Twitter)</div>
+          </div>
+
+          <!-- Discord -->
+          <div style="text-align: center;">
+            <div class="company-logo white">
+              <svg width="24" height="23.408" viewBox="0 0 24 24" fill="none">
+                <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419-.0002 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1568 2.4189Z"/>
+              </svg>
+            </div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 8px;">Discord</div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>White 變體 CSS：</strong><br>
+        .company-logo.white {<br>
+        &nbsp;&nbsp;display: flex;<br>
+        &nbsp;&nbsp;width: 32px;<br>
+        &nbsp;&nbsp;height: 32px;<br>
+        &nbsp;&nbsp;justify-content: center;<br>
+        &nbsp;&nbsp;align-items: center;<br>
+        &nbsp;&nbsp;flex-shrink: 0;<br>
+        &nbsp;&nbsp;aspect-ratio: 1/1;<br>
+        &nbsp;&nbsp;border-radius: 4px;<br>
+        &nbsp;&nbsp;border: 1px solid var(--color-white-10, rgba(255, 255, 255, 0.10));<br>
+        }<br><br>
+
+        .company-logo.white svg {<br>
+        &nbsp;&nbsp;fill: var(--White, #FFF);<br>
+        &nbsp;&nbsp;opacity: var(--opacity-100, 1);<br>
+        }
+      </div>
+    </div>
+
+    <!-- 顏色變體 -->
+    <div class="demo-container">
+      <h2 class="demo-title">� 顏色變體</h2>
+      <div class="demo-content">
+        <div style="display: flex; gap: 40px; align-items: center;">
+          <!-- 深色背景展示 -->
+          <div style="background: rgba(0,0,0,0.5); padding: 20px; border-radius: 12px;">
+            <p style="color: rgba(255,255,255,0.8); margin-bottom: 16px; font-size: 12px;">深色背景</p>
+            <div class="demo-grid">
+              <div class="company-logo color-white" id="logo-github-white">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                </svg>
+              </div>
+              <div class="company-logo color-white">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- 淺色背景展示 -->
+          <div style="background: rgba(255,255,255,0.9); padding: 20px; border-radius: 12px;">
+            <p style="color: rgba(0,0,0,0.8); margin-bottom: 16px; font-size: 12px;">淺色背景</p>
+            <div class="demo-grid">
+              <div class="company-logo color-black" id="logo-github-black">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                </svg>
+              </div>
+              <div class="company-logo color-black">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>HTML 結構：</strong><br>
+        &lt;div class="company-logo color-white" id="logo-service"&gt;<br>
+        &nbsp;&nbsp;&lt;svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;!-- SVG Path --&gt;<br>
+        &nbsp;&nbsp;&lt;/svg&gt;<br>
+        &lt;/div&gt;<br><br>
+
+        <strong>顏色變體：</strong><br>
+        • color-white: 白色標誌 (用於深色背景)<br>
+        • color-black: 黑色標誌 (用於淺色背景)<br>
+        • 使用 fill="currentColor" 實現顏色控制
+      </div>
+    </div>
+
+    <!-- 尺寸變體 -->
+    <div class="demo-container">
+      <h2 class="demo-title">📏 尺寸變體</h2>
+      <div class="demo-content">
+        <div class="demo-grid">
+          <div class="company-logo color-white size-sm">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+          </div>
+          <div class="company-logo color-white size-md">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+          </div>
+          <div class="company-logo color-white size-lg">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>尺寸規格：</strong><br>
+        • size-sm: 小尺寸 (16×16px)<br>
+        • size-md: 中尺寸 (24×24px) - 預設<br>
+        • size-lg: 大尺寸 (32×32px)
+
+        <table class="spec-table">
+          <tr><th>Size</th><th>Dimensions</th><th>使用場景</th></tr>
+          <tr><td>sm</td><td>16×16px</td><td>小型卡片、列表項目</td></tr>
+          <tr><td>md</td><td>24×24px</td><td>標準卡片、按鈕</td></tr>
+          <tr><td>lg</td><td>32×32px</td><td>大型卡片、標題區域</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- 支援的服務 -->
+    <div class="demo-container">
+      <h2 class="demo-title">🌐 支援的服務標誌</h2>
+      <div class="demo-content">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 20px;">
+          <div style="text-align: center;">
+            <div class="company-logo color-white" style="margin-bottom: 8px;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+              </svg>
+            </div>
+            <div style="color: rgba(255,255,255,0.8); font-size: 12px;">GitHub</div>
+          </div>
+
+          <div style="text-align: center;">
+            <div class="company-logo color-white" style="margin-bottom: 8px;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M14.176 0H16.9361L10.9061 6.89193L18 16.2703H12.4455L8.0951 10.5824L3.11722 16.2703H0.355444L6.80516 8.8986L0 0H5.69544L9.62785 5.19899L14.176 0ZM13.2073 14.6182H14.7367L4.8644 1.56529H3.22319L13.2073 14.6182Z"/>
+              </svg>
+            </div>
+            <div style="color: rgba(255,255,255,0.8); font-size: 12px;">Twitter/X</div>
+          </div>
+
+          <div style="text-align: center;">
+            <div class="company-logo color-white" style="margin-bottom: 8px;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+              </svg>
+            </div>
+            <div style="color: rgba(255,255,255,0.8); font-size: 12px;">Google</div>
+          </div>
+
+          <div style="text-align: center;">
+            <div class="company-logo color-white" style="margin-bottom: 8px;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+              </svg>
+            </div>
+            <div style="color: rgba(255,255,255,0.8); font-size: 12px;">Discord</div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>JavaScript 功能：</strong><br>
+        // 動態切換標誌顏色<br>
+        function switchLogoColor(logoId, color) {<br>
+        &nbsp;&nbsp;const logo = document.getElementById(logoId);<br>
+        &nbsp;&nbsp;logo.className = logo.className.replace(/color-\w+/, `color-${color}`);<br>
+        }<br><br>
+
+        // 創建標誌元件<br>
+        function createLogo(service, color, size = 'md') {<br>
+        &nbsp;&nbsp;const svgContent = getServiceSVG(service);<br>
+        &nbsp;&nbsp;return `&lt;div class="company-logo color-${color} size-${size}"&gt;${svgContent}&lt;/div&gt;`;<br>
+        }<br><br>
+
+        <strong>使用場景：</strong><br>
+        • 連接卡片中的服務標誌<br>
+        • 任務列表中的平台標識<br>
+        • 用戶資料中的關聯帳戶<br>
+        • 統計圖表中的數據來源標識
+      </div>
+    </div>
+  </section>
+
+  <!-- Twin3 Logo Component Section -->
+  <section class="component-section" id="twin3-logo-section">
+    <div class="component-header">
+      <h1 class="component-title">Twin3 Logo 品牌標誌元件</h1>
+      <p class="component-description">
+        Twin3 品牌標誌元件，支援 Light 和 Dark 兩種模式。基於 Figma MCP 數據精確實現，確保品牌一致性。
+      </p>
+      <div class="component-meta">
+        <div class="meta-item">Light Mode Node: <span class="meta-value">68-41017</span></div>
+        <div class="meta-item">Dark Mode Node: <span class="meta-value">68-41016</span></div>
+        <div class="meta-item">CSS Class: <span class="meta-value">.twin3-logo</span></div>
+        <div class="meta-item">檔案: <span class="meta-value">assets/img/twin3-logo/</span></div>
+        <div class="meta-item">狀態: <span class="meta-value">✅ 完成</span></div>
+      </div>
+    </div>
+
+    <div class="demo-container">
+      <h2 class="demo-title">🌓 Mode 變體 (Light & Dark)</h2>
+      <div class="demo-content">
+        <div class="demo-grid" style="align-items: center; gap: 32px;">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+            <div style="background: rgba(255,255,255,0.9); padding: 16px; border-radius: 8px;">
+              <div class="twin3-logo size-lg mode-light">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g clip-path="url(#clip0_light_demo)" transform="scale(1.33)">
+                    <path d="M12.0005 0.341827C18.4394 0.341827 23.6581 5.56134 23.6581 12C23.6581 18.4387 18.4384 23.6582 12.0005 23.6582" fill="white"/>
+                    <path d="M12.0005 23.6582C5.56157 23.6582 0.342896 18.4387 0.342896 12C0.342896 5.56134 5.56157 0.341827 12.0005 0.341827" fill="#141314"/>
+                    <path d="M12.0005 24C5.38378 24 0 18.6165 0 12C0 5.38354 5.38378 0 12.0005 0C18.6173 0 24 5.38354 24 12C24 18.6165 18.6173 24 12.0005 24ZM12.0005 0.685775C5.76055 0.685775 0.685805 5.76135 0.685805 12C0.685805 18.2386 5.76161 23.3142 12.0005 23.3142C18.2395 23.3142 23.3153 18.2386 23.3153 12C23.3153 5.76135 18.2395 0.685775 12.0005 0.685775Z" fill="#141314"/>
+                    <path d="M12.0006 11.0052C12.5499 11.0052 12.9955 11.4507 12.9955 12C12.9955 12.5493 12.5499 12.9948 12.0006 12.9948" fill="#141314"/>
+                    <path d="M12.0006 12.9948C11.4513 12.9948 11.0057 12.5493 11.0057 12C11.0057 11.4507 11.4513 11.0052 12.0006 11.0052" fill="white"/>
+                    <path d="M17.7928 10.7205H14.3807V13.2795H17.7928V10.7205Z" fill="#141314"/>
+                    <path d="M9.61924 10.7205H6.20715V13.2795H9.61924V10.7205Z" fill="white"/>
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_light_demo">
+                      <rect width="24" height="24" fill="white"/>
+                    </clipPath>
+                  </defs>
+                </svg>
+              </div>
+            </div>
+            <span style="font-size: 14px; color: var(--text-primary);">Light Mode</span>
+            <span style="font-size: 12px; color: var(--text-secondary);">Node: 68-41017</span>
+          </div>
+
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+            <div style="background: rgba(0,0,0,0.8); padding: 16px; border-radius: 8px;">
+              <div class="twin3-logo size-lg mode-dark">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g clip-path="url(#clip0_dark_demo)" transform="scale(1.33)">
+                    <path d="M12.0006 0.365112C18.4258 0.365112 23.635 5.57404 23.635 11.9989C23.635 18.4238 18.4258 23.6328 12.0006 23.6328" fill="white"/>
+                    <path d="M12.0006 23.6338C5.57537 23.6338 0.366211 18.4249 0.366211 12C0.366211 5.5751 5.57431 0.365112 12.0006 0.365112" fill="#141314"/>
+                    <path d="M12.0005 11.0063C12.5487 11.0063 12.9932 11.4507 12.9932 11.9989C12.9932 12.5471 12.5487 12.9916 12.0005 12.9916" fill="#141314"/>
+                    <path d="M12.0005 12.9927C11.4523 12.9927 11.0078 12.5482 11.0078 12C11.0078 11.4518 11.4523 11.0073 12.0005 11.0073" fill="white"/>
+                    <path d="M17.7823 10.7226H14.3766V13.2763H17.7823V10.7226Z" fill="#141314"/>
+                    <path d="M9.62461 10.7226H6.21887V13.2763H9.62461V10.7226Z" fill="white"/>
+                    <path d="M12.0005 24C5.38378 24 0 18.6165 0 12C0 5.38354 5.38378 0 12.0005 0C18.6173 0 24 5.38354 24 12C24 18.6165 18.6173 24 12.0005 24ZM12.0005 0.685775C5.76055 0.685775 0.685805 5.76135 0.685805 12C0.685805 18.2386 5.76161 23.3142 12.0005 23.3142C18.2394 23.3142 23.3153 18.2386 23.3153 12C23.3153 5.76135 18.2394 0.685775 12.0005 0.685775Z" fill="white"/>
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_dark_demo">
+                      <rect width="24" height="24" fill="white"/>
+                    </clipPath>
+                  </defs>
+                </svg>
+              </div>
+            </div>
+            <span style="font-size: 14px; color: var(--text-primary);">Dark Mode</span>
+            <span style="font-size: 12px; color: var(--text-secondary);">Node: 68-41016</span>
+          </div>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>模式規格：</strong><br>
+        • mode-light: 淺色背景版本，適用於白色或淺色背景<br>
+        • mode-dark: 深色背景版本，適用於黑色或深色背景<br>
+        • 基於 Figma MCP 精確數據，確保品牌一致性
+      </div>
+    </div>
+
+    <div class="demo-container">
+      <h2 class="demo-title">📏 Size 變體</h2>
+      <div class="demo-content">
+        <div class="demo-grid" style="align-items: center; gap: 24px;">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+            <div class="twin3-logo size-sm mode-dark">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_sm)">
+                  <path d="M12.0006 0.365112C18.4258 0.365112 23.635 5.57404 23.635 11.9989C23.635 18.4238 18.4258 23.6328 12.0006 23.6328" fill="white"/>
+                  <path d="M12.0006 23.6338C5.57537 23.6338 0.366211 18.4249 0.366211 12C0.366211 5.5751 5.57431 0.365112 12.0006 0.365112" fill="#141314"/>
+                  <path d="M12.0005 11.0063C12.5487 11.0063 12.9932 11.4507 12.9932 11.9989C12.9932 12.5471 12.5487 12.9916 12.0005 12.9916" fill="#141314"/>
+                  <path d="M12.0005 12.9927C11.4523 12.9927 11.0078 12.5482 11.0078 12C11.0078 11.4518 11.4523 11.0073 12.0005 11.0073" fill="white"/>
+                  <path d="M17.7823 10.7226H14.3766V13.2763H17.7823V10.7226Z" fill="#141314"/>
+                  <path d="M9.62461 10.7226H6.21887V13.2763H9.62461V10.7226Z" fill="white"/>
+                  <path d="M12.0005 24C5.38378 24 0 18.6165 0 12C0 5.38354 5.38378 0 12.0005 0C18.6173 0 24 5.38354 24 12C24 18.6165 18.6173 24 12.0005 24ZM12.0005 0.685775C5.76055 0.685775 0.685805 5.76135 0.685805 12C0.685805 18.2386 5.76161 23.3142 12.0005 23.3142C18.2394 23.3142 23.3153 18.2386 23.3153 12C23.3153 5.76135 18.2394 0.685775 12.0005 0.685775Z" fill="white"/>
+                </g>
+                <defs>
+                  <clipPath id="clip0_sm">
+                    <rect width="24" height="24" fill="white"/>
+                  </clipPath>
+                </defs>
+              </svg>
+            </div>
+            <span style="font-size: 12px; color: var(--text-secondary);">Small (16px)</span>
+          </div>
+
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+            <div class="twin3-logo size-md mode-dark">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_md)">
+                  <path d="M12.0006 0.365112C18.4258 0.365112 23.635 5.57404 23.635 11.9989C23.635 18.4238 18.4258 23.6328 12.0006 23.6328" fill="white"/>
+                  <path d="M12.0006 23.6338C5.57537 23.6338 0.366211 18.4249 0.366211 12C0.366211 5.5751 5.57431 0.365112 12.0006 0.365112" fill="#141314"/>
+                  <path d="M12.0005 11.0063C12.5487 11.0063 12.9932 11.4507 12.9932 11.9989C12.9932 12.5471 12.5487 12.9916 12.0005 12.9916" fill="#141314"/>
+                  <path d="M12.0005 12.9927C11.4523 12.9927 11.0078 12.5482 11.0078 12C11.0078 11.4518 11.4523 11.0073 12.0005 11.0073" fill="white"/>
+                  <path d="M17.7823 10.7226H14.3766V13.2763H17.7823V10.7226Z" fill="#141314"/>
+                  <path d="M9.62461 10.7226H6.21887V13.2763H9.62461V10.7226Z" fill="white"/>
+                  <path d="M12.0005 24C5.38378 24 0 18.6165 0 12C0 5.38354 5.38378 0 12.0005 0C18.6173 0 24 5.38354 24 12C24 18.6165 18.6173 24 12.0005 24ZM12.0005 0.685775C5.76055 0.685775 0.685805 5.76135 0.685805 12C0.685805 18.2386 5.76161 23.3142 12.0005 23.3142C18.2394 23.3142 23.3153 18.2386 23.3153 12C23.3153 5.76135 18.2394 0.685775 12.0005 0.685775Z" fill="white"/>
+                </g>
+                <defs>
+                  <clipPath id="clip0_md">
+                    <rect width="24" height="24" fill="white"/>
+                  </clipPath>
+                </defs>
+              </svg>
+            </div>
+            <span style="font-size: 12px; color: var(--text-secondary);">Medium (24px)</span>
+          </div>
+
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+            <div class="twin3-logo size-lg mode-dark">
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_lg)" transform="scale(1.33)">
+                  <path d="M12.0006 0.365112C18.4258 0.365112 23.635 5.57404 23.635 11.9989C23.635 18.4238 18.4258 23.6328 12.0006 23.6328" fill="white"/>
+                  <path d="M12.0006 23.6338C5.57537 23.6338 0.366211 18.4249 0.366211 12C0.366211 5.5751 5.57431 0.365112 12.0006 0.365112" fill="#141314"/>
+                  <path d="M12.0005 11.0063C12.5487 11.0063 12.9932 11.4507 12.9932 11.9989C12.9932 12.5471 12.5487 12.9916 12.0005 12.9916" fill="#141314"/>
+                  <path d="M12.0005 12.9927C11.4523 12.9927 11.0078 12.5482 11.0078 12C11.0078 11.4518 11.4523 11.0073 12.0005 11.0073" fill="white"/>
+                  <path d="M17.7823 10.7226H14.3766V13.2763H17.7823V10.7226Z" fill="#141314"/>
+                  <path d="M9.62461 10.7226H6.21887V13.2763H9.62461V10.7226Z" fill="white"/>
+                  <path d="M12.0005 24C5.38378 24 0 18.6165 0 12C0 5.38354 5.38378 0 12.0005 0C18.6173 0 24 5.38354 24 12C24 18.6165 18.6173 24 12.0005 24ZM12.0005 0.685775C5.76055 0.685775 0.685805 5.76135 0.685805 12C0.685805 18.2386 5.76161 23.3142 12.0005 23.3142C18.2394 23.3142 23.3153 18.2386 23.3153 12C23.3153 5.76135 18.2394 0.685775 12.0005 0.685775Z" fill="white"/>
+                </g>
+                <defs>
+                  <clipPath id="clip0_lg">
+                    <rect width="24" height="24" fill="white"/>
+                  </clipPath>
+                </defs>
+              </svg>
+            </div>
+            <span style="font-size: 12px; color: var(--text-secondary);">Large (32px)</span>
+          </div>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>尺寸規格：</strong><br>
+        • size-sm: 16×16px - 小型圖標使用<br>
+        • size-md: 24×24px - 標準圖標使用 (原始 SVG 尺寸)<br>
+        • size-lg: 32×32px - 大型圖標使用<br>
+        • size-xl: 48×48px - 特大圖標使用<br>
+        • size-2xl: 64×64px - 超大圖標使用
+      </div>
+    </div>
+
+    <div class="demo-container">
+      <h2 class="demo-title">💻 使用範例</h2>
+      <div class="demo-specs">
+        <strong>HTML 結構：</strong><br>
+        &lt;div class="twin3-logo size-lg mode-light"&gt;<br>
+        &nbsp;&nbsp;&lt;svg&gt;...&lt;/svg&gt;<br>
+        &lt;/div&gt;<br><br>
+
+        <strong>可點擊的標誌：</strong><br>
+        &lt;div class="twin3-logo size-lg mode-dark clickable" onclick="goToHomepage()"&gt;<br>
+        &nbsp;&nbsp;&lt;svg&gt;...&lt;/svg&gt;<br>
+        &lt;/div&gt;<br><br>
+
+        <strong>SVG 檔案位置：</strong><br>
+        • Light Mode: assets/img/twin3-logo/mode=light.svg<br>
+        • Dark Mode: assets/img/twin3-logo/mode=dark.svg<br><br>
+
+        <strong>CSS 類別組合：</strong><br>
+        • 必需：.twin3-logo<br>
+        • 尺寸：.size-sm | .size-md | .size-lg | .size-xl | .size-2xl<br>
+        • 模式：.mode-light | .mode-dark<br>
+        • 功能：.clickable (可選，添加 hover 效果)<br><br>
+
+        <strong>Node ID 對應：</strong><br>
+        • Light Mode: 68-41017 (mode=light.svg)<br>
+        • Dark Mode: 68-41016 (mode=dark.svg)
+      </div>
+    </div>
+  </section>
+
+  <!-- Accounts Connection Card Component Section -->
+  <section class="component-section" id="accounts-connection-card-section">
+    <div class="component-header">
+      <h1 class="component-title">Accounts Connection Card 帳戶連接卡片</h1>
+      <p class="component-description">
+        基於 MCP 數據 (Node: 67-26383) 的響應式複合元件，整合了 company-logo、文字標題和 _btn 按鈕。採用玻璃擬態效果設計，支援連接/未連接狀態切換。使用 fill container 設計，在頁面中自動適應容器寬度。
+      </p>
+      <div class="component-meta">
+        <div class="meta-item">規格: <span class="meta-value">RWD Fill Container (180-256×108px)</span></div>
+        <div class="meta-item">CSS Class: <span class="meta-value">.accounts-connection-card</span></div>
+        <div class="meta-item">MCP Node: <span class="meta-value">67-26383</span></div>
+        <div class="meta-item">狀態: <span class="meta-value">✅ MCP 驗證完成</span></div>
+      </div>
+    </div>
+
+    <!-- 組件規格 -->
+    <div class="demo-container">
+      <h2 class="demo-title">📐 複合元件規格</h2>
+      <div class="demo-specs">
+        <strong>複合元件組成 (基於 MCP Node: 67-26383)：</strong><br>
+        • 🏢 <strong>company-logo</strong>: 32×32px 公司標誌 (共用元件)<br>
+        • 📝 <strong>heading</strong>: Kanit 300 16px/22.4px 標題文字<br>
+        • 🔘 <strong>_btn</strong>: type-white size-s 操作按鈕 (共用元件)<br>
+        • 🎨 <strong>玻璃擬態容器</strong>: 180-256×108px 響應式卡片<br><br>
+
+        <strong>RWD Fill Container 規格：</strong><br>
+        • width: 100% (fill container) + min-width: 180px + max-width: 256px<br>
+        • height: 108px (固定高度，基於 MCP 精確數據)<br>
+        • padding: 16px 全方向 (MCP: paddingLeft/Right/Top/Bottom)<br>
+        • gap: 16px 垂直間距 (MCP: itemSpacing)<br>
+        • container gap: 12px 水平間距 (MCP: children[0].itemSpacing)<br><br>
+
+        <strong>玻璃擬態效果 (MCP 精確數值)：</strong><br>
+        • 背景: rgba(255,255,255,0.05) ← MCP: fills[0].opacity + color<br>
+        • 邊框: rgba(255,255,255,0.1) ← MCP: strokes[0].opacity + color<br>
+        • 模糊: backdrop-filter blur(8px) ← MCP: effects[0].radius<br>
+        • 圓角: 12px ← MCP: cornerRadius<br>
+        • 懸停: 背景透明度增加到 0.1 ← MCP: Hover 狀態<br><br>
+
+        <table class="spec-table">
+          <tr><th>元件</th><th>規格</th><th>MCP 來源</th></tr>
+          <tr><td>company-logo</td><td>32×32px, 圓角 4px</td><td>children[0].children[0]</td></tr>
+          <tr><td>heading</td><td>Kanit 300 16px/22.4px</td><td>children[0].children[1].style</td></tr>
+          <tr><td>_btn</td><td>type-white size-s, 填滿寬度</td><td>children[1].componentProperties</td></tr>
+          <tr><td>container</td><td>180-256×108px, gap 16px</td><td>absoluteBoundingBox + itemSpacing</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- 未連接狀態展示 -->
+    <div class="demo-container">
+      <h2 class="demo-title">🔗 未連接狀態 (Connected=No, Hover=No) - RWD Fill Container 展示</h2>
+      <div class="demo-content">
+        <!-- RWD 展示：不同容器寬度下的效果 -->
+        <div style="margin-bottom: 24px;">
+          <h3 style="color: rgba(255,255,255,0.8); font-size: 14px; margin-bottom: 12px;">📱 窄容器 (200px) - 接近最小寬度</h3>
+          <div style="width: 200px; margin: 0 auto;">
+            <div class="accounts-connection-card">
+              <div class="container">
+                <div class="company-logo black">
+                  <svg width="24" height="23.408" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+                  </svg>
+                </div>
+                <div class="heading">GitHub</div>
+              </div>
+              <button class="_btn type-white status-default size-s">Connect</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 24px;">
+          <h3 style="color: rgba(255,255,255,0.8); font-size: 14px; margin-bottom: 12px;">💻 中等容器 (240px) - 標準寬度</h3>
+          <div style="width: 240px; margin: 0 auto;">
+            <div class="accounts-connection-card">
+              <div class="container">
+                <div class="company-logo black">
+                  <svg width="24" height="23.408" viewBox="0 0 20 20" fill="none">
+                    <path d="M18.5195 0H1.47656C0.660156 0 0 0.644531 0 1.44141V18.5547C0 19.3516 0.660156 20 1.47656 20H18.5195C19.3359 20 20 19.3516 20 18.5586V1.44141C20 0.644531 19.3359 0 18.5195 0ZM5.93359 17.043H2.96484V7.49609H5.93359V17.043ZM4.44922 6.19531C3.49609 6.19531 2.72656 5.42578 2.72656 4.47656C2.72656 3.52734 3.49609 2.75781 4.44922 2.75781C5.39844 2.75781 6.16797 3.52734 6.16797 4.47656C6.16797 5.42188 5.39844 6.19531 4.44922 6.19531ZM17.043 17.043H14.0781V12.4023C14.0781 11.2969 14.0586 9.87109 12.5352 9.87109C10.9922 9.87109 10.7578 11.0781 10.7578 12.3203V17.043H7.79297V7.49609H10.6406V8.80078H10.6797C11.0742 8.05078 12.043 7.25781 13.4844 7.25781C16.4883 7.25781 17.043 9.23438 17.043 11.8047V17.043Z"/>
+                  </svg>
+                </div>
+                <div class="heading">LinkedIn</div>
+              </div>
+              <button class="_btn type-white status-default size-s">Connect</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 24px;">
+          <h3 style="color: rgba(255,255,255,0.8); font-size: 14px; margin-bottom: 12px;">🖥️ 寬容器 (300px) - 達到最大寬度限制</h3>
+          <div style="width: 300px; margin: 0 auto;">
+            <div class="accounts-connection-card">
+              <div class="container">
+                <div class="company-logo black">
+                  <svg width="24" height="23.408" viewBox="0 0 24 24" fill="none">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  </svg>
+                </div>
+                <div class="heading">X (Twitter)</div>
+              </div>
+              <button class="_btn type-white status-default size-s">Connect</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grid 佈局展示 -->
+        <div>
+          <h3 style="color: rgba(255,255,255,0.8); font-size: 14px; margin-bottom: 12px;">📊 Grid 佈局中的 Fill Container 效果</h3>
+          <div class="demo-grid">
+            <div class="accounts-connection-card">
+              <div class="container">
+                <div class="company-logo black">
+                  <svg width="24" height="23.408" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+                  </svg>
+                </div>
+                <div class="heading">GitHub</div>
+              </div>
+              <button class="_btn type-white status-default size-s">Connect</button>
+            </div>
+            <div class="accounts-connection-card">
+              <div class="container">
+                <div class="company-logo black">
+                  <svg width="24" height="23.408" viewBox="0 0 20 20" fill="none">
+                    <path d="M18.5195 0H1.47656C0.660156 0 0 0.644531 0 1.44141V18.5547C0 19.3516 0.660156 20 1.47656 20H18.5195C19.3359 20 20 19.3516 20 18.5586V1.44141C20 0.644531 19.3359 0 18.5195 0ZM5.93359 17.043H2.96484V7.49609H5.93359V17.043ZM4.44922 6.19531C3.49609 6.19531 2.72656 5.42578 2.72656 4.47656C2.72656 3.52734 3.49609 2.75781 4.44922 2.75781C5.39844 2.75781 6.16797 3.52734 6.16797 4.47656C6.16797 5.42188 5.39844 6.19531 4.44922 6.19531ZM17.043 17.043H14.0781V12.4023C14.0781 11.2969 14.0586 9.87109 12.5352 9.87109C10.9922 9.87109 10.7578 11.0781 10.7578 12.3203V17.043H7.79297V7.49609H10.6406V8.80078H10.6797C11.0742 8.05078 12.043 7.25781 13.4844 7.25781C16.4883 7.25781 17.043 9.23438 17.043 11.8047V17.043Z"/>
+                  </svg>
+                </div>
+                <div class="heading">LinkedIn</div>
+              </div>
+              <button class="_btn type-white status-default size-s">Connect</button>
+            </div>
+            <div class="accounts-connection-card">
+              <div class="container">
+                <div class="company-logo black">
+                  <svg width="24" height="23.408" viewBox="0 0 24 24" fill="none">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  </svg>
+                </div>
+                <div class="heading">X (Twitter)</div>
+              </div>
+              <button class="_btn type-white status-default size-s">Connect</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>MCP 精確規格 + RWD 響應式設計 (Node: 67-26383)：</strong><br>
+        • 響應式寬度：width: 100% (fill container) ← RWD 需求<br>
+        • 設計基準尺寸：180×108px ← MCP: absoluteBoundingBox<br>
+        • 最小/最大寬度：180px/256px ← MCP: minWidth/maxWidth<br>
+        • 固定高度：108px ← MCP: absoluteBoundingBox.height<br>
+        • Padding：16px 全方向 ← MCP: paddingLeft/Right/Top/Bottom<br>
+        • 垂直間距：16px ← MCP: itemSpacing<br>
+        • Container gap: 12px ← MCP: children[0].itemSpacing<br>
+        • 圓角：12px ← MCP: cornerRadius<br>
+        • 背景：rgba(255,255,255,0.05) ← MCP: fills[0].opacity + color<br>
+        • 邊框：rgba(255,255,255,0.1) ← MCP: strokes[0].opacity + color<br>
+        • 背景模糊：blur(8px) ← MCP: effects[0].radius<br>
+        • 文字：Kanit 300 16px/22.4px ← MCP: style 精確數值<br>
+        • 使用共用 ._btn 組件：type-white status-default size-s<br><br>
+
+        <strong>RWD Fill Container CSS 結構：</strong><br>
+        .accounts-connection-card {<br>
+        &nbsp;&nbsp;width: 100%; /* RWD: fill container */<br>
+        &nbsp;&nbsp;min-width: 180px; /* MCP: minWidth */<br>
+        &nbsp;&nbsp;max-width: 256px; /* MCP: maxWidth */<br>
+        &nbsp;&nbsp;height: 108px; /* MCP: absoluteBoundingBox.height */<br>
+        &nbsp;&nbsp;padding: 16px; /* MCP: paddingLeft/Right/Top/Bottom */<br>
+        &nbsp;&nbsp;border-radius: 12px; /* MCP: cornerRadius */<br>
+        &nbsp;&nbsp;background: rgba(255,255,255,0.05); /* MCP: fills[0] */<br>
+        &nbsp;&nbsp;backdrop-filter: blur(8px); /* MCP: effects[0].radius */<br>
+        &nbsp;&nbsp;gap: 16px; /* MCP: itemSpacing */<br>
+        }
+      </div>
+    </div>
+
+    <!-- 已連接狀態展示 -->
+    <div class="demo-container">
+      <h2 class="demo-title">✅ 已連接狀態 (Connected=Yes, Hover=No)</h2>
+      <div class="demo-content">
+        <div class="demo-grid">
+          <!-- GitHub Connected -->
+          <div style="text-align: center;">
+            <div class="accounts-connection-card">
+              <div class="container">
+                <div class="company-logo black">
+                  <svg width="24" height="23.408" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+                  </svg>
+                </div>
+                <div class="heading">GitHub</div>
+              </div>
+              <button class="_btn type-white status-disabled size-s">
+                Connected
+                <div class="btn-icon">
+                  <img src="../assets/img/icons/Check icon.svg" alt="Check" width="12" height="12">
+                </div>
+              </button>
+            </div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 8px;">GitHub Connected</div>
+          </div>
+
+          <!-- Discord Connected -->
+          <div style="text-align: center;">
+            <div class="accounts-connection-card">
+              <div class="container">
+                <div class="company-logo black">
+                  <svg width="24" height="23.408" viewBox="0 0 24 24" fill="none">
+                    <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419-.0002 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1568 2.4189Z"/>
+                  </svg>
+                </div>
+                <div class="heading">Discord</div>
+              </div>
+              <button class="_btn type-white status-disabled size-s">
+                Connected
+                <div class="btn-icon">
+                  <img src="../assets/img/icons/Check icon.svg" alt="Check" width="12" height="12">
+                </div>
+              </button>
+            </div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 8px;">Discord Connected</div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>已連接狀態使用共用按鈕：</strong><br>
+        • 使用 ._btn type-white status-disabled size-s ← MCP 精確尺寸<br>
+        • 自動顯示 Check icon (只有 type-white + status-disabled 才有)<br>
+        • 按鈕文字：Connected<br>
+        • 灰色邊框和文字，表示已完成狀態<br><br>
+
+        <strong>HTML 結構：</strong><br>
+        &lt;button class="_btn type-white status-disabled size-s"&gt;<br>
+        &nbsp;&nbsp;Connected<br>
+        &nbsp;&nbsp;&lt;div class="btn-icon"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;img src="../assets/img/icons/Check icon.svg" alt="Check" width="12" height="12"&gt;<br>
+        &nbsp;&nbsp;&lt;/div&gt;<br>
+        &lt;/button&gt;
+      </div>
+    </div>
+
+    <!-- 使用範例 -->
+    <div class="demo-container">
+      <h2 class="demo-title">💻 使用範例</h2>
+      <div class="demo-specs">
+        <strong>基於 MCP 數據的正確 HTML 結構：</strong><br>
+        &lt;!-- 未連接狀態 (Node: 67-26509) --&gt;<br>
+        &lt;div class="accounts-connection-card"&gt;<br>
+        &nbsp;&nbsp;&lt;div class="container"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="company-logo black"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;svg width="24" height="23.408"&gt;...&lt;/svg&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="heading"&gt;GitHub&lt;/div&gt;<br>
+        &nbsp;&nbsp;&lt;/div&gt;<br>
+        &nbsp;&nbsp;&lt;button class="_btn type-white status-default size-s"&gt;Connect&lt;/button&gt;<br>
+        &lt;/div&gt;<br><br>
+
+        &lt;!-- 已連接狀態 (Node: 67-27024) --&gt;<br>
+        &lt;div class="accounts-connection-card"&gt;<br>
+        &nbsp;&nbsp;&lt;div class="container"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="company-logo black"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;svg width="24" height="23.408"&gt;...&lt;/svg&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="heading"&gt;GitHub&lt;/div&gt;<br>
+        &nbsp;&nbsp;&lt;/div&gt;<br>
+        &nbsp;&nbsp;&lt;button class="_btn type-white status-disabled size-s"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Connected<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="btn-icon"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;img src="../assets/img/icons/Check icon.svg" alt="Check" width="12" height="12"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+        &nbsp;&nbsp;&lt;/button&gt;<br>
+        &lt;/div&gt;<br><br>
+
+        <strong>JavaScript API：</strong><br>
+        // 連接帳戶 - 使用共用按鈕組件<br>
+        function connectAccount(cardElement) {<br>
+        &nbsp;&nbsp;const button = cardElement.querySelector('._btn');<br>
+        &nbsp;&nbsp;button.className = '_btn type-white status-disabled size-m';<br>
+        &nbsp;&nbsp;button.innerHTML = 'Connected &lt;div class="btn-icon"&gt;&lt;img src="../assets/img/icons/Check icon.svg" alt="Check" width="12" height="12"&gt;&lt;/div&gt;';<br>
+        }<br><br>
+
+        // 斷開連接<br>
+        function disconnectAccount(cardElement) {<br>
+        &nbsp;&nbsp;const button = cardElement.querySelector('._btn');<br>
+        &nbsp;&nbsp;button.className = '_btn type-white status-default size-m';<br>
+        &nbsp;&nbsp;button.textContent = 'Connect';<br>
+        }<br><br>
+
+        <strong>MCP 數據規格：</strong><br>
+        • 卡片尺寸：172×112px (基於 absoluteBoundingBox)<br>
+        • 佈局：VERTICAL (主卡片) → HORIZONTAL (Container)<br>
+        • 間距：16px (卡片內) + 12px (Container 內)<br>
+        • 玻璃擬態：backdrop-filter blur(8px)<br>
+        • 按鈕：使用共用 _btn 組件，自動處理 Check icon
+      </div>
+    </div>
+  </section>
+
+  <!-- Carousel Arrow 組件展示區域 -->
+  <section id="carousel-arrow-section" class="component-section">
+    <div class="component-header">
+      <h1 class="component-title">Carousel Arrow 輪播箭頭</h1>
+      <p class="component-description">
+        基於 MCP 數據 (Node: 145:3148) 的輪播箭頭組件，支援左右方向和 hover 狀態。採用 46×46px 尺寸設計，內含 20×20px 圖標，適用於各種滾動和輪播場景。
+      </p>
+      <div class="component-meta">
+        <div class="meta-item">規格: <span class="meta-value">46×46px 固定尺寸</span></div>
+        <div class="meta-item">CSS Class: <span class="meta-value">.carousel-arrow</span></div>
+        <div class="meta-item">MCP Node: <span class="meta-value">145:3148</span></div>
+        <div class="meta-item">狀態: <span class="meta-value">default, hover, disabled</span></div>
+        <div class="meta-item">狀態: <span class="meta-value">✅ 完成</span></div>
+      </div>
+    </div>
+
+    <!-- MCP 數據規格 -->
+    <div class="demo-container">
+      <h2 class="demo-title">📊 MCP 精確數據規格</h2>
+      <div class="demo-specs">
+        <strong>🎯 基於 MCP 145:3148 數據：</strong><br>
+        • 容器: 46×46px (absoluteBoundingBox)<br>
+        • 背景: **GRADIENT_LINEAR** (重要發現！)<br>
+        • 佈局: HORIZONTAL, gap: 12px<br>
+        • 內邊距: 8px (paddingLeft/Right/Top/Bottom)<br>
+        • 圓角: 左箭頭 [8,0,0,8]，右箭頭 [0,8,8,0]<br><br>
+
+        <strong>🎨 Gradient 規格：</strong><br>
+        • 類型: GRADIENT_LINEAR<br>
+        • 顏色: rgba(45,45,45,1) → rgba(45,45,45,0)<br>
+        • 方向: 左箭頭 to right，右箭頭 to left<br><br>
+
+        <strong>🎨 Icon 規格：</strong><br>
+        • 尺寸: 20×20px (chevron-left/right)<br>
+        • 顏色: rgba(255,255,255,1) 白色<br>
+        • Stroke Width: 1.67px (MCP 精確)<br>
+        • Stroke Cap/Join: round<br><br>
+
+        <table class="spec-table">
+          <tr><th>屬性</th><th>Chevron=left</th><th>Chevron=right</th><th>來源</th></tr>
+          <tr><td>width</td><td>46px</td><td>46px</td><td>absoluteBoundingBox.width</td></tr>
+          <tr><td>height</td><td>46px</td><td>46px</td><td>absoluteBoundingBox.height</td></tr>
+          <tr><td>background</td><td>GRADIENT_LINEAR</td><td>GRADIENT_LINEAR</td><td>fills[0].type</td></tr>
+          <tr><td>gradient</td><td>to right</td><td>to left</td><td>gradientHandlePositions</td></tr>
+          <tr><td>gradient-colors</td><td>rgba(45,45,45,1) → rgba(45,45,45,0)</td><td>rgba(45,45,45,1) → rgba(45,45,45,0)</td><td>gradientStops</td></tr>
+          <tr><td>border-radius</td><td>8px 0 0 8px</td><td>0 8px 8px 0</td><td>rectangleCornerRadii</td></tr>
+          <tr><td>padding</td><td>8px</td><td>8px</td><td>paddingLeft/Right/Top/Bottom</td></tr>
+          <tr><td>icon-size</td><td>20×20px</td><td>20×20px</td><td>chevron instance absoluteBoundingBox</td></tr>
+          <tr><td>icon-stroke</td><td>rgba(255,255,255,1)</td><td>rgba(255,255,255,1)</td><td>strokes[0].color</td></tr>
+          <tr><td>strokeWeight</td><td>1.67px</td><td>1.67px</td><td>strokeWeight: 1.6699999570846558</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- 基本展示 -->
+    <div class="demo-container">
+      <h2 class="demo-title">✨ 基本展示</h2>
+      <div class="demo-content">
+        <div style="display: flex; gap: 16px; align-items: center;">
+          <button class="carousel-arrow chevron-left" aria-label="向左">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+
+          <button class="carousel-arrow chevron-right" aria-label="向右">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+
+          <button class="carousel-arrow chevron-right" disabled aria-label="禁用狀態">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>狀態說明：</strong><br>
+        • <strong>Default</strong>: Linear Gradient 背景，白色圖標<br>
+        • <strong>Hover</strong>: 90% 透明度，1.05 倍縮放<br>
+        • <strong>Disabled</strong>: 50% 透明度，不可點擊<br><br>
+
+        <strong>方向性設計：</strong><br>
+        • <strong>左箭頭</strong>: 左側圓角 (8px 0 0 8px)，向右漸變 (to right)<br>
+        • <strong>右箭頭</strong>: 右側圓角 (0 8px 8px 0)，向左漸變 (to left)
+      </div>
+    </div>
+
+    <!-- 使用說明 -->
+    <div class="demo-container">
+      <h2 class="demo-title">📖 使用說明</h2>
+      <div class="demo-specs">
+        <strong>🔧 基本用法：</strong><br><br>
+
+        <code>
+        &lt;button class="carousel-arrow chevron-left" aria-label="向左滾動"&gt;<br>
+        &nbsp;&nbsp;&lt;svg viewBox="0 0 24 24" fill="none"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;path d="M15 18L9 12L15 6" stroke="currentColor"/&gt;<br>
+        &nbsp;&nbsp;&lt;/svg&gt;<br>
+        &lt;/button&gt;<br><br>
+
+        &lt;button class="carousel-arrow chevron-right" aria-label="向右滾動"&gt;<br>
+        &nbsp;&nbsp;&lt;svg viewBox="0 0 24 24" fill="none"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;path d="M9 18L15 12L9 6" stroke="currentColor"/&gt;<br>
+        &nbsp;&nbsp;&lt;/svg&gt;<br>
+        &lt;/button&gt;<br><br>
+        </code>
+
+        <strong>🎯 適用場景：</strong><br>
+        • 輪播圖控制<br>
+        • 水平滾動容器<br>
+        • 分頁導航<br>
+        • 任何需要方向控制的 UI 元素<br><br>
+
+        <strong>📱 響應式：</strong><br>
+        • 固定 46×46px 尺寸<br>
+        • 適合觸控操作<br>
+        • 支援鍵盤導航 (aria-label)
+      </div>
+    </div>
+  </section>
+
+  <!-- Add Button 組件展示區域 -->
+  <section id="add-button-section" class="component-section">
+    <div class="component-header">
+      <h1 class="component-title">Add Button 新增按鈕</h1>
+      <p class="component-description">
+        基於 MCP 數據 (Node: 151:3635) 的新增按鈕組件，支援 default 和 hover 狀態。採用 24×24px 圓形設計，內含 16×16px plus 圖標，適用於各種新增和創建場景。
+      </p>
+      <div class="component-meta">
+        <div class="meta-item">規格: <span class="meta-value">24×24px 固定尺寸</span></div>
+        <div class="meta-item">CSS Class: <span class="meta-value">.add-button</span></div>
+        <div class="meta-item">MCP Node: <span class="meta-value">151:3635</span></div>
+        <div class="meta-item">狀態: <span class="meta-value">default, hover, disabled</span></div>
+        <div class="meta-item">狀態: <span class="meta-value">✅ 完成</span></div>
+      </div>
+    </div>
+
+    <!-- MCP 數據規格 -->
+    <div class="demo-container">
+      <h2 class="demo-title">📊 MCP 精確數據規格</h2>
+      <div class="demo-specs">
+        <strong>🎯 基於 MCP 151:3635 數據：</strong><br>
+        • 容器: 24×24px (absoluteBoundingBox)<br>
+        • 邊框: 1px solid rgba(164,167,174,1) (default)<br>
+        • 圓角: 12px (cornerRadius)<br>
+        • 佈局: HORIZONTAL, gap: 10px<br>
+        • 內邊距: 4px (paddingTop/Right/Bottom/Left)<br>
+        • 背景: transparent<br><br>
+
+        <strong>🎨 Hover 狀態 (status=hover)：</strong><br>
+        • 邊框: rgba(255,255,255,1) 白色<br>
+        • 圖標: rgba(255,255,255,1) 白色<br>
+        • 背景: rgba(255,255,255,0.05) 輕微變化<br><br>
+
+        <strong>📐 Icon 規格：</strong><br>
+        • 尺寸: 16×16px (plus icon)<br>
+        • 實際 Vector: 9.33×9.33px<br>
+        • Stroke Width: 2px (統一規範)<br><br>
+
+        <table class="spec-table">
+          <tr><th>屬性</th><th>Default 數值</th><th>Hover 數值</th><th>來源</th></tr>
+          <tr><td>width</td><td>24px</td><td>24px</td><td>absoluteBoundingBox.width</td></tr>
+          <tr><td>height</td><td>24px</td><td>24px</td><td>absoluteBoundingBox.height</td></tr>
+          <tr><td>border</td><td>rgba(164,167,174,1)</td><td>rgba(255,255,255,1)</td><td>strokes[0].color (Gray/400 vs White)</td></tr>
+          <tr><td>border-radius</td><td>12px</td><td>12px</td><td>cornerRadius</td></tr>
+          <tr><td>padding</td><td>4px</td><td>4px</td><td>Content frame paddingTop/Right/Bottom/Left</td></tr>
+          <tr><td>itemSpacing</td><td>10px</td><td>10px</td><td>itemSpacing</td></tr>
+          <tr><td>icon-size</td><td>16×16px</td><td>16×16px</td><td>plus instance absoluteBoundingBox</td></tr>
+          <tr><td>icon-stroke</td><td>rgba(164,167,174,1)</td><td>rgba(255,255,255,1)</td><td>Icon strokes[0].color</td></tr>
+          <tr><td>strokeWeight</td><td>2px</td><td>2px</td><td>統一 stroke-width 規範</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- 基本展示 -->
+    <div class="demo-container">
+      <h2 class="demo-title">✨ 基本展示</h2>
+      <div class="demo-content">
+        <div style="display: flex; gap: 16px; align-items: center;">
+          <button class="add-button" aria-label="新增項目">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+
+          <button class="add-button" disabled aria-label="禁用狀態">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <button class="add-button" aria-label="新增標籤">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <span style="color: rgba(164, 167, 174, 1); font-size: 14px;">新增標籤</span>
+          </div>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>狀態說明：</strong><br>
+        • <strong>Default</strong>: 灰色邊框和圖標 (Gray/400)<br>
+        • <strong>Hover</strong>: 白色邊框和圖標，輕微背景變化<br>
+        • <strong>Disabled</strong>: 50% 透明度，不可點擊
+      </div>
+    </div>
+
+    <!-- 使用說明 -->
+    <div class="demo-container">
+      <h2 class="demo-title">📖 使用說明</h2>
+      <div class="demo-specs">
+        <strong>🔧 基本用法：</strong><br><br>
+
+        <code>
+        &lt;button class="add-button" aria-label="新增項目"&gt;<br>
+        &nbsp;&nbsp;&lt;svg viewBox="0 0 24 24" fill="none"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;path d="M12 5V19M5 12H19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/&gt;<br>
+        &nbsp;&nbsp;&lt;/svg&gt;<br>
+        &lt;/button&gt;<br><br>
+        </code>
+
+        <strong>🎯 適用場景：</strong><br>
+        • 新增標籤頁<br>
+        • 創建新項目<br>
+        • 添加列表項<br>
+        • 任何需要新增功能的 UI 元素<br><br>
+
+        <strong>📱 設計特性：</strong><br>
+        • 24×24px 適合觸控操作<br>
+        • 圓形設計 (12px 圓角)<br>
+        • 支援鍵盤導航 (aria-label)<br>
+        • 與其他按鈕組件一致的視覺語言
+      </div>
+    </div>
+  </section>
+
+  <!-- Horizontal Tabs 組件展示區域 -->
+  <section id="horizontal-tabs-section" class="component-section">
+    <div class="component-header">
+      <h1 class="component-title">Horizontal Tabs 水平標籤</h1>
+      <p class="component-description">
+        基於 MCP 數據 (Node: 151:3559 + 135:3584) 的水平標籤組件，支援 Desktop 和 Mobile 響應式設計。Desktop 版本包含滾動功能和新增按鈕，Mobile 版本採用 Dropdown 形式並支援新增項目選項。
+      </p>
+      <div class="component-meta">
+        <div class="meta-item">規格: <span class="meta-value">950×46px (Desktop) / 343×40px (Mobile)</span></div>
+        <div class="meta-item">CSS Class: <span class="meta-value">.horizontal-tabs</span></div>
+        <div class="meta-item">MCP Node: <span class="meta-value">151:3559 + 135:3584</span></div>
+        <div class="meta-item">響應式: <span class="meta-value">768px 斷點</span></div>
+        <div class="meta-item">狀態: <span class="meta-value">✅ 完成</span></div>
+      </div>
+    </div>
+
+    <!-- MCP 數據規格 -->
+    <div class="demo-container">
+      <h2 class="demo-title">📊 MCP 精確數據規格</h2>
+      <div class="demo-specs">
+        <strong>🎯 Desktop 版本 (≥768px)：</strong><br>
+        • Container: 950×46px, gap: 16px<br>
+        • Tab Bar: rgba(36,36,36,1) 背景, 8px 圓角, 4px 內邊距<br>
+        • Tab Button: 48×38px (sm) / 48×40px (md), 6px 圓角, 8px×12px 內邊距<br>
+        • Add Button: 24×24px, rgba(164,167,174,1) 邊框, 12px 圓角<br><br>
+
+        <strong>📱 Mobile 版本 (<768px)：</strong><br>
+        • Dropdown: 343×40px, rgba(255,255,255,0.05) 背景<br>
+        • Border: rgba(255,255,255,0.1), 8px 圓角<br>
+        • Padding: 10px×14px, gap: 8px<br><br>
+
+        <strong>🎨 狀態顏色 (基於 MCP 135:3584)：</strong><br>
+        • Default: transparent 背景, rgba(255,255,255,1) 文字<br>
+        • Active: rgba(255,255,255,1) 背景, rgba(0,0,0,1) 文字<br>
+        • Hover: rgba(255,255,255,1) 背景, rgba(0,0,0,1) 文字<br>
+        • Disabled: transparent 背景, rgba(164,167,174,1) 文字<br><br>
+
+        <strong>📝 文字規格：</strong><br>
+        • 字體: Kanit 300 (保持原設計)<br>
+        • 大小: 16px, 行高: 16px<br>
+        • 對齊: center (tab buttons), left (dropdown)<br><br>
+
+        <table class="spec-table">
+          <tr><th>元件</th><th>Desktop 尺寸</th><th>Mobile 尺寸</th><th>背景色</th><th>文字色</th></tr>
+          <tr><td>Container</td><td>950×46px</td><td>343×40px</td><td>-</td><td>-</td></tr>
+          <tr><td>Tab Bar</td><td>160×46px / 910×46px</td><td>-</td><td>rgba(36,36,36,1)</td><td>-</td></tr>
+          <tr><td>Tab Button</td><td>48×38px (sm)</td><td>-</td><td>transparent / white</td><td>white / black</td></tr>
+          <tr><td>Add Button</td><td>24×24px</td><td>-</td><td>transparent</td><td>rgba(164,167,174,1)</td></tr>
+          <tr><td>Dropdown</td><td>-</td><td>343×40px</td><td>rgba(255,255,255,0.05)</td><td>rgba(255,255,255,1)</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- 新版本展示 -->
+    <div class="demo-container">
+      <h2 class="demo-title">🎯 新版 Horizontal Tabs (基於需求重新實現)</h2>
+      <div class="demo-content">
+        <!-- 正確的 Horizontal Tabs 結構 -->
+        <div class="horizontal-tabs-container">
+          <div class="horizontal-tabs hug-content">
+            <div class="tab-bar">
+              <div class="tabs-scroll-container">
+                <button class="tab-button active" data-tab="web3">Web3</button>
+                <button class="tab-button" data-tab="design">Design</button>
+                <button class="tab-button" data-tab="tech">Tech Dev</button>
+              </div>
+            </div>
+
+            <button class="add-button" aria-label="新增標籤">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="demo-specs">
+          <strong>✨ 新功能特性：</strong><br>
+          • <strong>單選行為</strong>: 一次只能選一個 tab，點擊跳轉到對應內容<br>
+          • <strong>Hug Content</strong>: 初始不 fill container，根據 tab 數量調整寬度<br>
+          • <strong>Overflow 處理</strong>: 超過頁面寬度時 overflow hidden + hover 顯示 carousel arrows<br>
+          • <strong>RWD 支援</strong>: Desktop/Tablet 用 horizontal tabs，Mobile 用下拉選單<br>
+          • <strong>Areas 來源</strong>: 基於 user-info.html 的 14 個 areas 項目<br>
+          • <strong>Add Button</strong>: 可選擇其他 areas (最多 3 個，之後會有彈窗)<br>
+          • <strong>初始狀態</strong>: 根據用戶在 user-info.html 選擇的 1-3 個項目<br><br>
+
+          <strong>🎮 互動測試：</strong><br>
+          • 點擊不同 tab 測試單選行為<br>
+          • 調整瀏覽器寬度測試 RWD<br>
+          • 點擊 + 按鈕測試新增功能<br>
+          • Mobile 模式下測試下拉選單
+        </div>
+      </div>
+    </div>
+
+    <!-- Desktop 版本展示 -->
+    <div class="demo-container">
+      <h2 class="demo-title">🖥️ Desktop 版本 - Hug Content</h2>
+      <div class="demo-content">
+        <div class="horizontal-tabs-container">
+          <div class="horizontal-tabs hug-content">
+            <div class="tab-bar">
+              <div class="tabs-scroll-container">
+                <button class="tab-button active" data-tab="general">General</button>
+                <button class="tab-button" data-tab="technical">Technical</button>
+                <button class="tab-button" data-tab="creative">Creative</button>
+              </div>
+            </div>
+            <button class="add-button" aria-label="新增標籤">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>Hug Content 版本特性：</strong><br>
+        • Tab Bar: 160×46px (自適應內容寬度)<br>
+        • 包含 Add Button: 24×24px 新增按鈕<br>
+        • 適用於: 少量 tabs，內容導向設計
+      </div>
+    </div>
+
+    <!-- Desktop Full Width 版本展示 -->
+    <div class="demo-container">
+      <h2 class="demo-title">🖥️ Desktop 版本 - Full Width (含滾動)</h2>
+      <div class="demo-content">
+        <div class="horizontal-tabs-container">
+          <div class="horizontal-tabs full-width">
+            <div class="tab-bar full-width" id="full-width-tabs">
+              <div class="tabs-scroll-container">
+                <button class="tab-button active" data-tab="general">General</button>
+                <button class="tab-button" data-tab="technical">Technical</button>
+                <button class="tab-button" data-tab="creative">Creative</button>
+                <button class="tab-button" data-tab="marketing">Marketing</button>
+                <button class="tab-button" data-tab="design">Design</button>
+                <button class="tab-button" data-tab="development">Development</button>
+                <button class="tab-button" data-tab="analytics">Analytics</button>
+                <button class="tab-button" data-tab="research">Research</button>
+                <button class="tab-button" data-tab="strategy">Strategy</button>
+                <button class="tab-button" data-tab="operations">Operations</button>
+                <button class="tab-button" data-tab="finance">Finance</button>
+                <button class="tab-button" data-tab="legal">Legal</button>
+                <button class="tab-button" data-tab="hr">Human Resources</button>
+                <button class="tab-button" data-tab="sales">Sales</button>
+                <button class="tab-button" data-tab="support">Customer Support</button>
+              </div>
+              <button class="carousel-arrow chevron-left" aria-label="向左滾動">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <button class="carousel-arrow chevron-right" aria-label="向右滾動">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+            <button class="add-button" aria-label="新增標籤">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>Full Width 版本特性：</strong><br>
+        • Tab Bar: 910×46px (固定寬度)<br>
+        • 滾動箭頭: 46×46px，hover 時顯示<br>
+        • 適用於: 大量 tabs，需要滾動瀏覽<br>
+        • 互動: 滑鼠懸停顯示箭頭，點擊滾動
+      </div>
+    </div>
+
+    <!-- Mobile 版本展示 -->
+    <div class="demo-container">
+      <h2 class="demo-title">📱 Mobile 版本 - Dropdown 形式</h2>
+      <div class="demo-content">
+        <div class="horizontal-tabs-mobile">
+          <div class="tab-dropdown" id="mobile-dropdown">
+            <button class="dropdown-trigger">
+              <span class="selected-tab">General</span>
+              <svg viewBox="0 0 24 24">
+                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="dropdown-menu">
+              <button class="dropdown-item active" data-tab="general">General</button>
+              <button class="dropdown-item" data-tab="technical">Technical</button>
+              <button class="dropdown-item" data-tab="creative">Creative</button>
+              <button class="dropdown-item" data-tab="marketing">Marketing</button>
+              <button class="dropdown-item" data-tab="design">Design</button>
+              <button class="dropdown-item add-new">+ 新增項目</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>Mobile Dropdown 特性：</strong><br>
+        • 觸發器: 343×40px，顯示當前選中項目<br>
+        • 下拉選單: 包含所有選項 + 新增項目<br>
+        • 動畫: 0.2s ease 過渡效果<br>
+        • 互動: 點擊觸發器開關選單，選擇項目後關閉
+      </div>
+    </div>
+
+    <!-- 狀態展示 -->
+    <div class="demo-container">
+      <h2 class="demo-title">🎨 Tab Button 狀態展示</h2>
+      <div class="demo-content">
+        <div class="horizontal-tabs-container">
+          <div class="horizontal-tabs hug-content">
+            <div class="tab-bar">
+              <div class="tabs-scroll-container">
+                <button class="tab-button active">Active</button>
+                <button class="tab-button">Default</button>
+                <button class="tab-button" onmouseover="this.style.background='rgba(255,255,255,1)'; this.style.color='rgba(0,0,0,1)'" onmouseout="this.style.background='transparent'; this.style.color='rgba(255,255,255,1)'">Hover Me</button>
+                <button class="tab-button disabled">Disabled</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>狀態說明：</strong><br>
+        • <strong>Active</strong>: 白色背景，黑色文字<br>
+        • <strong>Default</strong>: 透明背景，白色文字<br>
+        • <strong>Hover</strong>: 白色背景，黑色文字 (滑鼠懸停時)<br>
+        • <strong>Disabled</strong>: 透明背景，灰色文字，不可點擊
+      </div>
+    </div>
+
+    <!-- 使用說明 -->
+    <div class="demo-container">
+      <h2 class="demo-title">📖 使用說明</h2>
+      <div class="demo-specs">
+        <strong>🔧 基本用法：</strong><br><br>
+
+        <code>
+        // Desktop 版本 - Hug Content<br>
+        &lt;div class="horizontal-tabs-container"&gt;<br>
+        &nbsp;&nbsp;&lt;div class="horizontal-tabs hug-content"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="tab-bar"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="tabs-scroll-container"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button class="tab-button active"&gt;Tab 1&lt;/button&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button class="tab-button"&gt;Tab 2&lt;/button&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;button class="add-button"&gt;+&lt;/button&gt;<br>
+        &nbsp;&nbsp;&lt;/div&gt;<br>
+        &lt;/div&gt;<br><br>
+
+        // Mobile 版本 - Dropdown<br>
+        &lt;div class="horizontal-tabs-mobile"&gt;<br>
+        &nbsp;&nbsp;&lt;div class="tab-dropdown"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;button class="dropdown-trigger"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;span&gt;Selected Tab&lt;/span&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;svg&gt;...&lt;/svg&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;/button&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="dropdown-menu"&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button class="dropdown-item"&gt;Tab 1&lt;/button&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button class="dropdown-item add-new"&gt;+ 新增&lt;/button&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+        &nbsp;&nbsp;&lt;/div&gt;<br>
+        &lt;/div&gt;<br><br>
+
+        <strong>📱 響應式行為：</strong><br>
+        • ≥768px: 顯示 Desktop 版本<br>
+        • &lt;768px: 顯示 Mobile Dropdown 版本<br>
+        • 自動切換，無需手動控制<br><br>
+
+        <strong>🎯 JavaScript 初始化：</strong><br>
+        • initHorizontalTabs(): 初始化所有功能<br>
+        • 自動處理 tab 切換、滾動、dropdown 等互動
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Matrix Traits Cell 組件展示區域 -->
+  <section id="matrix-traits-cell-section" class="component-section">
+    <div class="component-header">
+      <h1 class="component-title">Matrix Traits Cell 矩陣特徵單元</h1>
+      <p class="component-description">
+        基於 MCP 數據 (Node: 94:1027) 的矩陣特徵單元組件，整合了 title 文字、earned-badge 排名徽章和 progress bar 進度條。採用垂直佈局設計，支援動態進度顯示和外部連結功能。
+      </p>
+      <div class="component-meta">
+        <div class="meta-item">規格: <span class="meta-value">Fill Container (自適應父容器寬度)</span></div>
+        <div class="meta-item">CSS Class: <span class="meta-value">.matrix-traits-cell</span></div>
+        <div class="meta-item">MCP Node: <span class="meta-value">94:1027</span></div>
+        <div class="meta-item">佈局: <span class="meta-value">VERTICAL (gap: 4px)</span></div>
+        <div class="meta-item">寬度範圍: <span class="meta-value">280px - 無限制 (響應式)</span></div>
+      </div>
+    </div>
+
+    <!-- 組件規格 -->
+    <div class="demo-container">
+      <h2 class="demo-title">📐 複合元件規格</h2>
+      <div class="demo-specs">
+        <strong>Fill Container 複合元件組成 (基於 MCP Node: 94:1027)：</strong><br>
+        • 📝 <strong>title-text</strong>: Kanit 300 14px/20px 標題文字 (Gray/400)<br>
+        • 🏆 <strong>earned-badge.type-rank</strong>: 115×22px 排名徽章 (共用元件)<br>
+        • 📊 <strong>progress-bar</strong>: flex: 1 彈性進度條 (新建元件)<br>
+        • 🔢 <strong>progress-value</strong>: Kanit 300 14px/20px 數值文字 (Gray/400)<br>
+        • 🔗 <strong>external-link icon</strong>: 12×12px 外部連結圖標<br><br>
+
+        <strong>Fill Container 設計規格：</strong><br>
+        • 主容器: width: 100% (自適應父容器，min: 280px)<br>
+        • Title 容器: width: 100% (HORIZONTAL, gap: 8px)<br>
+        • Progress 容器: width: 100% (HORIZONTAL, gap: 8px)<br>
+        • Progress Bar: flex: 1 (自動填充剩餘空間，min: 150px)<br>
+        • Progress Fill: 66.12% 寬度 (基於 MCP 290.95px / 440px)<br><br>
+
+        <table class="spec-table">
+          <tr><th>元件</th><th>Fill Container 行為</th><th>最小尺寸</th><th>字體規格</th><th>顏色</th></tr>
+          <tr><td>matrix-traits-cell</td><td>width: 100% (自適應)</td><td>300px×46px</td><td>-</td><td>-</td></tr>
+          <tr><td>title-text</td><td>flex: 1 (彈性，可截斷)</td><td>動態計算</td><td>Kanit 300 14px/20px</td><td>rgba(164,167,174,1)</td></tr>
+          <tr><td>earned-badge</td><td>flex-shrink: 0 (優先顯示)</td><td>115×22px</td><td>Inter 300 12px/18px</td><td>白色邊框20%</td></tr>
+          <tr><td>progress-bar</td><td>flex: 1 (彈性填充)</td><td>150×8px</td><td>-</td><td>背景: rgba(65,70,81,1)</td></tr>
+          <tr><td>progress-value</td><td>固定寬度</td><td>45×20px</td><td>Kanit 300 14px/20px</td><td>rgba(164,167,174,1)</td></tr>
+        </table>
+
+        <br><strong>Fill Container 特性：</strong><br>
+        • <strong>自適應寬度</strong>: 組件寬度 100% 填滿父容器<br>
+        • <strong>智能文字截斷</strong>: Title 過長時顯示 "..."，Badge 優先完整顯示<br>
+        • <strong>Badge 跟隨</strong>: Badge 緊貼在 Title 文字右側，不固定在容器右邊<br>
+        • <strong>彈性進度條</strong>: 進度條自動填充剩餘空間<br>
+        • <strong>最小寬度保護</strong>: 300px 最小寬度確保可用性<br>
+        • <strong>響應式優化</strong>: 極小螢幕 (< 480px) 字體和尺寸微調<br>
+        • <strong>無最大寬度限制</strong>: 大螢幕 (≥ 720px) 可無限擴展</table>
+      </div>
+    </div>
+
+    <!-- 基本展示 -->
+    <div class="demo-container">
+      <h2 class="demo-title">✨ 基本展示</h2>
+      <div class="demo-content">
+        <div class="matrix-traits-cell">
+          <div class="title-container">
+            <div class="title-with-badge">
+              <div class="title-text">Title</div>
+              <div class="earned-badge type-rank">
+                <div class="badge-text">
+                  <span>Rank:</span>
+                  <span>000/000</span>
+                </div>
+                <svg class="badge-icon" viewBox="0 0 24 24">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15,3 21,3 21,9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="progress-container">
+            <div class="progress-bar">
+              <div class="progress-fill"></div>
+            </div>
+            <div class="progress-value">000/255</div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-specs">
+        <strong>MCP 精確實現：</strong><br>
+        • 主容器: 503×46px VERTICAL 佈局，gap: 4px<br>
+        • Title 區域: 28px 文字 + 115px 排名徽章，gap: 8px<br>
+        • Progress 區域: 440px 進度條 + 55px 數值，gap: 8px<br>
+        • 進度填充: 66.12% (基於 MCP 290.95px / 440px)<br>
+        • 字體粗細: 符合最大 300 規範<br>
+        • Icon 粗細: stroke-width: 2px
+      </div>
+    </div>
+
+    <!-- Fill Container 測試 -->
+    <div class="demo-container">
+      <h2 class="demo-title">📏 Fill Container 測試</h2>
+      <div class="demo-specs">
+        <strong>Fill Container 特性：</strong><br>
+        • <strong>自適應寬度</strong>: 組件寬度 100% 填滿父容器<br>
+        • <strong>彈性進度條</strong>: 進度條自動填充剩餘空間<br>
+        • <strong>最小寬度保護</strong>: 300px 最小寬度確保可用性<br>
+        • <strong>Title 智能截斷</strong>: Title 過長時顯示 "..."，Badge 優先顯示<br>
+        • <strong>Badge 跟隨</strong>: Badge 緊貼在 Title 文字右側<br>
+        • <strong>響應式字體</strong>: 極小螢幕自動調整字體大小<br><br>
+
+        <strong>測試方法：</strong><br>
+        1. 觀察不同容器寬度下組件的自適應行為<br>
+        2. 注意進度條如何填充剩餘空間<br>
+        3. 測試 Title 文字截斷和 Badge 跟隨行為<br>
+        4. 測試極小寬度下的可用性<br><br>
+      </div>
+
+      <!-- 不同寬度測試 -->
+      <div class="demo-content">
+        <h3 style="color: rgba(164, 167, 174, 1); font-size: 12px; margin-bottom: 16px;">📱 極小容器 (300px) - 短文字</h3>
+        <div style="width: 300px; border: 1px dashed rgba(255,255,255,0.2); padding: 16px; margin-bottom: 24px;">
+          <div class="matrix-traits-cell">
+            <div class="title-container">
+              <div class="title-with-badge">
+                <div class="title-text">Title</div>
+                <div class="earned-badge type-rank">
+                  <div class="badge-text">
+                    <span>Rank:</span>
+                    <span>000/000</span>
+                  </div>
+                  <svg class="badge-icon" viewBox="0 0 24 24">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15,3 21,3 21,9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div class="progress-container">
+              <div class="progress-bar">
+                <div class="progress-fill"></div>
+              </div>
+              <div class="progress-value">000/255</div>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="color: rgba(164, 167, 174, 1); font-size: 12px; margin-bottom: 16px;">📱 極小容器 (300px) - 長文字測試</h3>
+        <div style="width: 300px; border: 1px dashed rgba(255,255,255,0.2); padding: 16px; margin-bottom: 24px;">
+          <div class="matrix-traits-cell">
+            <div class="title-container">
+              <div class="title-with-badge">
+                <div class="title-text">Very Long Title That Should Be Truncated</div>
+                <div class="earned-badge type-rank">
+                  <div class="badge-text">
+                    <span>Rank:</span>
+                    <span>000/000</span>
+                  </div>
+                  <svg class="badge-icon" viewBox="0 0 24 24">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15,3 21,3 21,9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div class="progress-container">
+              <div class="progress-bar">
+                <div class="progress-fill"></div>
+              </div>
+              <div class="progress-value">000/255</div>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="color: rgba(164, 167, 174, 1); font-size: 12px; margin-bottom: 16px;">📱 中等容器 (500px) - 長文字完整顯示</h3>
+        <div style="width: 500px; border: 1px dashed rgba(255,255,255,0.2); padding: 16px; margin-bottom: 24px;">
+          <div class="matrix-traits-cell">
+            <div class="title-container">
+              <div class="title-with-badge">
+                <div class="title-text">Very Long Title That Should Be Fully Visible</div>
+                <div class="earned-badge type-rank">
+                  <div class="badge-text">
+                    <span>Rank:</span>
+                    <span>000/000</span>
+                  </div>
+                  <svg class="badge-icon" viewBox="0 0 24 24">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15,3 21,3 21,9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div class="progress-container">
+              <div class="progress-bar">
+                <div class="progress-fill"></div>
+              </div>
+              <div class="progress-value">000/255</div>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="color: rgba(164, 167, 174, 1); font-size: 12px; margin-bottom: 16px;">🖥️ 大容器 (800px)</h3>
+        <div style="width: 800px; border: 1px dashed rgba(255,255,255,0.2); padding: 16px;">
+          <div class="matrix-traits-cell">
+            <div class="title-container">
+              <div class="title-with-badge">
+                <div class="title-text">Title</div>
+                <div class="earned-badge type-rank">
+                  <div class="badge-text">
+                    <span>Rank:</span>
+                    <span>000/000</span>
+                  </div>
+                  <svg class="badge-icon" viewBox="0 0 24 24">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15,3 21,3 21,9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div class="progress-container">
+              <div class="progress-bar">
+                <div class="progress-fill"></div>
+              </div>
+              <div class="progress-value">000/255</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-specs">
+        <strong>Fill Container 實現細節：</strong><br>
+        • 主容器: width: 100% (自適應父容器寬度)<br>
+        • Title 文字: flex: 1, text-overflow: ellipsis (彈性寬度，支援截斷)<br>
+        • Badge: flex-shrink: 0 (優先保證完整顯示)<br>
+        • 進度條: flex: 1 (自動填充剩餘空間)<br>
+        • 最小寬度: 300px (主容器), 150px (進度條)<br>
+        • 響應式字體: < 480px 時字體從 14px 調整為 12px<br>
+        • 無最大寬度限制: 大螢幕可無限擴展<br>
+        • 文字截斷邏輯: Title + Badge 總寬度超過容器時，Title 顯示 "..."
+      </div>
+    </div>
+
+  </section>
+
+  </main>
+
+  <script>
+    // Navigation functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const navItems = document.querySelectorAll('.nav-item');
+      const sections = document.querySelectorAll('.component-section');
+      const navToggle = document.getElementById('navToggle');
+      const nav = document.getElementById('devSpecNav');
+
+      // Navigation switching
+      navItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+          e.preventDefault();
+
+          // Remove active class from all items and sections
+          navItems.forEach(nav => nav.classList.remove('active'));
+          sections.forEach(section => {
+            section.classList.remove('active');
+            section.style.display = 'none';
+          });
+
+          // Add active class to clicked item
+          this.classList.add('active');
+
+          // Show corresponding section
+          const componentId = this.getAttribute('data-component') + '-section';
+          const targetSection = document.getElementById(componentId);
+          if (targetSection) {
+            targetSection.classList.add('active');
+            targetSection.style.display = 'block';
+          }
+        });
+      });
+
+      // Mobile navigation toggle
+      if (navToggle) {
+        navToggle.addEventListener('click', function() {
+          nav.classList.toggle('open');
+        });
+      }
+
+      // Show/hide mobile toggle based on screen size
+      function checkScreenSize() {
+        if (window.innerWidth <= 1024) {
+          navToggle.style.display = 'block';
+        } else {
+          navToggle.style.display = 'none';
+          nav.classList.remove('open');
+        }
+      }
+
+      window.addEventListener('resize', checkScreenSize);
+      checkScreenSize();
+
+      // Initialize page state
+      function initializePageState() {
+        // Hide all sections first
+        sections.forEach(section => {
+          section.classList.remove('active');
+          section.style.display = 'none';
+        });
+
+        // Show the first section (button)
+        const firstSection = document.getElementById('button-section');
+        if (firstSection) {
+          firstSection.classList.add('active');
+          firstSection.style.display = 'block';
+        }
+
+        // Ensure first nav item is active
+        navItems.forEach(nav => nav.classList.remove('active'));
+        const firstNavItem = document.querySelector('[data-component="button"]');
+        if (firstNavItem) {
+          firstNavItem.classList.add('active');
+        }
+      }
+
+      // Initialize on page load
+      initializePageState();
+
+      // Horizontal Tabs 功能 - 基於 figma-tab-component.html
+      function initHorizontalTabs() {
+        // Desktop Tab 切換功能
+        document.querySelectorAll('.horizontal-tabs .tab-bar').forEach(tabBar => {
+          // Tab 點擊事件
+          tabBar.addEventListener('click', (e) => {
+            if (e.target.classList.contains('tab-button') && !e.target.classList.contains('disabled')) {
+              // 移除所有 active 狀態
+              tabBar.querySelectorAll('.tab-button').forEach(tab => {
+                tab.classList.remove('active');
+              });
+
+              // 添加 active 狀態到點擊的 tab
+              e.target.classList.add('active');
+            }
+          });
+
+          // Tab Hover 事件
+          tabBar.addEventListener('mouseover', (e) => {
+            if (e.target.classList.contains('tab-button') &&
+                !e.target.classList.contains('active') &&
+                !e.target.classList.contains('disabled')) {
+              e.target.style.background = 'rgba(255, 255, 255, 1)';
+              e.target.style.color = 'rgba(0, 0, 0, 1)';
+            }
+          });
+
+          tabBar.addEventListener('mouseout', (e) => {
+            if (e.target.classList.contains('tab-button') &&
+                !e.target.classList.contains('active') &&
+                !e.target.classList.contains('disabled')) {
+              e.target.style.background = 'transparent';
+              e.target.style.color = 'rgba(255, 255, 255, 1)';
+            }
+          });
+        });
+
+        // Full Width 滾動功能
+        document.querySelectorAll('.horizontal-tabs.full-width').forEach(container => {
+          const tabBar = container.querySelector('.tab-bar');
+          const leftChevron = container.querySelector('.chevron-left');
+          const rightChevron = container.querySelector('.chevron-right');
+          const scrollContainer = container.querySelector('.tabs-scroll-container');
+
+          if (!scrollContainer || !leftChevron || !rightChevron) return;
+
+          const scrollStep = 150;
+
+          // 計算最大滾動位置
+          function getMaxScrollLeft() {
+            return scrollContainer.scrollWidth - scrollContainer.clientWidth;
+          }
+
+          // 更新箭頭顯示狀態
+          function updateChevronVisibility() {
+            const maxScroll = getMaxScrollLeft();
+            const currentScroll = scrollContainer.scrollLeft;
+
+            // 左箭頭：不在最左邊時顯示
+            if (currentScroll > 0) {
+              leftChevron.classList.add('visible');
+            } else {
+              leftChevron.classList.remove('visible');
+            }
+
+            // 右箭頭：不在最右邊時顯示
+            if (currentScroll < maxScroll - 1) {
+              rightChevron.classList.add('visible');
+            } else {
+              rightChevron.classList.remove('visible');
+            }
+          }
+
+          // 左箭頭點擊事件
+          leftChevron.addEventListener('click', (e) => {
+            e.stopPropagation();
+            scrollContainer.scrollLeft = Math.max(0, scrollContainer.scrollLeft - scrollStep);
+          });
+
+          // 右箭頭點擊事件
+          rightChevron.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const maxScroll = getMaxScrollLeft();
+            const newPosition = scrollContainer.scrollLeft + scrollStep;
+
+            if (newPosition >= maxScroll - 30) {
+              scrollContainer.scrollLeft = maxScroll;
+            } else {
+              scrollContainer.scrollLeft = newPosition;
+            }
+          });
+
+          // 滾動事件監聽
+          scrollContainer.addEventListener('scroll', updateChevronVisibility);
+
+          // Hover 時顯示箭頭
+          container.addEventListener('mouseenter', updateChevronVisibility);
+
+          // 離開時隱藏箭頭
+          container.addEventListener('mouseleave', () => {
+            leftChevron.classList.remove('visible');
+            rightChevron.classList.remove('visible');
+          });
+
+          // 初始化檢查
+          setTimeout(updateChevronVisibility, 100);
+        });
+
+        // Mobile Dropdown 功能
+        document.querySelectorAll('.horizontal-tabs-mobile .tab-dropdown').forEach(dropdown => {
+          const trigger = dropdown.querySelector('.dropdown-trigger');
+          const menu = dropdown.querySelector('.dropdown-menu');
+          const selectedSpan = trigger.querySelector('.selected-tab');
+
+          // 切換 dropdown
+          trigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = menu.classList.contains('open');
+
+            // 關閉所有其他 dropdown
+            document.querySelectorAll('.dropdown-menu.open').forEach(otherMenu => {
+              otherMenu.classList.remove('open');
+              otherMenu.parentElement.querySelector('.dropdown-trigger').classList.remove('open');
+            });
+
+            if (!isOpen) {
+              menu.classList.add('open');
+              trigger.classList.add('open');
+            }
+          });
+
+          // 選擇項目
+          menu.addEventListener('click', (e) => {
+            if (e.target.classList.contains('dropdown-item') && !e.target.classList.contains('add-new')) {
+              // 更新選中狀態
+              menu.querySelectorAll('.dropdown-item').forEach(item => {
+                item.classList.remove('active');
+              });
+              e.target.classList.add('active');
+
+              // 更新顯示文字
+              selectedSpan.textContent = e.target.textContent;
+
+              // 關閉 dropdown
+              menu.classList.remove('open');
+              trigger.classList.remove('open');
+            } else if (e.target.classList.contains('add-new')) {
+              // 處理新增項目
+              const newTabName = prompt('請輸入新標籤名稱:');
+              if (newTabName && newTabName.trim()) {
+                // 創建新的 dropdown item
+                const newItem = document.createElement('button');
+                newItem.className = 'dropdown-item';
+                newItem.textContent = newTabName.trim();
+                newItem.setAttribute('data-tab', newTabName.trim().toLowerCase().replace(/\s+/g, '-'));
+
+                // 插入到 add-new 之前
+                menu.insertBefore(newItem, e.target);
+
+                // 選中新項目
+                menu.querySelectorAll('.dropdown-item').forEach(item => {
+                  item.classList.remove('active');
+                });
+                newItem.classList.add('active');
+                selectedSpan.textContent = newTabName.trim();
+
+                // 關閉 dropdown
+                menu.classList.remove('open');
+                trigger.classList.remove('open');
+              }
+            }
+          });
+        });
+
+        // Add Button 功能
+        document.querySelectorAll('.horizontal-tabs .add-button').forEach(addBtn => {
+          addBtn.addEventListener('click', () => {
+            const newTabName = prompt('請輸入新標籤名稱:');
+            if (newTabName && newTabName.trim()) {
+              const tabBar = addBtn.parentElement.querySelector('.tabs-scroll-container');
+
+              // 創建新的 tab button
+              const newTab = document.createElement('button');
+              newTab.className = 'tab-button';
+              newTab.textContent = newTabName.trim();
+              newTab.setAttribute('data-tab', newTabName.trim().toLowerCase().replace(/\s+/g, '-'));
+
+              // 添加到 tab bar
+              tabBar.appendChild(newTab);
+
+              // 選中新 tab
+              tabBar.querySelectorAll('.tab-button').forEach(tab => {
+                tab.classList.remove('active');
+              });
+              newTab.classList.add('active');
+
+              // 滾動到新 tab
+              newTab.scrollIntoView({ behavior: 'smooth', inline: 'nearest' });
+            }
+          });
+        });
+
+        // 點擊外部關閉 dropdown
+        document.addEventListener('click', () => {
+          document.querySelectorAll('.dropdown-menu.open').forEach(menu => {
+            menu.classList.remove('open');
+            menu.parentElement.querySelector('.dropdown-trigger').classList.remove('open');
+          });
+        });
+      }
+
+      // 初始化 Horizontal Tabs
+      initHorizontalTabs();
+
+      // Tab functionality
+      function initTabs(containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        const tabItems = container.querySelectorAll('.tab-item');
+        const tabPanels = container.querySelectorAll('.tab-panel');
+
+        tabItems.forEach(item => {
+          item.addEventListener('click', function() {
+            // Remove active class from all tabs and panels
+            tabItems.forEach(tab => tab.classList.remove('active'));
+            tabPanels.forEach(panel => panel.classList.remove('active'));
+
+            // Add active class to clicked tab
+            this.classList.add('active');
+
+            // Show corresponding panel
+            const targetPanelId = this.getAttribute('data-tab');
+            const targetPanel = document.getElementById(targetPanelId);
+            if (targetPanel) {
+              targetPanel.classList.add('active');
+            }
+          });
+        });
+      }
+
+      // Initialize all tab containers
+      initTabs('basic-tabs');
+      initTabs('icon-tabs');
+
+      // Badge functionality
+      const badgeWithIcon1 = document.getElementById('badge-with-icon-1');
+      const badgeWithIcon2 = document.getElementById('badge-with-icon-2');
+
+      if (badgeWithIcon1) {
+        badgeWithIcon1.addEventListener('click', function() {
+          this.innerHTML = '<span class="badge-icon">✅</span>Clicked!';
+        });
+      }
+
+      if (badgeWithIcon2) {
+        badgeWithIcon2.addEventListener('click', function() {
+          this.innerHTML = '<span class="badge-icon">💎</span>Updated!';
+        });
+      }
+
+      // Task functionality
+      const taskContribution = document.getElementById('task-contribution');
+      const taskReward = document.getElementById('task-reward');
+
+      if (taskContribution) {
+        const btn = taskContribution.querySelector('._btn');
+        btn.addEventListener('click', function() {
+          taskContribution.className = taskContribution.className.replace('status-default', 'status-completed');
+          this.innerHTML = 'Done <div class="btn-icon"><img src="../assets/img/icons/Check icon.svg" alt="Check" width="12" height="12"></div>';
+          this.className = this.className.replace('status-default', 'status-disabled');
+        });
+      }
+
+      if (taskReward) {
+        const btn = taskReward.querySelector('._btn');
+        btn.addEventListener('click', function() {
+          taskReward.className = taskReward.className.replace('status-default', 'status-completed');
+          this.innerHTML = 'Done <div class="btn-icon"><img src="../assets/img/icons/Check icon.svg" alt="Check" width="12" height="12"></div>';
+          this.className = this.className.replace('status-default', 'status-disabled');
+        });
+      }
+
+      // Connection Card functionality
+      const connectionCards = document.querySelectorAll('.accounts-connection-card');
+      connectionCards.forEach(card => {
+        const btn = card.querySelector('._btn');
+        if (btn && btn.textContent.trim() === 'Connect') {
+          btn.addEventListener('click', function() {
+            const serviceName = card.querySelector('.card-heading').textContent;
+            connectService(card.id, serviceName);
+          });
+        }
+      });
+
+      function connectService(cardId, serviceName) {
+        const card = document.getElementById(cardId);
+        card.className = card.className.replace('state-disconnected', 'state-connected');
+        const btn = card.querySelector('._btn');
+        btn.innerHTML = 'Connected <div class="btn-icon"><img src="../assets/img/icons/Check icon.svg" alt="Check" width="12" height="12"></div>';
+        btn.className = '_btn type-grey status-disabled size-s has-icon';
+      }
+
+      function disconnectService(cardId) {
+        const card = document.getElementById(cardId);
+        card.className = card.className.replace('state-connected', 'state-disconnected');
+        const btn = card.querySelector('._btn');
+        btn.innerHTML = 'Connect';
+        btn.className = '_btn type-stroke status-default size-s';
+      }
+
+      // Utility functions for dynamic content
+      window.createTask = function(config) {
+        return `
+          <div class="task-list-cell ${config.type} ${config.status} ${config.breakpoint}" id="${config.id}">
+            <div class="task-content">
+              <div class="task-description">
+                ${config.hasType ? `<div class="task-type ${config.taskType}">${config.taskTypeText}</div>` : ''}
+                <div class="task-title">${config.title}</div>
+              </div>
+            </div>
+            <button class="_btn ${config.buttonClass}">${config.buttonText}</button>
+          </div>
+        `;
+      };
+
+      window.createConnectionCard = function(config) {
+        return `
+          <div class="accounts-connection-card ${config.state}" id="${config.id}">
+            <div class="card-container">
+              <div class="company-logo ${config.logoColor}">
+                ${config.logoSvg}
+              </div>
+              <div class="card-heading">${config.serviceName}</div>
+            </div>
+            <button class="_btn ${config.buttonClass}">${config.buttonText}</button>
+          </div>
+        `;
+      };
+
+      window.completeTask = function(taskId) {
+        const task = document.getElementById(taskId);
+        if (task) {
+          task.className = task.className.replace('status-default', 'status-completed');
+          const btn = task.querySelector('._btn');
+          btn.innerHTML = 'Done <div class="btn-icon"><img src="../assets/img/icons/Check icon.svg" alt="Check" width="12" height="12"></div>';
+          btn.className = btn.className.replace('status-default', 'status-disabled');
+        }
+      };
+
+      // Task Type functionality
+      const interactiveTaskTypes = document.querySelectorAll('.task-type.clickable');
+      interactiveTaskTypes.forEach(taskType => {
+        taskType.addEventListener('click', function() {
+          const currentType = this.className.match(/type-(\w+)/)[1];
+          const types = ['auto', 'review', 'insight'];
+          const currentIndex = types.indexOf(currentType);
+          const nextIndex = (currentIndex + 1) % types.length;
+          const nextType = types[nextIndex];
+
+          this.className = this.className.replace(/type-\w+/, `type-${nextType}`);
+          this.textContent = `Click Me - ${nextType.charAt(0).toUpperCase() + nextType.slice(1)}`;
+        });
+      });
+
+      window.switchTaskType = function(elementId, newType) {
+        const element = document.getElementById(elementId);
+        if (element) {
+          element.className = element.className.replace(/type-\w+/, `type-${newType}`);
+          element.textContent = newType.charAt(0).toUpperCase() + newType.slice(1);
+        }
+      };
+
+      window.createTaskType = function(type, text, size = 'md') {
+        return `<div class="task-type type-${type} size-${size}">${text}</div>`;
+      };
+
+      window.switchLogoColor = function(logoId, color) {
+        const logo = document.getElementById(logoId);
+        if (logo) {
+          logo.className = logo.className.replace(/color-\w+/, `color-${color}`);
+        }
+      };
+
+      window.switchTab = function(containerId, tabId) {
+        const container = document.getElementById(containerId);
+        if (container) {
+          const targetTab = container.querySelector(`[data-tab="${tabId}"]`);
+          if (targetTab) {
+            targetTab.click();
+          }
+        }
+      };
+    });
+  </script>
+
+  <!-- 新版 Horizontal Tabs JavaScript -->
+  <script src="../js/horizontal-tabs.js"></script>
+
+  <!-- 確保 JavaScript 正確載入的除錯 -->
+  <script>
+    console.log('Checking horizontal-tabs.js loading...');
+    if (typeof HorizontalTabs === 'undefined') {
+      console.error('HorizontalTabs class not loaded!');
+    } else {
+      console.log('HorizontalTabs class loaded successfully');
+    }
+  </script>
+</body>
+</html>
